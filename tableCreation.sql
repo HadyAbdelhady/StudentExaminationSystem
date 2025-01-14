@@ -112,22 +112,25 @@ CREATE TABLE QuestionBank_Choice (
     PRIMARY KEY (questionID, Choice)
 );
 
+-- ExamModel_Question table
 CREATE TABLE ExamModel_Question (
     examModelID INT NOT NULL,
     questionID INT NOT NULL,
-	mark INT NOT NULL,
+    mark INT NOT NULL,
     correctChoice NVARCHAR(200) NOT NULL,
     FOREIGN KEY (examModelID) REFERENCES ExamModel(ID),
     FOREIGN KEY (questionID) REFERENCES QuestionBank(ID),
     PRIMARY KEY (examModelID, questionID)
 );
 
+-- StudentSubmit_Answer table
 CREATE TABLE StudentSubmit_Answer (
     StudentSubmitID INT NOT NULL,
-	questionID INT NOT NULL,
+    examModelID INT NOT NULL, 
+    questionID INT NOT NULL,
     studentAnswer NVARCHAR(200) NOT NULL,
     FOREIGN KEY (StudentSubmitID) REFERENCES StudentSubmit(ID),
-	FOREIGN KEY (questionID) REFERENCES ExamModel_Question(questionID) 
+    FOREIGN KEY (examModelID, questionID) REFERENCES ExamModel_Question(examModelID, questionID)
 );
 
 CREATE TABLE ExamModel_StudentSubmit_Student (
