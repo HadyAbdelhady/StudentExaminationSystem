@@ -17,9 +17,9 @@ CREATE TABLE Track (
 -- Table: Instructor
 CREATE TABLE Instructor (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    firstName NVARCHAR(100) NOT NULL,
-    lastName NVARCHAR(100) NOT NULL,
-    gender NVARCHAR(10) CHECK (gender IN ('Male', 'Female', 'Other')),
+    firstName NVARCHAR(10) NOT NULL,
+    lastName NVARCHAR(10) NOT NULL,
+    gender NVARCHAR(1) CHECK (gender IN ('M', 'F')),
     SSN NVARCHAR(20) UNIQUE NOT NULL,
     enrollmentDate DATETIME NOT NULL,
     email NVARCHAR(100) UNIQUE NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE Student (
     ID INT PRIMARY KEY IDENTITY(1,1),
     firstName NVARCHAR(100) NOT NULL,
     lastName NVARCHAR(100) NOT NULL,
-    gender NVARCHAR(10) CHECK (gender IN ('Male', 'Female', 'Other')),
+    gender NVARCHAR(10) CHECK (gender IN ('M', 'F')),
     SSN NVARCHAR(20) UNIQUE NOT NULL,
     enrollmentDate DATETIME NOT NULL,
     email NVARCHAR(100) UNIQUE NOT NULL,
@@ -57,13 +57,13 @@ CREATE TABLE QuestionBank (
     ID INT PRIMARY KEY IDENTITY(1,1),
     type NVARCHAR(50) NOT NULL,
     correctChoice NVARCHAR(200) NOT NULL,
-    mark INT NOT NULL,
     instructorID INT NOT NULL,
     courseID INT NOT NULL,
     lastEditDate DATETIME DEFAULT GETDATE(),
     questionText NVARCHAR(200) NOT NULL,
     FOREIGN KEY (instructorID) REFERENCES Instructor(ID),
-    FOREIGN KEY (courseID) REFERENCES Course(ID)
+    FOREIGN KEY (courseID) REFERENCES Course(ID),
+	isDeleted BIT DEFAULT 0 
 );
 
 -- Table: ExamModel
@@ -115,6 +115,7 @@ CREATE TABLE QuestionBank_Choice (
 CREATE TABLE ExamModel_Question (
     examModelID INT NOT NULL,
     questionID INT NOT NULL,
+	mark INT NOT NULL,
     correctChoice NVARCHAR(200) NOT NULL,
     FOREIGN KEY (examModelID) REFERENCES ExamModel(ID),
     FOREIGN KEY (questionID) REFERENCES QuestionBank(ID),
@@ -123,8 +124,10 @@ CREATE TABLE ExamModel_Question (
 
 CREATE TABLE StudentSubmit_Answer (
     StudentSubmitID INT NOT NULL,
+	questionID INT NOT NULL,
     studentAnswer NVARCHAR(200) NOT NULL,
-    FOREIGN KEY (StudentSubmitID) REFERENCES StudentSubmit(ID)
+    FOREIGN KEY (StudentSubmitID) REFERENCES StudentSubmit(ID),
+	FOREIGN KEY (questionID) REFERENCES ExamModel_Question(questionID) 
 );
 
 CREATE TABLE ExamModel_StudentSubmit_Student (
