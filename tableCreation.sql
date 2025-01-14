@@ -130,7 +130,8 @@ CREATE TABLE StudentSubmit_Answer (
     questionID INT NOT NULL,
     studentAnswer NVARCHAR(200) NOT NULL,
     FOREIGN KEY (StudentSubmitID) REFERENCES StudentSubmit(ID),
-    FOREIGN KEY (examModelID, questionID) REFERENCES ExamModel_Question(examModelID, questionID)
+    FOREIGN KEY (examModelID, questionID) REFERENCES ExamModel_Question(examModelID, questionID),
+	PRIMARY KEY (StudentSubmitID,studentAnswer)
 );
 
 CREATE TABLE ExamModel_StudentSubmit_Student (
