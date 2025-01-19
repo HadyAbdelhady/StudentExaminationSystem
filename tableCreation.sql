@@ -3,7 +3,8 @@ CREATE TABLE Department (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL,
     ManagerID INT,
-    creationDate DATETIME DEFAULT GETDATE()
+    creationDate DATETIME DEFAULT GETDATE(),
+	isDeleted BIT  DEFAULT 0 
 );
 
 -- Table: Track
@@ -11,7 +12,9 @@ CREATE TABLE Track (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL,
     departmentID INT NOT NULL,
-    FOREIGN KEY (departmentID) REFERENCES Department(ID)
+    creationDate DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (departmentID) REFERENCES Department(ID),
+	isDeleted BIT  DEFAULT 0 
 );
 
 -- Table: Instructor
@@ -25,8 +28,11 @@ CREATE TABLE Instructor (
     email NVARCHAR(100) UNIQUE NOT NULL,
     phone NVARCHAR(15) NOT NULL,
     DateOfBirth DATE NOT NULL,
-    address NVARCHAR(200) NOT NULL
+    address NVARCHAR(200) NOT NULL,
+	isDeleted BIT  DEFAULT 0
 );
+
+
 
 -- Table: Student
 CREATE TABLE Student (
@@ -43,13 +49,16 @@ CREATE TABLE Student (
     trackID INT,
     departmentID INT NOT NULL,
     FOREIGN KEY (trackID) REFERENCES Track(ID),
-    FOREIGN KEY (departmentID) REFERENCES Department(ID)
+    FOREIGN KEY (departmentID) REFERENCES Department(ID),
+	isDeleted BIT  DEFAULT 0 
 );
 
 -- Table: Course
 CREATE TABLE Course (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(100) NOT NULL
+    Name NVARCHAR(100) NOT NULL,
+	isDeleted BIT  DEFAULT 0,
+    creationDate DATETIME DEFAULT GETDATE(),
 );
 
 -- Table: QuestionBank
@@ -59,7 +68,7 @@ CREATE TABLE QuestionBank (
     correctChoice NVARCHAR(200) NOT NULL,
     instructorID INT NOT NULL,
     courseID INT NOT NULL,
-    lastEditDate DATETIME DEFAULT GETDATE(),
+    insertionDate DATETIME DEFAULT GETDATE(),
     questionText NVARCHAR(200) NOT NULL,
     FOREIGN KEY (instructorID) REFERENCES Instructor(ID),
     FOREIGN KEY (courseID) REFERENCES Course(ID),
@@ -87,7 +96,8 @@ CREATE TABLE StudentSubmit (
     studentID INT NOT NULL,
     examModelID INT NOT NULL,
     FOREIGN KEY (studentID) REFERENCES Student(ID),
-    FOREIGN KEY (examModelID) REFERENCES ExamModel(ID)
+    FOREIGN KEY (examModelID) REFERENCES ExamModel(ID),
+    submitDate DATETIME DEFAULT GETDATE()
 );
 
 -- Junction Tables
@@ -95,14 +105,16 @@ CREATE TABLE Course_Topic (
     courseID INT NOT NULL,
     topic NVARCHAR(200) NOT NULL,
     FOREIGN KEY (courseID) REFERENCES Course(ID),
-    PRIMARY KEY (courseID, topic)
+    PRIMARY KEY (courseID, topic),
+    creationDate DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE Course_Field (
     courseID INT NOT NULL,
     field NVARCHAR(200) NOT NULL,
     FOREIGN KEY (courseID) REFERENCES Course(ID),
-    PRIMARY KEY (courseID, field)
+    PRIMARY KEY (courseID, field),
+    creationDate DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE QuestionBank_Choice (
@@ -128,7 +140,7 @@ CREATE TABLE StudentSubmit_Answer (
     StudentSubmitID INT NOT NULL,
     examModelID INT NOT NULL, 
     questionID INT NOT NULL,
-    studentAnswer NVARCHAR(200) NOT NULL,
+    studentAnswer NVARCHAR(200) ,
     FOREIGN KEY (StudentSubmitID) REFERENCES StudentSubmit(ID),
     FOREIGN KEY (examModelID, questionID) REFERENCES ExamModel_Question(examModelID, questionID),
 	PRIMARY KEY (StudentSubmitID,studentAnswer)
