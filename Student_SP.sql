@@ -1,10 +1,9 @@
 --- Add a New Student
-CREATE PROCEDURE AddStudent
+CREATE PROCEDURE InsertStudent
     @firstName NVARCHAR(100),
     @lastName NVARCHAR(100),
     @gender NVARCHAR(10),
     @SSN NVARCHAR(20),
-    @enrollmentDate DATETIME,
     @Email NVARCHAR(100),
     @phone NVARCHAR(15),
     @DateOfBirth DATE,
@@ -13,10 +12,11 @@ CREATE PROCEDURE AddStudent
     @departmentID INT
 AS 
 BEGIN
+    BEGIN TRY
 	DECLARE @studentID INT;
 	
     INSERT INTO Student (firstName, lastName, gender, SSN, enrollmentDate, email, phone, DateOfBirth, address, trackID, departmentID)
-    VALUES (@firstName, @lastName, @gender, @SSN, @enrollmentDate, @Email, @phone, @DateOfBirth, @address, @trackID, @departmentID);
+    VALUES (@firstName, @lastName, @gender, @SSN, GETDATE(), @Email, @phone, @DateOfBirth, @address, @trackID, @departmentID);
 	
     SET @studentID = SCOPE_IDENTITY();
 
@@ -30,41 +30,40 @@ BEGIN
         Track_Course tc
     WHERE 
         tc.trackID = @trackID;
+    END TRY
+    BEGIN CATCH
+        -- Rollback the transaction in case of error
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
 
+        -- Raise the error
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
-/***
--- auto enroll the student to the cources related to its track 
-GO
-CREATE TRIGGER EnrollStudentInCoursesAfterInsert
-ON Student
-AFTER INSERT
-AS
-BEGIN
-    DECLARE @studentID INT;
-    DECLARE @trackID INT;
-
-    SELECT @studentID = ID, @trackID = trackID FROM INSERTED;
-
-    INSERT INTO Course_Student (courseID, studentID, startDate)
-    SELECT 
-        tc.courseID,  
-        @studentID,   
-        GETDATE()     
-    FROM 
-        Track_Course tc
-    WHERE 
-        tc.trackID = @trackID; =
-END;
- ***/
- -------------------------------------
 GO
 --Get Student by ID
-CREATE PROCEDURE SelectStudentById
+CREATE PROCEDURE GetStudentById
     @StudentID INT
 AS
 BEGIN
-    SELECT * FROM Student WHERE ID = @StudentID;
+    SELECT Std.* , Dept.Name as [departmentName] , T.Name as [trackName]
+    FROM Student Std INNER JOIN Department Dept
+    ON Std.departmentID = Dept.ID
+    INNER JOIN Track T 
+    ON Std.trackID = T.ID
+    WHERE Std.ID = @StudentID;
 END;
 ------------------------------------------------------
 GO
@@ -76,6 +75,12 @@ BEGIN
     BEGIN TRANSACTION;
 
     BEGIN TRY
+        -- Check aginst NULL values
+        IF @StudentID IS NULL OR @StudentID <= 0
+        BEGIN
+            RAISERROR('Invalid StudentID. StudentID must be a positive integer.', 16, 1);
+            RETURN;
+        END;
         -- Validate StudentID
         IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @StudentID)
         BEGIN
@@ -83,34 +88,15 @@ BEGIN
             ROLLBACK TRANSACTION;
             RETURN;
         END
-			------------------
-
-        DELETE FROM ExamModel_StudentSubmit_Student
-        WHERE studentID = @StudentID;
-
-   
-        DELETE FROM StudentSubmit_Answer
-        WHERE StudentSubmitID IN (
-            SELECT ID
-            FROM StudentSubmit
-            WHERE studentID = @StudentID
-        );
-
-  
-        DELETE FROM StudentSubmit
-        WHERE studentID = @StudentID;
-
-        DELETE FROM Course_Student
-        WHERE studentID = @StudentID;
-
-        DELETE FROM Student
-        WHERE ID = @StudentID;
 			-------------
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-
-        ROLLBACK TRANSACTION;
+        -- ensure that @@TRANCOUNT is checked before rolling back to avoid errors if the transaction is not active
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
 
         DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
         SELECT @ErrorMessage = ERROR_MESSAGE(), 
@@ -124,7 +110,7 @@ END
 ---------------------------------------------
 GO
 --Update Student Information
-CREATE PROCEDURE UpdateStudentInfo
+CREATE PROCEDURE UpdateStudent
     @StudentID INT,
     @firstName NVARCHAR(100),
     @lastName NVARCHAR(100),
@@ -145,7 +131,6 @@ BEGIN
 			IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @StudentID)
 			BEGIN
 				RAISERROR('Student not found.', 16, 1);
-				ROLLBACK TRANSACTION;
 				RETURN;
 			END
 
@@ -153,7 +138,6 @@ BEGIN
 			IF @trackID IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Track WHERE ID = @trackID)
 			BEGIN
 				RAISERROR('Track not found.', 16, 1);
-				ROLLBACK TRANSACTION;
 				RETURN;
 			END
 
@@ -161,7 +145,6 @@ BEGIN
 			IF NOT EXISTS (SELECT 1 FROM Department WHERE ID = @departmentID)
 			BEGIN
 				RAISERROR('Department not found.', 16, 1);
-				ROLLBACK TRANSACTION;
 				RETURN;
 			END
 
@@ -179,10 +162,13 @@ BEGIN
 				departmentID = @departmentID
 			WHERE ID = @StudentID;
 
-			COMMIT TRANSACTION;
+	COMMIT TRANSACTION;
 		END TRY
 		BEGIN CATCH
-			ROLLBACK TRANSACTION;
+            IF @@TRANCOUNT > 0
+            BEGIN
+                ROLLBACK TRANSACTION;
+            END;
 			DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
 			SELECT @ErrorMessage = ERROR_MESSAGE(), 
 				   @ErrorSeverity = ERROR_SEVERITY(), 
@@ -195,7 +181,7 @@ END;
 
 GO
 --Enroll Student in a Course
-CREATE PROCEDURE EnrollStudentInCourse
+CREATE PROCEDURE InsertStudentInCourse
     @courseID INT,
     @studentID INT,
     @startDate DATETIME
@@ -231,9 +217,9 @@ BEGIN
 
  
     SELECT 
-        c.ID AS "Course ID",
-        c.Name AS "Course Name",
-        cs.startDate AS "Enrollment Date"
+        c.ID ,
+        c.Name ,
+        cs.startDate 
     FROM 
         Course_Student cs
     INNER JOIN 
@@ -243,7 +229,7 @@ BEGIN
 END;
 ------------------------------------------------------------
 GO
-CREATE PROCEDURE RemoveStudentEnrollment
+CREATE PROCEDURE DeleteCourseForStudent
     @courseID INT,
     @studentID INT
 AS
@@ -259,7 +245,6 @@ BEGIN
         )
         BEGIN
             RAISERROR('No matching record found for the given course and student.', 16, 1);
-            ROLLBACK TRANSACTION;
             RETURN;
         END;
 
@@ -270,8 +255,10 @@ BEGIN
         PRINT 'Student successfully removed from the course.';
     END TRY
     BEGIN CATCH
-
-        ROLLBACK TRANSACTION;
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
         DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
 		SELECT  @ErrorMessage = ERROR_MESSAGE(), 
 				@ErrorSeverity = ERROR_SEVERITY(), 
@@ -283,7 +270,7 @@ END;
 -------------------------------------------------
 GO
 --Count Students Enrolled in a Course
-CREATE PROCEDURE GetStudentCountInCourse
+CREATE PROCEDURE GetCountStudentInCourse
     @courseID INT
 AS
 BEGIN
@@ -301,7 +288,7 @@ END;
 
 GO
 --Submit Answer for a Question
-CREATE PROCEDURE SubmitExamAnswer
+CREATE PROCEDURE InsertAnswerForStudentSubmition
     @StudentSubmitID INT,
     @examModelID INT,
     @questionID INT,
@@ -315,7 +302,6 @@ BEGIN
         IF NOT EXISTS (SELECT 1 FROM StudentSubmit WHERE ID = @StudentSubmitID)
         BEGIN
             RAISERROR ('Invalid StudentSubmitID.', 16, 1);
-            ROLLBACK TRANSACTION;
             RETURN;
         END;
 
@@ -323,7 +309,6 @@ BEGIN
         IF NOT EXISTS (SELECT 1 FROM ExamModel WHERE ID = @examModelID)
         BEGIN
             RAISERROR ('Invalid examModelID.', 16, 1);
-            ROLLBACK TRANSACTION;
             RETURN;
         END;
 
@@ -331,7 +316,6 @@ BEGIN
         IF NOT EXISTS (SELECT 1 FROM QuestionBank WHERE ID = @questionID)
         BEGIN
             RAISERROR ('Invalid questionID.', 16, 1);
-            ROLLBACK TRANSACTION;
             RETURN;
         END;
 
@@ -344,7 +328,7 @@ BEGIN
               AND questionID = @questionID
         )
         BEGIN
-            RAISERROR ('Duplicate submission is not allowed for the same question.', 16, 1);
+            RAISERROR ('Duplicate submission answer is not allowed for the same question.', 16, 1);
             ROLLBACK TRANSACTION;
             RETURN;
         END;
@@ -359,7 +343,10 @@ BEGIN
     END TRY
     BEGIN CATCH
 
-        ROLLBACK TRANSACTION;
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
 
         DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
 			SELECT @ErrorMessage = ERROR_MESSAGE(), 
@@ -373,18 +360,54 @@ END;
 GO
 ---------useless SP----------
 -- Stored Procedure: Update a Submitted Answer
-CREATE PROCEDURE UpdateSubmittedAnswer
+CREATE PROCEDURE UpdateStudentSubmitAnswer
     @studentSubmitID INT,
     @examModelID INT,
     @questionID INT,
     @newAnswer NVARCHAR(200)
 AS
 BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
     UPDATE StudentSubmit_Answer
     SET studentAnswer = @newAnswer
     WHERE StudentSubmitID = @studentSubmitID 
     AND examModelID = @examModelID
     AND questionID = @questionID;
+
+    -- Check if the answer already exists
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM StudentSubmit_Answer 
+            WHERE StudentSubmitID = @studentSubmitID 
+              AND examModelID = @examModelID 
+              AND questionID = @questionID
+        )
+        BEGIN
+            RAISERROR('The specified answer does not exist. Cannot update.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
+
+        COMMIT TRANSACTION;
+    END TRY
+
+    BEGIN CATCH
+        -- Rollback the transaction if an error occurs
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+    DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        SELECT @ErrorMessage = ERROR_MESSAGE(), 
+               @ErrorSeverity = ERROR_SEVERITY(), 
+               @ErrorState = ERROR_STATE();
+
+        RAISERROR('Error updating answer: %s', @ErrorSeverity, @ErrorState, @ErrorMessage);
+
+        -- Return failure status
+        SELECT 0 AS Status, 'Failed to update answer.' AS Message;
+    END CATCH;
 END;
 
 
@@ -393,7 +416,7 @@ END;
 
 ------------------------EXTRA MAHARAT------------------------------------------------
 GO 
-CREATE PROCEDURE GetExamSubmissionCountByStudent
+CREATE PROCEDURE GetCountExamAnsweredByStudent
     @StudentID INT
 AS
 BEGIN
@@ -403,7 +426,7 @@ BEGIN
         RETURN;
     END
 
-    SELECT COUNT(*) AS "Submitted Exams"
+    SELECT COUNT(*)
     FROM StudentSubmit SS
     WHERE SS.studentID = @StudentID;
 END;
@@ -411,7 +434,7 @@ END;
 --------------------------------------------------------------
 
 GO
-CREATE PROCEDURE GetStudentExamNames 
+CREATE PROCEDURE GetExamCourseNamesByStudent
     @StudentID INT
 AS
 BEGIN
@@ -430,64 +453,11 @@ BEGIN
     WHERE SS.studentID = @StudentID;
 END;
 
------------------------------------------------------------------
-GO
-CREATE PROCEDURE GetStudentGradesForCourses
-
-    @StudentID INT
-AS
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @StudentID)
-    BEGIN
-        RAISERROR('Student with ID %d not found.', 16, 1, @StudentID);
-        RETURN;
-    END
-
-    SELECT 
-        C.Name AS Course,  SS.grade AS Grade
-    FROM StudentSubmit SS
-    INNER JOIN  ExamModel EM 
-		ON EM.ID = SS.examModelID
-    INNER JOIN  Course C 
-		ON C.ID = EM.CourseID
-    WHERE SS.studentID = @StudentID
-    ORDER BY C.Name;
-END
----------------------------------------------------------------
-
-GO
-CREATE PROCEDURE GetStudentGradeForCourse 
-	@StudentID INT,
-	@CourseID INT
-AS
-BEGIN
-	
-	IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @StudentID)
-		BEGIN
-			RAISERROR('Student with ID %d not found.', 16, 1, @StudentID);
-			RETURN;
-		END
-
-    IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @CourseID)
-		BEGIN
-			RAISERROR('Course with ID %d not found.', 16, 1, @CourseID);
-			RETURN;
-		END
-
-
-	SELECT SS.grade 
-	FROM StudentSubmit SS
-	INNER JOIN ExamModel EM
-		ON EM.ID=SS.examModelID
-	WHERE SS.studentID=@StudentID 
-	AND  EM.CourseID=@CourseID
-END
-
 ----------------------------------------------------------------------
 
 GO
 --- Get All Exam Answers Submitted by a Student
-CREATE PROCEDURE GetStudentExamAnswers
+CREATE PROCEDURE GetStudentAnswersPerExam
     @studentID INT,
     @examModelID INT
 AS
@@ -504,6 +474,19 @@ BEGIN
         RAISERROR('Exam model with ID %d not found.', 16, 1, @examModelID);
         RETURN;
     END
+
+    IF NOT EXISTS (
+    SELECT 1 
+    FROM StudentSubmit_Answer ssa
+    INNER JOIN ExamModel_StudentSubmit_Student emss 
+        ON ssa.StudentSubmitID = emss.studentSubmitID
+    WHERE emss.studentID = @studentID 
+      AND emss.examModelID = @examModelID
+)
+BEGIN
+    RAISERROR('No answers found for student with ID %d and exam model with ID %d.', 16, 1, @studentID, @examModelID);
+    RETURN;
+END
 
     SELECT 
         ssa.questionID,
