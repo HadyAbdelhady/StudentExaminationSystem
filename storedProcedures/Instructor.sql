@@ -10,17 +10,17 @@ WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the instructor exists
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @inputID)
+        -- Check if the instructor exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @inputID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@inputID AS NVARCHAR) + ' does not exist.';
+            PRINT 'Instructor with ID ' + CAST(@inputID AS NVARCHAR) + ' does not exist or is deleted.';
             RETURN;
         END;
 
         -- Select the instructor
         SELECT *
         FROM Instructor
-        WHERE ID = @inputID;
+        WHERE ID = @inputID AND isDeleted = 0;
     END TRY
     BEGIN CATCH
         -- Handle errors
@@ -46,10 +46,10 @@ WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the instructor exists
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instId)
+        -- Check if the instructor exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instId AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instId AS NVARCHAR) + ' does not exist.';
+            PRINT 'Instructor with ID ' + CAST(@instId AS NVARCHAR) + ' does not exist or is deleted.';
             RETURN;
         END;
 
@@ -64,7 +64,7 @@ BEGIN
             phone = @mobilePhone,
             enrollmentDate = @enrollDate,
             address = @homeAt
-        WHERE ID = @instId;
+        WHERE ID = @instId AND isDeleted = 0;
 
         PRINT 'Instructor data updated successfully.';
     END TRY
@@ -78,53 +78,47 @@ GO
 
 -- delete instructor
 CREATE PROC deleteInstructor
-	@instID INT
-WITH
-	ENCRYPTION
+    @instID INT
+WITH ENCRYPTION
 AS
 BEGIN
-	-- Check if the instructor exists
-	IF NOT EXISTS (SELECT 1
-	FROM Instructor
-	WHERE ID = @instID)
+    -- Check if the instructor exists and is not already deleted
+    IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
     BEGIN
-		PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist.';
-		RETURN;
-	END;
+        PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is already deleted.';
+        RETURN;
+    END;
 
-	-- Update all tables that reference the Instructor table
-	BEGIN TRY
+    BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- Update QuestionBank
+        -- Update all tables that reference the Instructor table
         UPDATE QuestionBank
         SET instructorID = 0
         WHERE instructorID = @instID;
 
-        -- Update ExamModel
         UPDATE ExamModel
         SET instructorID = 0
         WHERE instructorID = @instID;
 
-        -- Update Course_Instructor
         UPDATE Course_Instructor
         SET instructorID = 0
         WHERE instructorID = @instID;
 
-        -- Update Department_Instructor
         UPDATE Department_Instructor
         SET instructorID = 0
         WHERE instructorID = @instID;
 
-        -- Delete the instructor
-        DELETE FROM Instructor
+        -- Mark the instructor as deleted
+        UPDATE Instructor
+        SET isDeleted = 1
         WHERE ID = @instID;
 
         -- Commit the transaction
         COMMIT TRANSACTION;
 
         -- Print success message
-        PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' has been deleted. All references have been updated to instructorID = 0.';
+        PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' has been marked as deleted. All references have been updated to instructorID = 0.';
     END TRY
     BEGIN CATCH
         -- Rollback the transaction in case of an error
@@ -150,8 +144,8 @@ WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the SSN already exists
-        IF EXISTS (SELECT 1 FROM Instructor WHERE SSN = @ssn)
+        -- Check if the SSN already exists and is not deleted
+        IF EXISTS (SELECT 1 FROM Instructor WHERE SSN = @ssn AND isDeleted = 0)
         BEGIN
             PRINT 'Instructor with SSN ' + CAST(@ssn AS NVARCHAR) + ' already exists.';
             RETURN;
@@ -159,9 +153,9 @@ BEGIN
 
         -- Insert the instructor
         INSERT INTO Instructor
-            (firstName, lastName, gender, SSN, email, phone, enrollmentDate, DateOfBirth, address)
+            (firstName, lastName, gender, SSN, email, phone, enrollmentDate, DateOfBirth, address, isDeleted)
         VALUES
-            (@fName, @lName, @Gender, @ssn, @mail, @mobilePhone, @enrollDate, @DOB, @homeAt);
+            (@fName, @lName, @Gender, @ssn, @mail, @mobilePhone, @enrollDate, @DOB, @homeAt, 0);
 
         PRINT 'Instructor inserted successfully.';
     END TRY
@@ -180,10 +174,10 @@ WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the instructor exists
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID)
+        -- Check if the instructor exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist.';
+            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
             RETURN;
         END;
 
@@ -208,10 +202,10 @@ WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the instructor exists
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID)
+        -- Check if the instructor exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist.';
+            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
             RETURN;
         END;
 
@@ -235,10 +229,10 @@ WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the instructor exists
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID)
+        -- Check if the instructor exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist.';
+            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
             RETURN;
         END;
 
@@ -262,10 +256,10 @@ WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the instructor exists
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID)
+        -- Check if the instructor exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist.';
+            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
             RETURN;
         END;
 
@@ -289,10 +283,10 @@ WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the instructor exists
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID)
+        -- Check if the instructor exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist.';
+            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
             RETURN;
         END;
 
@@ -307,7 +301,7 @@ BEGIN
             JOIN Course ON ExamModel.courseID = Course.ID
             JOIN Instructor ON ExamModel.instructorID = Instructor.ID
         WHERE 
-            ExamModel.instructorID = @instID
+            ExamModel.instructorID = @instID AND Instructor.isDeleted = 0
         GROUP BY 
             Course.Name, Instructor.firstName, Instructor.lastName;
     END TRY

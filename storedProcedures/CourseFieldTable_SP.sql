@@ -10,7 +10,7 @@ BEGIN
     BEGIN TRY 
     IF EXISTS(SELECT 1
     FROM Course
-    WHERE ID = @CourseID)
+    WHERE ID = @CourseID AND isDeleted = 0)
 BEGIN
         INSERT INTO Course_Field
             (courseID,field)
@@ -42,9 +42,14 @@ CREATE PROCEDURE UpdateCourseField
     @field NVARCHAR(200)
 AS
 BEGIN
-    UPDATE Course_Field
-SET field = @field
-WHERE courseID = @CourseID
+    IF EXISTS(SELECT 1
+    FROM Course_Field
+    WHERE courseID = @CourseID AND isDeleted = 0)
+    BEGIN
+        UPDATE Course_Field
+        SET field = @field
+        WHERE courseID = @CourseID
+    END
 END;
 
 
@@ -73,23 +78,25 @@ GO
 
 --Getting all the fields with all the courses
 CREATE PROCEDURE GetCourseByField
-@field NVARCHAR(200) 
+    @field NVARCHAR(200)
 AS
 BEGIN
     SELECT C.*
     FROM Course_Field CF INNER JOIN Course C
-    ON CF.courseID = C.ID
-    WHERE field = @field
+        ON CF.courseID = C.ID
+    WHERE field = @field AND C.isDeleted = 0
 END;
 
 GO
 
 -- getting number of courses in specific field 
 CREATE PROCEDURE GetNumOfCoursesByField
-@field NVARCHAR(200)
-AS 
-BEGIN 
+    @field NVARCHAR(200)
+AS
+BEGIN
     SELECT COUNT(*)
-    FROM Course_Field
-    WHERE field = @field ;
+    FROM Course_Field INNER JOIN Course
+        ON Course_Field.courseID = Course.ID
+    WHERE field = @field AND Course.isDeleted = 0
+;
 END;

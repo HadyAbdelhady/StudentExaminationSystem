@@ -77,10 +77,13 @@ BEGIN
 
 		BEGIN TRANSACTION 
 
-		DELETE FROM Course_Field WHERE courseID = @CourseID
-		DELETE FROM Course_Topic WHERE courseID = @CourseID
+		-- DELETE FROM Course_Field WHERE courseID = @CourseID
+		-- DELETE FROM Course_Topic WHERE courseID = @CourseID
 
-		DELETE FROM Course WHERE ID = @CourseID
+		-- DELETE FROM Course WHERE ID = @CourseID
+		UPDATE Course 
+		SET isDeleted = 1
+		WHERE ID = @CourseID;
 
 		COMMIT TRANSACTION 
 	END TRY
@@ -95,7 +98,7 @@ BEGIN
     END CATCH
 	
 END
-
+GO
 --USING NAME   ---!!MAYBE WE CAN DO WITHOUT IT AS NAMES ARE NOT UNIQUE 
 --MALHASH LAZMA
 --CREATE PROCEDURE deleteFromCourseByName @name NVARCHAR(100)

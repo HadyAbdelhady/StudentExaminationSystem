@@ -9,11 +9,20 @@ CREATE PROCEDURE InsertIntoDepartmenttInstructor
 AS
 BEGIN
     BEGIN TRY
-        -- Attempt to insert the data
-        INSERT INTO Department_Instructor
-        (instructorID, departmentID, joinDate)
-    VALUES
-        (@INSTID, @DEPTID, GETDATE())
+        -- Check if the department and instructor are not deleted
+        IF EXISTS (SELECT 1 FROM Department WHERE ID = @DEPTID AND isDeleted = 0) AND
+           EXISTS (SELECT 1 FROM Instructor WHERE ID = @INSTID AND isDeleted = 0)
+        BEGIN
+            -- Attempt to insert the data
+            INSERT INTO Department_Instructor
+            (instructorID, departmentID, joinDate)
+            VALUES
+            (@INSTID, @DEPTID, GETDATE())
+        END
+        ELSE
+        BEGIN
+            RAISERROR ('Department or Instructor is deleted or does not exist.', 16, 1);
+        END
     END TRY
     BEGIN CATCH
         -- Handle the error
@@ -29,22 +38,29 @@ BEGIN
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END
-
 GO
 
 -- Delete SP 
 CREATE PROCEDURE DeleteInstructorFromDepartment
-    @INSTID INT ,
+    @INSTID INT,
     @DEPTID INT
 AS
 BEGIN
     BEGIN TRY
-    DELETE FROM Department_Instructor
-    WHERE departmentID = @DEPTID AND instructorID = @INSTID
+        -- Check if the department and instructor are not deleted
+        IF EXISTS (SELECT 1 FROM Department WHERE ID = @DEPTID AND isDeleted = 0) AND
+           EXISTS (SELECT 1 FROM Instructor WHERE ID = @INSTID AND isDeleted = 0)
+        BEGIN
+            DELETE FROM Department_Instructor
+            WHERE departmentID = @DEPTID AND instructorID = @INSTID
+        END
+        ELSE
+        BEGIN
+            RAISERROR ('Department or Instructor is deleted or does not exist.', 16, 1);
+        END
     END TRY
-
-BEGIN CATCH
--- Handle the error
+    BEGIN CATCH
+        -- Handle the error
         DECLARE @ErrorMessage NVARCHAR(4000);
         DECLARE @ErrorSeverity INT;
         DECLARE @ErrorState INT;
@@ -55,9 +71,8 @@ BEGIN CATCH
         @ErrorState = ERROR_STATE();
 
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
-END CATCH
+    END CATCH
 END
-
 GO
 
 -- Read SP
@@ -68,9 +83,10 @@ CREATE PROCEDURE GetInstructorsIDsInDepartment
 AS
 BEGIN
     BEGIN TRY
-        SELECT InstructorID
-    FROM Department_Instructor
-    WHERE departmentID = @DEPTID;
+        SELECT DI.instructorID
+        FROM Department_Instructor DI
+        INNER JOIN Instructor I ON DI.instructorID = I.ID
+        WHERE DI.departmentID = @DEPTID AND I.isDeleted = 0;
     END TRY
     BEGIN CATCH
         -- Handle the error
@@ -83,28 +99,25 @@ BEGIN
         @ErrorSeverity = ERROR_SEVERITY(),
         @ErrorState = ERROR_STATE();
 
-        -- Optionally, log the error or re-throw it
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
-END;
-
+END
 GO
 
 -- Get all the data of the indtructors in a specific department 
 CREATE PROCEDURE GetInstructorsDataInDepartment
     @DEPTID INT
 AS
-
 BEGIN
     BEGIN TRY 
-        SELECT INST.* , DEPT_INST.joinDate
-    FROM Instructor INST INNER JOIN Department_Instructor DEPT_INST
-        ON INST.ID = DEPT_INST.instructorID
-    WHERE @DEPTID = DEPT_INST.departmentID
+        SELECT INST.*, DEPT_INST.joinDate
+        FROM Instructor INST
+        INNER JOIN Department_Instructor DEPT_INST ON INST.ID = DEPT_INST.instructorID
+        WHERE DEPT_INST.departmentID = @DEPTID AND INST.isDeleted = 0;
     END TRY
     
     BEGIN CATCH
-    -- Handle the error
+        -- Handle the error
         DECLARE @ErrorMessage NVARCHAR(4000);
         DECLARE @ErrorSeverity INT;
         DECLARE @ErrorState INT;
@@ -114,7 +127,6 @@ BEGIN
         @ErrorSeverity = ERROR_SEVERITY(),
         @ErrorState = ERROR_STATE();
 
-    -- Optionally, log the error or re-throw it
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END

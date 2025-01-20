@@ -19,7 +19,6 @@ BEGIN
     -- Get the ID of the inserted question
     SET @QuestionID = SCOPE_IDENTITY();
 END;
-
 GO
 
 --Read
@@ -29,10 +28,10 @@ AS
 BEGIN
     SELECT *
     FROM QuestionBank
-    WHERE ID = @ID
-END
-
+    WHERE ID = @ID AND isDeleted = 0;
+END;
 GO
+
 --Update
 CREATE PROCEDURE UpdateQuestion
     @ID INT,
@@ -43,21 +42,42 @@ CREATE PROCEDURE UpdateQuestion
     @QuestionText NVARCHAR(1000)
 AS
 BEGIN
-    UPDATE QuestionBank SET Type = @Type, CorrectChoice = @CorrectChoice, InstructorID = @InstructorID, 
-	CourseID = @CourseID, LastEditDate = GETDATE(), QuestionText = @QuestionText 
-	WHERE ID = @ID
-END
+    -- Check if the question exists and is not deleted
+    IF NOT EXISTS (SELECT 1 FROM QuestionBank WHERE ID = @ID AND isDeleted = 0)
+    BEGIN
+        RAISERROR('Question does not exist or is deleted.', 16, 1);
+        RETURN;
+    END;
 
+    -- Update the question
+    UPDATE QuestionBank 
+    SET Type = @Type, 
+        CorrectChoice = @CorrectChoice, 
+        InstructorID = @InstructorID, 
+        CourseID = @CourseID, 
+        LastEditDate = GETDATE(), 
+        QuestionText = @QuestionText 
+    WHERE ID = @ID AND isDeleted = 0;
+END;
 GO
+
 --Delete
 CREATE PROCEDURE DeleteQuestion
     @ID INT
 AS
 BEGIN
-    DELETE FROM QuestionBank 
-	WHERE ID = @ID
-END
+    -- Check if the question exists and is not already deleted
+    IF NOT EXISTS (SELECT 1 FROM QuestionBank WHERE ID = @ID AND isDeleted = 0)
+    BEGIN
+        RAISERROR('Question does not exist or is already deleted.', 16, 1);
+        RETURN;
+    END;
 
+    -- Mark the question as deleted
+    UPDATE QuestionBank
+    SET isDeleted = 1
+    WHERE ID = @ID;
+END;
 GO
 
 --get all questions for specific course
@@ -67,9 +87,8 @@ AS
 BEGIN
     SELECT *
     FROM QuestionBank
-    WHERE CourseID = @CourseID;
-END
-
+    WHERE CourseID = @CourseID AND isDeleted = 0;
+END;
 GO
 
 --Generate random questions with specific numbers of true or false and MCQ Questions using courseID
@@ -94,7 +113,7 @@ BEGIN
         DECLARE @AvailableTrueOrFalse INT;
         SELECT @AvailableTrueOrFalse = COUNT(*)
         FROM QuestionBank
-        WHERE CourseID = @CourseID AND Type = 'TrueOrFalse';
+        WHERE CourseID = @CourseID AND Type = 'TrueOrFalse' AND isDeleted = 0;
 
         IF @NumOfTrueOrFalse > @AvailableTrueOrFalse
             BEGIN
@@ -107,7 +126,7 @@ BEGIN
         SELECT TOP (@NumOfTrueOrFalse)
             ID, QuestionText, Type
         FROM QuestionBank
-        WHERE CourseID = @CourseID AND Type = 'TrueOrFalse'
+        WHERE CourseID = @CourseID AND Type = 'TrueOrFalse' AND isDeleted = 0
         ORDER BY NEWID();
     END
 
@@ -117,7 +136,7 @@ BEGIN
         DECLARE @AvailableMultiple INT;
         SELECT @AvailableMultiple = COUNT(*)
         FROM QuestionBank
-        WHERE CourseID = @CourseID AND Type = 'MultipleChoice';
+        WHERE CourseID = @CourseID AND Type = 'MultipleChoice' AND isDeleted = 0;
 
         IF @NumOfMultiple > @AvailableMultiple
             BEGIN
@@ -130,7 +149,7 @@ BEGIN
         SELECT TOP (@NumOfMultiple)
             ID, QuestionText, Type
         FROM QuestionBank
-        WHERE CourseID = @CourseID AND Type = 'MultipleChoice'
+        WHERE CourseID = @CourseID AND Type = 'MultipleChoice' AND isDeleted = 0
         ORDER BY NEWID();
     END
 
@@ -153,8 +172,8 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
-
 GO
+
 -- Procedure to Get Questions by Topic with Random Selection for Specific Types
 CREATE PROCEDURE GetRandomQuestionsByTopic
     @CourseID INT,
@@ -181,7 +200,8 @@ BEGIN
             JOIN Course_Topic CT ON QB.CourseID = CT.CourseID
         WHERE QB.CourseID = @CourseID
             AND QB.Type = 'TrueOrFalse'
-            AND (CT.Topic = @Topic OR @Topic IS NULL);
+            AND (CT.Topic = @Topic OR @Topic IS NULL)
+            AND QB.isDeleted = 0;
 
         IF @AvailableTrueOrFalse < @NumOfTrueOrFalse
             BEGIN
@@ -198,6 +218,7 @@ BEGIN
         WHERE QB.CourseID = @CourseID
             AND QB.Type = 'TrueOrFalse'
             AND (CT.Topic = @Topic OR @Topic IS NULL)
+            AND QB.isDeleted = 0
         ORDER BY NEWID();
     END
 
@@ -210,7 +231,8 @@ BEGIN
             JOIN Course_Topic CT ON QB.CourseID = CT.CourseID
         WHERE QB.CourseID = @CourseID
             AND QB.Type = 'MultipleChoice'
-            AND (CT.Topic = @Topic OR @Topic IS NULL);
+            AND (CT.Topic = @Topic OR @Topic IS NULL)
+            AND QB.isDeleted = 0;
 
         IF @AvailableMultiple < @NumOfMultiple
             BEGIN
@@ -227,6 +249,7 @@ BEGIN
         WHERE QB.CourseID = @CourseID
             AND QB.Type = 'MultipleChoice'
             AND (CT.Topic = @Topic OR @Topic IS NULL)
+            AND QB.isDeleted = 0
         ORDER BY NEWID();
     END
 
@@ -247,5 +270,5 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
-
+GO
 

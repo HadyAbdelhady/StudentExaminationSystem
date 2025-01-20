@@ -13,23 +13,25 @@ CREATE PROCEDURE InsertStudent
 AS 
 BEGIN
     BEGIN TRY
-	DECLARE @studentID INT;
-	
-    INSERT INTO Student (firstName, lastName, gender, SSN, enrollmentDate, email, phone, DateOfBirth, address, trackID, departmentID)
-    VALUES (@firstName, @lastName, @gender, @SSN, GETDATE(), @Email, @phone, @DateOfBirth, @address, @trackID, @departmentID);
-	
-    SET @studentID = SCOPE_IDENTITY();
+        DECLARE @studentID INT;
+        
+        -- Insert the new student
+        INSERT INTO Student (firstName, lastName, gender, SSN, enrollmentDate, email, phone, DateOfBirth, address, trackID, departmentID)
+        VALUES (@firstName, @lastName, @gender, @SSN, GETDATE(), @Email, @phone, @DateOfBirth, @address, @trackID, @departmentID);
+        
+        -- Get the ID of the inserted student
+        SET @studentID = SCOPE_IDENTITY();
 
-    -- Enroll the student in all courses associated with the track
-    INSERT INTO Course_Student (courseID, studentID, startDate)
-    SELECT 
-        tc.courseID,
-        @studentID,
-        GETDATE() 
-    FROM 
-        Track_Course tc
-    WHERE 
-        tc.trackID = @trackID;
+        -- Enroll the student in all courses associated with the track
+        INSERT INTO Course_Student (courseID, studentID, startDate)
+        SELECT 
+            tc.courseID,
+            @studentID,
+            GETDATE() 
+        FROM 
+            Track_Course tc
+        WHERE 
+            tc.trackID = @trackID;
     END TRY
     BEGIN CATCH
         -- Rollback the transaction in case of error
@@ -51,22 +53,29 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH;
 END;
-
 GO
+
 --Get Student by ID
 CREATE PROCEDURE GetStudentById
     @StudentID INT
 AS
 BEGIN
-    SELECT Std.* , Dept.Name as [departmentName] , T.Name as [trackName]
-    FROM Student Std INNER JOIN Department Dept
-    ON Std.departmentID = Dept.ID
-    INNER JOIN Track T 
-    ON Std.trackID = T.ID
-    WHERE Std.ID = @StudentID;
+    SELECT 
+        Std.*, 
+        Dept.Name AS [departmentName], 
+        T.Name AS [trackName]
+    FROM 
+        Student Std 
+    INNER JOIN 
+        Department Dept ON Std.departmentID = Dept.ID
+    INNER JOIN 
+        Track T ON Std.trackID = T.ID
+    WHERE 
+        Std.ID = @StudentID 
+        AND Std.isDeleted = 0;
 END;
-------------------------------------------------------
 GO
+
 --Remove a Student
 CREATE PROCEDURE DeleteStudent
     @StudentID INT
@@ -75,40 +84,38 @@ BEGIN
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- Check aginst NULL values
-        IF @StudentID IS NULL OR @StudentID <= 0
+        -- Check if the student exists and is not already deleted
+        IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @StudentID AND isDeleted = 0)
         BEGIN
-            RAISERROR('Invalid StudentID. StudentID must be a positive integer.', 16, 1);
+            RAISERROR('Student with ID %d does not exist or is already deleted.', 16, 1, @StudentID);
             RETURN;
         END;
-        -- Validate StudentID
-        IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @StudentID)
-        BEGIN
-            RAISERROR ('StudentID %d does not exist.', 16, 1, @StudentID);
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END
-			-------------
+
+        -- Mark the student as deleted
+        UPDATE Student
+        SET isDeleted = 1
+        WHERE ID = @StudentID;
+
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        -- ensure that @@TRANCOUNT is checked before rolling back to avoid errors if the transaction is not active
+        -- Rollback the transaction if an error occurs
         IF @@TRANCOUNT > 0
         BEGIN
             ROLLBACK TRANSACTION;
         END;
 
         DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
-        SELECT @ErrorMessage = ERROR_MESSAGE(), 
-               @ErrorSeverity = ERROR_SEVERITY(), 
-               @ErrorState = ERROR_STATE();
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(), 
+            @ErrorSeverity = ERROR_SEVERITY(), 
+            @ErrorState = ERROR_STATE();
 
-        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
-END
-
----------------------------------------------
+END;
 GO
+
 --Update Student Information
 CREATE PROCEDURE UpdateStudent
     @StudentID INT,
@@ -126,60 +133,50 @@ AS
 BEGIN
     BEGIN TRANSACTION;
 
-		BEGIN TRY
-			-- Check if the student exists
-			IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @StudentID)
-			BEGIN
-				RAISERROR('Student not found.', 16, 1);
-				RETURN;
-			END
+    BEGIN TRY
+        -- Check if the student exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @StudentID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('Student with ID %d does not exist or is deleted.', 16, 1, @StudentID);
+            RETURN;
+        END;
 
-			-- Check if trackID exists (optional, based on your logic)
-			IF @trackID IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Track WHERE ID = @trackID)
-			BEGIN
-				RAISERROR('Track not found.', 16, 1);
-				RETURN;
-			END
+        -- Update the student information
+        UPDATE Student
+        SET 
+            firstName = @firstName,
+            lastName = @lastName,
+            gender = @gender,
+            SSN = @SSN,
+            email = @email,
+            phone = @phone,
+            DateOfBirth = @DateOfBirth,
+            address = @address,
+            trackID = @trackID,
+            departmentID = @departmentID
+        WHERE 
+            ID = @StudentID;
 
-			-- Check if departmentID exists
-			IF NOT EXISTS (SELECT 1 FROM Department WHERE ID = @departmentID)
-			BEGIN
-				RAISERROR('Department not found.', 16, 1);
-				RETURN;
-			END
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Rollback the transaction if an error occurs
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
 
-			-- Update the student information
-			UPDATE Student
-			SET firstName = @firstName,
-				lastName = @lastName,
-				gender = @gender,
-				SSN = @SSN,
-				email = @email,
-				phone = @phone,
-				DateOfBirth = @DateOfBirth,
-				address = @address,
-				trackID = @trackID,
-				departmentID = @departmentID
-			WHERE ID = @StudentID;
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(), 
+            @ErrorSeverity = ERROR_SEVERITY(), 
+            @ErrorState = ERROR_STATE();
 
-	COMMIT TRANSACTION;
-		END TRY
-		BEGIN CATCH
-            IF @@TRANCOUNT > 0
-            BEGIN
-                ROLLBACK TRANSACTION;
-            END;
-			DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
-			SELECT @ErrorMessage = ERROR_MESSAGE(), 
-				   @ErrorSeverity = ERROR_SEVERITY(), 
-				   @ErrorState = ERROR_STATE();
-			RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
-		END CATCH
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
 END;
-
---------------------------------------------------
-
 GO
+
 --Enroll Student in a Course
 CREATE PROCEDURE InsertStudentInCourse
     @courseID INT,
@@ -187,48 +184,84 @@ CREATE PROCEDURE InsertStudentInCourse
     @startDate DATETIME
 AS
 BEGIN
-    IF EXISTS (
-        SELECT 1 
-        FROM Course_Student
-        WHERE courseID = @courseID AND studentID = @studentID
-    )
-    BEGIN
-        RAISERROR ('The student is already enrolled in the specified course.', 16, 1);
-        RETURN;
-    END
+    BEGIN TRY
+        -- Check if the student exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @studentID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('Student with ID %d does not exist or is deleted.', 16, 1, @studentID);
+            RETURN;
+        END;
 
-    INSERT INTO Course_Student (courseID, studentID, startDate)
-    VALUES (@courseID, @studentID, @startDate);
+        -- Check if the course exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('Course with ID %d does not exist or is deleted.', 16, 1, @courseID);
+            RETURN;
+        END;
+
+        -- Check if the student is already enrolled in the course
+        IF EXISTS (SELECT 1 FROM Course_Student WHERE courseID = @courseID AND studentID = @studentID)
+        BEGIN
+            RAISERROR('The student is already enrolled in the specified course.', 16, 1);
+            RETURN;
+        END;
+
+        -- Enroll the student in the course
+        INSERT INTO Course_Student (courseID, studentID, startDate)
+        VALUES (@courseID, @studentID, @startDate);
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(), 
+            @ErrorSeverity = ERROR_SEVERITY(), 
+            @ErrorState = ERROR_STATE();
+
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
 END;
-
-------------------------------------------------
-
 GO
+
 --Get Courses Enrolled by a Student
 CREATE PROCEDURE GetCoursesEnrolledByStudent
     @studentID INT
 AS
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @studentID)
-    BEGIN
-        RAISERROR('Student not found.', 16, 1);
-        RETURN;
-    END
+    BEGIN TRY
+        -- Check if the student exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @studentID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('Student with ID %d does not exist or is deleted.', 16, 1, @studentID);
+            RETURN;
+        END;
 
- 
-    SELECT 
-        c.ID ,
-        c.Name ,
-        cs.startDate 
-    FROM 
-        Course_Student cs
-    INNER JOIN 
-        Course c ON cs.courseID = c.ID
-    WHERE 
-        cs.studentID = @studentID
+        -- Retrieve the courses the student is enrolled in
+        SELECT 
+            c.ID,
+            c.Name,
+            cs.startDate
+        FROM 
+            Course_Student cs
+        INNER JOIN 
+            Course c ON cs.courseID = c.ID
+        WHERE 
+            cs.studentID = @studentID
+            AND c.isDeleted = 0;
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(), 
+            @ErrorSeverity = ERROR_SEVERITY(), 
+            @ErrorState = ERROR_STATE();
+
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
 END;
-------------------------------------------------------------
 GO
+
 CREATE PROCEDURE DeleteCourseForStudent
     @courseID INT,
     @studentID INT

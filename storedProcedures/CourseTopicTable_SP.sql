@@ -3,9 +3,9 @@
 
 --RAISERROR (message_string, severity, state)
 --severity: Indicates the severity level of the error. It ranges from 0 to 25:
---0–10: Informational messages (no effect on execution).
---11–16: User-defined errors.
---17–25: Software or hardware errors (requires sysadmin role).
+--0ï¿½10: Informational messages (no effect on execution).
+--11ï¿½16: User-defined errors.
+--17ï¿½25: Software or hardware errors (requires sysadmin role).
 --state: Any integer from 0 to 255. It is used to identify the location in the code that raised the error.
 
 --Inserting into Course_Topic Table
@@ -15,7 +15,7 @@ CREATE PROCEDURE InsertTopicIntoCourse
 AS
 BEGIN
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID)
+        IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID OR isDeleted = 0 ) 
         BEGIN
             RAISERROR('Course with ID %d does not exist in the Course table.', 16, 5, @courseID);  --16 means user error --5 means error in the course table
             RETURN;
@@ -23,11 +23,21 @@ BEGIN
 
         IF EXISTS (
             SELECT 1 
-            FROM Course_Topic 
-            WHERE courseID = @courseID AND topic = @Topic
+            FROM Course_Topic INNER JOIN Course ON Course.ID = Course_Topic.courseID
+            WHERE courseID = @courseID AND topic = @Topic AND isDeleted = 0
         )
         BEGIN
             RAISERROR('Topic "%s" already exists for Course with ID %d.', 16, 51, @Topic, @courseID); --16 means user error --5 means error in the course table --1 means topic
+            RETURN;
+        END
+
+        IF EXISTS (
+            SELECT 1 
+            FROM Course_Topic INNER JOIN Course ON Course.ID = Course_Topic.courseID
+            WHERE courseID = @courseID AND topic = @Topic AND isDeleted = 1
+        )
+        BEGIN
+            RAISERROR('Course with ID %d is deleted.', 16, 51,@courseID); --16 means user error --5 means error in the course table --1 means topic
             RETURN;
         END
 
@@ -60,9 +70,9 @@ CREATE PROCEDURE UpdateCourseTopic
 AS
 BEGIN
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID)
+        IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID OR isDeleted = 1)
         BEGIN
-            RAISERROR('Course with ID %d not found.', 16, 1, @courseID);
+            RAISERROR('Course not found.', 16, 1);
             RETURN;
         END
 
@@ -97,9 +107,9 @@ CREATE PROCEDURE DeleteSpecificTopicFromCourse
 AS
 BEGIN
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID)
+        IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID OR isDeleted = 0 ) 
         BEGIN
-            RAISERROR('Course with ID %d not found.', 16, 1, @courseID);
+            RAISERROR('Course not found.', 16, 1);
             RETURN;
         END
 
@@ -141,9 +151,9 @@ CREATE PROCEDURE DeleteAllTopicsByCourseID
 AS
 BEGIN
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID)
+        IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID OR isDeleted = 0 ) 
         BEGIN
-            RAISERROR('Course with ID %d not found.', 16, 1, @courseID);
+            RAISERROR('Course not found.', 16, 1);
             RETURN;
         END
 
@@ -181,7 +191,8 @@ BEGIN
             Course c
         INNER JOIN 
             Course_Topic ct
-            ON c.ID = ct.courseID;
+            ON c.ID = ct.courseID
+        WHERE c.isDeleted = 0;
     END TRY
     BEGIN CATCH
 
@@ -203,7 +214,7 @@ CREATE PROCEDURE GetCourseTopics
     @courseID INT
 AS
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID)
+    IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID OR isDeleted = 0)
     BEGIN
         RAISERROR('Course not found.', 16, 1);
         RETURN;

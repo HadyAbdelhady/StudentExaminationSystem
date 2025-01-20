@@ -9,7 +9,7 @@ BEGIN
 	INSERT INTO ExamModel_StudentSubmit_Student (examModelID, studentSubmitID, studentID, submitDate)
 		VALUES(@examModelID, @studentSubmitID, @studentID, @date)
 END
-
+GO
 --Updating ExamModel_StudentSubmit_Student Table
 CREATE PROCEDURE UpdateExamModelStudentSubmitStudent 
     @examModelID INT, @studentSubmitID INT, @studentID INT,
@@ -20,7 +20,7 @@ BEGIN
     SET submitDate = @date
     WHERE examModelID = @examModelID AND studentSubmitID = @studentSubmitID AND studentID = @studentID;
 END;
-
+GO
 -- Deleting from ExamModel_StudentSubmit_Student'
 CREATE PROCEDURE deleteExamModelStudentSubmitStudent
 	@examModelID INT, @studentSubmitID INT, @studentID INT
@@ -29,7 +29,7 @@ BEGIN
 	DELETE FROM ExamModel_StudentSubmit_Student
 		WHERE examModelID = @examModelID AND studentSubmitID = @studentSubmitID AND studentID = @studentID
 END
-
+GO
 
 --Getting all ExamModel_StudentSubmit_Student data
 CREATE PROCEDURE getAllExamModelStudentSubmitStudents
