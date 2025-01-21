@@ -1,26 +1,17 @@
--- Insert Department 1
+-- Insert Department 1: Computer Science
 EXEC InsertDepartment @DEPTNAME = 'Computer Science', @DEPTMANAGER = 1;
 
--- Insert Department 2
+-- Insert Department 2: Mathematics
 EXEC InsertDepartment @DEPTNAME = 'Mathematics', @DEPTMANAGER = 2;
 
--- Insert Department 3
-EXEC InsertDepartment @DEPTNAME = 'Physics', @DEPTMANAGER = 3;
-
-
--- Insert Track 1 (Computer Science Department)
+-- Insert Track 1: Software Engineering (Computer Science Department)
 EXEC InsertTrack @Name = 'Software Engineering', @DepartmentID = 1;
 
--- Insert Track 2 (Computer Science Department)
+-- Insert Track 2: Artificial Intelligence (Computer Science Department)
 EXEC InsertTrack @Name = 'Artificial Intelligence', @DepartmentID = 1;
 
--- Insert Track 3 (Mathematics Department)
+-- Insert Track 3: Pure Mathematics (Mathematics Department)
 EXEC InsertTrack @Name = 'Pure Mathematics', @DepartmentID = 2;
-
--- Insert Track 4 (Physics Department)
-EXEC InsertTrack @Name = 'Quantum Physics', @DepartmentID = 3;
-
-
 
 -- Insert Instructor 1
 EXEC InsertInstructor 
@@ -58,8 +49,31 @@ EXEC InsertInstructor
     @DOB = '1975-12-25',
     @homeAt = '789 Oak St, City, Country';
 
+-- Insert Instructor 4
+EXEC InsertInstructor 
+    @fName = 'Robert',
+    @lName = 'Brown',
+    @Gender = 'M',
+    @ssn = '321-54-9876',
+    @mail = 'robert.brown@university.edu',
+    @mobilePhone = '3216549876',
+    @enrollDate = '2017-07-10',
+    @DOB = '1970-08-30',
+    @homeAt = '101 Pine St, City, Country';
 
-    -- Insert Student 1 (Software Engineering Track)
+-- Insert Instructor 5
+EXEC InsertInstructor 
+    @fName = 'Emily',
+    @lName = 'Davis',
+    @Gender = 'F',
+    @ssn = '654-87-3210',
+    @mail = 'emily.davis@university.edu',
+    @mobilePhone = '6548732109',
+    @enrollDate = '2016-09-20',
+    @DOB = '1982-11-12',
+    @homeAt = '202 Maple St, City, Country';
+
+    -- Insert Student 1: Software Engineering Track
 EXEC InsertStudent 
     @firstName = 'Michael',
     @lastName = 'Brown',
@@ -72,7 +86,7 @@ EXEC InsertStudent
     @trackID = 1, -- Software Engineering Track
     @departmentID = 1; -- Computer Science Department
 
--- Insert Student 2 (Artificial Intelligence Track)
+-- Insert Student 2: Artificial Intelligence Track
 EXEC InsertStudent 
     @firstName = 'Emily',
     @lastName = 'Davis',
@@ -85,7 +99,7 @@ EXEC InsertStudent
     @trackID = 2, -- Artificial Intelligence Track
     @departmentID = 1; -- Computer Science Department
 
--- Insert Student 3 (Pure Mathematics Track)
+-- Insert Student 3: Pure Mathematics Track
 EXEC InsertStudent 
     @firstName = 'David',
     @lastName = 'Wilson',
@@ -98,60 +112,70 @@ EXEC InsertStudent
     @trackID = 3, -- Pure Mathematics Track
     @departmentID = 2; -- Mathematics Department
 
--- Insert Student 4 (Quantum Physics Track)
+-- Insert Student 4: Software Engineering Track
 EXEC InsertStudent 
-    @firstName = 'Sarah',
+    @firstName = 'Olivia',
     @lastName = 'Taylor',
     @gender = 'F',
     @SSN = '444-55-6666',
-    @Email = 'sarah.taylor@university.edu',
+    @Email = 'olivia.taylor@university.edu',
     @phone = '4445556666',
     @DateOfBirth = '2003-04-04',
     @address = '404 Birch St, City, Country',
-    @trackID = 4, -- Quantum Physics Track
-    @departmentID = 3; -- Physics Department
+    @trackID = 1, -- Software Engineering Track
+    @departmentID = 1; -- Computer Science Department
 
+-- Insert Student 5: Artificial Intelligence Track
+EXEC InsertStudent 
+    @firstName = 'James',
+    @lastName = 'Anderson',
+    @gender = 'M',
+    @SSN = '555-66-7777',
+    @Email = 'james.anderson@university.edu',
+    @phone = '5556667777',
+    @DateOfBirth = '2004-05-05',
+    @address = '505 Oak St, City, Country',
+    @trackID = 2, -- Artificial Intelligence Track
+    @departmentID = 1; -- Computer Science Department
 
-    -- Insert Course 1
-EXEC InsertCourse @Name = 'Introduction to Programming';
+    -- Insert Course 1: Artificial Intelligence (AI)
+EXEC InsertCourse @Name = 'Artificial Intelligence';
 
--- Insert Course 2
+-- Insert Course 2: Data Structures and Algorithms
 EXEC InsertCourse @Name = 'Data Structures and Algorithms';
 
--- Insert Course 3
-EXEC InsertCourse @Name = 'Calculus I';
+-- Insert Course 3: Networking
+EXEC InsertCourse @Name = 'Networking';
 
--- Insert Course 4
-EXEC InsertCourse @Name = 'Quantum Mechanics';
+-- Insert Course 4: Operating Systems
+EXEC InsertCourse @Name = 'Operating Systems';
 
+-- Insert Course 5: Databases
+EXEC InsertCourse @Name = 'Databases';
 
--- Enroll Student 1 in Course 1
-EXEC InsertStudentInCourse @courseID = 1, @studentID = 1, @startDate = '2023-09-01';
+-- Insert Course 6: Object-Oriented Programming with C#
+EXEC InsertCourse @Name = 'Object-Oriented Programming with C#';
 
--- Enroll Student 1 in Course 2
+-- Insert Course 7: JavaScript Programming
+EXEC InsertCourse @Name = 'JavaScript Programming';
+
+-- Enroll Student 1 (Software Engineering) in Course 2 (Data Structures and Algorithms)
 EXEC InsertStudentInCourse @courseID = 2, @studentID = 1, @startDate = '2023-09-01';
 
--- Enroll Student 2 in Course 1
+-- Enroll Student 1 (Software Engineering) in Course 4 (Operating Systems)
+EXEC InsertStudentInCourse @courseID = 4, @studentID = 1, @startDate = '2023-09-01';
+
+-- Enroll Student 2 (Artificial Intelligence) in Course 1 (Artificial Intelligence)
 EXEC InsertStudentInCourse @courseID = 1, @studentID = 2, @startDate = '2023-09-01';
 
--- Enroll Student 3 in Course 3
-EXEC InsertStudentInCourse @courseID = 3, @studentID = 3, @startDate = '2023-09-01';
+-- Enroll Student 2 (Artificial Intelligence) in Course 5 (Databases)
+EXEC InsertStudentInCourse @courseID = 5, @studentID = 2, @startDate = '2023-09-01';
 
--- Enroll Student 4 in Course 4
-EXEC InsertStudentInCourse @courseID = 4, @studentID = 4, @startDate = '2023-09-01';
+-- Enroll Student 3 (Pure Mathematics) in Course 2 (Data Structures and Algorithms)
+EXEC InsertStudentInCourse @courseID = 2, @studentID = 3, @startDate = '2023-09-01';
 
+-- Enroll Student 4 (Software Engineering) in Course 6 (OOP with C#)
+EXEC InsertStudentInCourse @courseID = 6, @studentID = 4, @startDate = '2023-09-01';
 
--- Enroll Student 1 in Course 1
-EXEC InsertStudentInCourse @courseID = 1, @studentID = 1, @startDate = '2023-09-01';
-
--- Enroll Student 1 in Course 2
-EXEC InsertStudentInCourse @courseID = 2, @studentID = 1, @startDate = '2023-09-01';
-
--- Enroll Student 2 in Course 1
-EXEC InsertStudentInCourse @courseID = 1, @studentID = 2, @startDate = '2023-09-01';
-
--- Enroll Student 3 in Course 3
-EXEC InsertStudentInCourse @courseID = 3, @studentID = 3, @startDate = '2023-09-01';
-
--- Enroll Student 4 in Course 4
-EXEC InsertStudentInCourse @courseID = 4, @studentID = 4, @startDate = '2023-09-01';
+-- Enroll Student 5 (Artificial Intelligence) in Course 7 (JavaScript Programming)
+EXEC InsertStudentInCourse @courseID = 7, @studentID = 5, @startDate = '2023-09-01';

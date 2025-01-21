@@ -168,7 +168,7 @@ END
 GO
 
 -- get the number of student in each course that the instructor teach
-CREATE PROC getInstructorCoursesStudentCount
+CREATE PROCEDURE getInstructorCoursesStudentCount
     @instID INT
 WITH ENCRYPTION
 AS
@@ -182,17 +182,27 @@ BEGIN
         END;
 
         -- Get the number of students in each course taught by the instructor
-        SELECT COUNT(*) AS studentCount, courseID
-        FROM Student
-        WHERE courseID IN (SELECT courseID FROM Course_Instructor WHERE instructorID = @instID)
-        GROUP BY courseID;
+        SELECT 
+            CI.courseID, 
+            COUNT(CS.studentID) AS studentCount
+        FROM 
+            Course_Instructor CI
+        INNER JOIN 
+            Course_Student CS ON CI.courseID = CS.courseID
+        INNER JOIN 
+            Course C ON CI.courseID = C.ID
+        WHERE 
+            CI.instructorID = @instID
+            AND C.isDeleted = 0 -- Ensure the course is not deleted
+        GROUP BY 
+            CI.courseID;
     END TRY
     BEGIN CATCH
         -- Handle errors
         PRINT 'An error occurred while retrieving the student count for courses taught by the instructor.';
         PRINT 'Error Message: ' + ERROR_MESSAGE();
     END CATCH;
-END
+END;
 GO
 
 -- get how many course does an instructor teach
