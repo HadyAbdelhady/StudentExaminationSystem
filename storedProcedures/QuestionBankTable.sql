@@ -12,7 +12,7 @@ AS
 BEGIN
     -- Insert the new question
     INSERT INTO QuestionBank
-        (Type, CorrectChoice, InstructorID, CourseID, LastEditDate, QuestionText)
+        (Type, CorrectChoice, InstructorID, CourseID, insertionDate, QuestionText)
     VALUES
         (@Type, @CorrectChoice, @InstructorID, @CourseID, GETDATE(), @QuestionText);
 
@@ -55,7 +55,7 @@ BEGIN
         CorrectChoice = @CorrectChoice, 
         InstructorID = @InstructorID, 
         CourseID = @CourseID, 
-        LastEditDate = GETDATE(), 
+        insertionDate = GETDATE(), 
         QuestionText = @QuestionText 
     WHERE ID = @ID AND isDeleted = 0;
 END;
@@ -85,6 +85,7 @@ CREATE PROCEDURE GetQuestionsByCourse
     @CourseID INT
 AS
 BEGIN
+
     SELECT *
     FROM QuestionBank
     WHERE CourseID = @CourseID AND isDeleted = 0;
