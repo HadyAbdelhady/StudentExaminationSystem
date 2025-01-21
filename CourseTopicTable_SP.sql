@@ -34,20 +34,13 @@ BEGIN
         INSERT INTO Course_Topic (courseID, topic)
         VALUES (@courseID, @Topic);
     END TRY
-    BEGIN CATCH
-		
-		DECLARE @ErrorMessage NVARCHAR(4000)
-        SELECT @ErrorMessage = ERROR_MESSAGE()
-	
-        RAISERROR(
-            'An error occurred while inserting the topic "%s" into the course with ID %d. Error Message: %s',
-            16,
-            53,
-            @Topic,
-            @courseID,
-            @ErrorMessage
-        );
-    END CATCH
+   BEGIN CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
+
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState)
+	END CATCH	
 END;
 
 
@@ -71,20 +64,13 @@ BEGIN
         WHERE courseID = @courseID;
 
     END TRY
-    BEGIN CATCH
-		
-		DECLARE @ErrorMessage NVARCHAR(4000)
-        SELECT @ErrorMessage = ERROR_MESSAGE()
+  BEGIN CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
 
-        RAISERROR(
-            'An error occurred while updating the topic for Course with ID %d. Error Message: %s', 
-            16, 
-            1, 
-            @courseID, 
-            @ErrorMessage
-        );
-        RETURN;
-    END CATCH
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState)
+	END CATCH	
 END;
 
 GO
@@ -117,20 +103,12 @@ BEGIN
         WHERE courseID = @courseID AND topic = @Topic;
     END TRY
     BEGIN CATCH
-		
-		DECLARE @ErrorMessage NVARCHAR(4000)
-        SELECT @ErrorMessage = ERROR_MESSAGE()
-		
-        RAISERROR(
-            'An error occurred while deleting the topic "%s" for the course with ID %d. Error Message: %s',
-            16,
-            1,
-            @Topic,
-            @courseID,
-            @ErrorMessage
-        );
-        RETURN;
-    END CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
+
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState)
+	END CATCH	
 END;
 
 GO
@@ -150,21 +128,13 @@ BEGIN
         DELETE FROM Course_Topic
         WHERE courseID = @courseID;
     END TRY
-    BEGIN CATCH
+ BEGIN CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
 
-        DECLARE @ErrorMessage NVARCHAR(4000)
-        SELECT @ErrorMessage = ERROR_MESSAGE() 
-		
-		
-		RAISERROR(
-            'An error occurred while deleting topics for the course with ID %d. Error Message: %s', 
-            16, 
-            1, 
-            @courseID,
-            @ErrorMessage
-        );
-        RETURN;
-    END CATCH
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState)
+	END CATCH	
 END;
 
 GO
@@ -205,9 +175,10 @@ AS
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID)
     BEGIN
-        RAISERROR('Course not found.', 16, 1);
+        RAISERROR('Course with ID "%d" is not found.', 16, 1, @courseID);
         RETURN;
     END
+
     SELECT  CT.topic AS TopicName
     FROM    Course_Topic CT
     WHERE   CT.courseID = @courseID;
