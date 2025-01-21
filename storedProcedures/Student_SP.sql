@@ -1,7 +1,7 @@
 --- Add a New Student
 CREATE PROCEDURE InsertStudent
-    @firstName NVARCHAR(100),
-    @lastName NVARCHAR(100),
+    @firstName NVARCHAR(20),
+    @lastName NVARCHAR(20),
     @gender NVARCHAR(10),
     @SSN NVARCHAR(20),
     @Email NVARCHAR(100),
@@ -119,8 +119,8 @@ GO
 --Update Student Information
 CREATE PROCEDURE UpdateStudent
     @StudentID INT,
-    @firstName NVARCHAR(100),
-    @lastName NVARCHAR(100),
+    @firstName NVARCHAR(20),
+    @lastName NVARCHAR(20),
     @gender NVARCHAR(10),
     @SSN NVARCHAR(20),
     @email NVARCHAR(100),

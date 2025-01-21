@@ -20,8 +20,8 @@ CREATE TABLE Track (
 -- Table: Instructor
 CREATE TABLE Instructor (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    firstName NVARCHAR(10) NOT NULL,
-    lastName NVARCHAR(10) NOT NULL,
+    firstName NVARCHAR(20) NOT NULL,
+    lastName NVARCHAR(20) NOT NULL,
     gender NVARCHAR(1) CHECK (gender IN ('M', 'F')),
     SSN NVARCHAR(20) UNIQUE NOT NULL,
     enrollmentDate DATETIME NOT NULL,
@@ -37,8 +37,8 @@ CREATE TABLE Instructor (
 -- Table: Student
 CREATE TABLE Student (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    firstName NVARCHAR(100) NOT NULL,
-    lastName NVARCHAR(100) NOT NULL,
+    firstName NVARCHAR(20) NOT NULL,
+    lastName NVARCHAR(20) NOT NULL,
     gender NVARCHAR(10) CHECK (gender IN ('M', 'F')),
     SSN NVARCHAR(20) UNIQUE NOT NULL,
     enrollmentDate DATETIME NOT NULL,
@@ -106,7 +106,8 @@ CREATE TABLE Course_Topic (
     topic NVARCHAR(200) NOT NULL,
     FOREIGN KEY (courseID) REFERENCES Course(ID),
     PRIMARY KEY (courseID, topic),
-    creationDate DATETIME DEFAULT GETDATE()
+    creationDate DATETIME DEFAULT GETDATE(),
+    isDeleted BIT DEFAULT 0
 );
 
 CREATE TABLE Course_Field (
@@ -114,7 +115,8 @@ CREATE TABLE Course_Field (
     field NVARCHAR(200) NOT NULL,
     FOREIGN KEY (courseID) REFERENCES Course(ID),
     PRIMARY KEY (courseID, field),
-    creationDate DATETIME DEFAULT GETDATE()
+    creationDate DATETIME DEFAULT GETDATE(),
+    isDeleted BIT DEFAULT 0
 );
 
 CREATE TABLE QuestionBank_Choice (

@@ -69,33 +69,6 @@ END
 GO
 
 
--- Get Courses that Instructor teaches 
-CREATE PROC getInstructorCourses
-    @instructorID INT
-WITH ENCRYPTION 
-AS
-BEGIN
-    BEGIN TRY
-        -- Check if the instructor exists
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instructorID)
-        BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instructorID AS NVARCHAR) + ' does not exist.';
-            RETURN;
-        END;
-
-        -- Retrieve courses taught by the instructor
-        SELECT * FROM Course_Instructor
-        WHERE instructorID = @instructorID;
-    END TRY
-    BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while retrieving courses for the instructor.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
-    END CATCH;
-END
-GO
-
-
 
 -- Update Course Instructors
 CREATE PROC updateCourseInstructors

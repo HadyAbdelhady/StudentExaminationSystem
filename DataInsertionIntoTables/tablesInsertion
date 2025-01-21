@@ -1,24 +1,9 @@
--- Insert Department 1: Computer Science
-EXEC InsertDepartment @DEPTNAME = 'Computer Science', @DEPTMANAGER = 1;
-
--- Insert Department 2: Mathematics
-EXEC InsertDepartment @DEPTNAME = 'Mathematics', @DEPTMANAGER = 2;
-
--- Insert Track 1: Software Engineering (Computer Science Department)
-EXEC InsertTrack @Name = 'Software Engineering', @DepartmentID = 1;
-
--- Insert Track 2: Artificial Intelligence (Computer Science Department)
-EXEC InsertTrack @Name = 'Artificial Intelligence', @DepartmentID = 1;
-
--- Insert Track 3: Pure Mathematics (Mathematics Department)
-EXEC InsertTrack @Name = 'Pure Mathematics', @DepartmentID = 2;
-
 -- Insert Instructor 1
 EXEC InsertInstructor 
     @fName = 'John',
     @lName = 'Doe',
     @Gender = 'M',
-    @ssn = '123-45-6789',
+    @ssn = 123456789,
     @mail = 'john.doe@university.edu',
     @mobilePhone = '1234567890',
     @enrollDate = '2020-01-01',
@@ -30,7 +15,7 @@ EXEC InsertInstructor
     @fName = 'Jane',
     @lName = 'Smith',
     @Gender = 'F',
-    @ssn = '987-65-4321',
+    @ssn = 987654321,
     @mail = 'jane.smith@university.edu',
     @mobilePhone = '0987654321',
     @enrollDate = '2019-06-01',
@@ -39,39 +24,99 @@ EXEC InsertInstructor
 
 -- Insert Instructor 3
 EXEC InsertInstructor 
-    @fName = 'Alice',
+    @fName = 'Michael',
     @lName = 'Johnson',
-    @Gender = 'F',
-    @ssn = '456-78-9123',
-    @mail = 'alice.johnson@university.edu',
-    @mobilePhone = '5551234567',
-    @enrollDate = '2018-03-15',
-    @DOB = '1975-12-25',
+    @Gender = 'M',
+    @ssn = 126359748,
+    @mail = 'michael.johnson@university.edu',
+    @mobilePhone = '1234567890',
+    @enrollDate = '2020-09-15',
+    @DOB = '1990-03-12',
     @homeAt = '789 Oak St, City, Country';
 
 -- Insert Instructor 4
 EXEC InsertInstructor 
-    @fName = 'Robert',
+    @fName = 'Sophia',
     @lName = 'Brown',
-    @Gender = 'M',
-    @ssn = '321-54-9876',
-    @mail = 'robert.brown@university.edu',
-    @mobilePhone = '3216549876',
-    @enrollDate = '2017-07-10',
-    @DOB = '1970-08-30',
-    @homeAt = '101 Pine St, City, Country';
+    @Gender = 'F',
+    @ssn = 375849102,
+    @mail = 'sophia.brown@university.edu',
+    @mobilePhone = '9876543210',
+    @enrollDate = '2017-08-25',
+    @DOB = '1992-04-15',
+    @homeAt = '123 Cedar St, City, Country';
 
 -- Insert Instructor 5
 EXEC InsertInstructor 
-    @fName = 'Emily',
-    @lName = 'Davis',
-    @Gender = 'F',
-    @ssn = '654-87-3210',
-    @mail = 'emily.davis@university.edu',
-    @mobilePhone = '6548732109',
-    @enrollDate = '2016-09-20',
-    @DOB = '1982-11-12',
-    @homeAt = '202 Maple St, City, Country';
+    @fName = 'James',
+    @lName = 'Taylor',
+    @Gender = 'M',
+    @ssn = 584739210,
+    @mail = 'james.taylor@university.edu',
+    @mobilePhone = '8765432109',
+    @enrollDate = '2022-05-18',
+    @DOB = '1988-09-30',
+    @homeAt = '987 Birch St, City, Country';
+
+GO
+-- Declare variable to capture new IDs
+DECLARE @newDepartmentID INT;
+
+-- Insert Department 1: Computer Science
+EXEC InsertDepartment 
+    @DEPTNAME = 'Computer Science', 
+    @DEPTMANAGER = 1, 
+    @newDepartmentID = @newDepartmentID OUTPUT;
+
+
+-- Insert Department 2: Mathematics
+EXEC InsertDepartment 
+    @DEPTNAME = 'Mathematics', 
+    @DEPTMANAGER = 2, 
+    @newDepartmentID = @newDepartmentID OUTPUT;
+
+-- Insert Department 3: SD
+EXEC InsertDepartment 
+    @DEPTNAME = 'System Development', 
+    @DEPTMANAGER = 3, 
+    @newDepartmentID = @newDepartmentID OUTPUT;
+
+-- Insert Department 4: Data Science
+EXEC InsertDepartment 
+    @DEPTNAME = 'Data Science', 
+    @DEPTMANAGER = 4, 
+    @newDepartmentID = @newDepartmentID OUTPUT;
+-- Insert Department 5: Open Source
+EXEC InsertDepartment 
+    @DEPTNAME = 'Open Source', 
+    @DEPTMANAGER = 5, 
+    @newDepartmentID = @newDepartmentID OUTPUT;
+
+GO
+-- Declare a new variable to capture track IDs (optional)
+DECLARE @newTrackID INT;
+
+-- Insert Track 1: Software Engineering (Computer Science Department)
+EXEC InsertTrack 
+    @Name = 'Software Engineering', 
+    @DepartmentID = 1, 
+    @newTrackID = @newTrackID OUTPUT;
+
+-- Insert Track 2: Artificial Intelligence (Computer Science Department)
+EXEC InsertTrack 
+    @Name = 'Artificial Intelligence', 
+    @DepartmentID = 2, 
+    @newTrackID = @newTrackID OUTPUT;
+
+
+-- Insert Track 3: Pure Mathematics (Mathematics Department)
+EXEC InsertTrack 
+    @Name = 'Pure Mathematics', 
+    @DepartmentID = 3, 
+    @newTrackID = @newTrackID OUTPUT;
+
+GO
+
 
     -- Insert Student 1: Software Engineering Track
 EXEC InsertStudent 
@@ -137,27 +182,30 @@ EXEC InsertStudent
     @address = '505 Oak St, City, Country',
     @trackID = 2, -- Artificial Intelligence Track
     @departmentID = 1; -- Computer Science Department
+GO
 
     -- Insert Course 1: Artificial Intelligence (AI)
-EXEC InsertCourse @Name = 'Artificial Intelligence';
+EXEC InsertCourse @CourseName = 'Artificial Intelligence';
 
 -- Insert Course 2: Data Structures and Algorithms
-EXEC InsertCourse @Name = 'Data Structures and Algorithms';
+EXEC InsertCourse @CourseName = 'Data Structures and Algorithms';
 
 -- Insert Course 3: Networking
-EXEC InsertCourse @Name = 'Networking';
+EXEC InsertCourse @CourseName = 'Networking';
 
 -- Insert Course 4: Operating Systems
-EXEC InsertCourse @Name = 'Operating Systems';
+EXEC InsertCourse @CourseName = 'Operating Systems';
 
 -- Insert Course 5: Databases
-EXEC InsertCourse @Name = 'Databases';
+EXEC InsertCourse @CourseName = 'Databases';
 
 -- Insert Course 6: Object-Oriented Programming with C#
-EXEC InsertCourse @Name = 'Object-Oriented Programming with C#';
+EXEC InsertCourse @CourseName = 'Object-Oriented Programming with C#';
 
 -- Insert Course 7: JavaScript Programming
-EXEC InsertCourse @Name = 'JavaScript Programming';
+EXEC InsertCourse @CourseName = 'JavaScript Programming';
+
+GO
 
 -- Enroll Student 1 (Software Engineering) in Course 2 (Data Structures and Algorithms)
 EXEC InsertStudentInCourse @courseID = 2, @studentID = 1, @startDate = '2023-09-01';

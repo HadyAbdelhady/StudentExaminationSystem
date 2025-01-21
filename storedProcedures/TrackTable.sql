@@ -2,13 +2,17 @@
 -- Create
 CREATE PROCEDURE InsertTrack
     @Name NVARCHAR(100),
-    @DepartmentID INT
+    @DepartmentID INT,
+    @NewTrackID INT OUTPUT -- Add an OUTPUT parameter to return the new track ID
 AS
 BEGIN
-    BEGIN TRY 
+    BEGIN TRY
         -- Insert the new track
         INSERT INTO Track (Name, DepartmentID)
         VALUES (@Name, @DepartmentID);
+
+        -- Get the ID of the newly inserted track
+        SET @NewTrackID = SCOPE_IDENTITY();
     END TRY
     BEGIN CATCH
         -- Handle errors
@@ -22,6 +26,7 @@ BEGIN
     END CATCH
 END;
 GO
+
 
 -- Read
 CREATE PROCEDURE GetTrack

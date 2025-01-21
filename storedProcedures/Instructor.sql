@@ -33,8 +33,8 @@ GO
 -- update instructor
 CREATE PROC updateInstructorData
     @instId INT,
-    @fName VARCHAR(10),
-    @lName VARCHAR(10),
+    @fName VARCHAR(20),
+    @lName VARCHAR(20),
     @Gender VARCHAR(1),
     @ssn INT,
     @mail VARCHAR(100),
@@ -131,12 +131,12 @@ GO
 
 -- Insert Instructor
 CREATE PROC insertInstructor
-    @fName VARCHAR(10),
-    @lName VARCHAR(10),
+    @fName VARCHAR(20),
+    @lName VARCHAR(20),
     @Gender VARCHAR(1),
     @ssn INT,
     @mail VARCHAR(100),
-    @mobilePhone INT,
+    @mobilePhone VARCHAR(20),
     @enrollDate DATETIME,
     @DOB DATETIME,
     @homeAt VARCHAR(200)

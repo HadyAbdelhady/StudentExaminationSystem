@@ -24,7 +24,7 @@ BEGIN
         IF EXISTS (
             SELECT 1 
             FROM Course_Topic INNER JOIN Course ON Course.ID = Course_Topic.courseID
-            WHERE courseID = @courseID AND topic = @Topic AND isDeleted = 0
+            WHERE Course_Topic.courseID = @courseID AND Course_Topic.topic = @Topic AND Course_Topic.isDeleted = 0
         )
         BEGIN
             RAISERROR('Topic "%s" already exists for Course with ID %d.', 16, 51, @Topic, @courseID); --16 means user error --5 means error in the course table --1 means topic
@@ -34,7 +34,7 @@ BEGIN
         IF EXISTS (
             SELECT 1 
             FROM Course_Topic INNER JOIN Course ON Course.ID = Course_Topic.courseID
-            WHERE courseID = @courseID AND topic = @Topic AND isDeleted = 1
+            WHERE Course_Topic.courseID = @courseID AND Course_Topic.topic = @Topic AND Course_Topic.isDeleted = 1
         )
         BEGIN
             RAISERROR('Course with ID %d is deleted.', 16, 51,@courseID); --16 means user error --5 means error in the course table --1 means topic
