@@ -4,7 +4,7 @@ DECLARE @QuestionID INT;
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) Artificial Intelligence', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is the full form of “AI”?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -18,7 +18,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Advanced 
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) Artificial Intelligence is a field that aims to develop intelligent machines', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is Artificial Intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -32,7 +32,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Artificia
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) John McCarthy', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Who is the inventor of Artificial Intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -46,7 +46,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Jürgen S
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'a) Machine Learning', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is the branch of Artificial Intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -60,7 +60,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Network D
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) To explain various sorts of intelligence', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is the goal of Artificial Intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -75,7 +75,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) To solve 
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) Language understanding and problem-solving (Text analytics and NLP)', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is an application of Artificial Intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -89,7 +89,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) It helps 
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) categorized into 3 categories', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'In how many categories process of Artificial Intelligence is categorized?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -103,7 +103,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) process i
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) Based on capabilities and functionally', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Based on which of the following parameter Artificial Intelligence is categorized?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -117,7 +117,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) It is not
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'a) Learning', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is a component of Artificial Intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -131,7 +131,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Puzzling'
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) Mapping of precept sequence to an action', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is the function of an Artificial Intelligence “Agent”?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -145,7 +145,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Mapping o
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) Unity-based AI agent', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is not a type of Artificial Intelligence agent?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -159,7 +159,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Unity-bas
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'a) Perl', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is not the commonly used programming language for Artificial Intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -173,7 +173,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) LISP';
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) system known as STUDENT', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is the name of the Artificial Intelligence system developed by Daniel Bobrow?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -187,7 +187,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) system kn
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) system which can read and solve algebra word problems', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is the function of the system Student?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -201,7 +201,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) DBMS', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is not an application of artificial intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -216,7 +216,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) DBMS';
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) AI system', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following machine requires input from the humans but can interpret the outputs themselves?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -230,7 +230,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) AI system
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'a) 4', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = '_________ number of informed search method are there in Artificial Intelligence.', 
     @QuestionID = @QuestionID OUTPUT;
@@ -244,7 +244,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) 1';
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) 2 proposition symbols', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'The total number of proposition symbols in AI are ________', 
     @QuestionID = @QuestionID OUTPUT;
@@ -258,7 +258,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) No propos
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) There are 5 logical symbols', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'The total number of logical symbols in AI are ____________', 
     @QuestionID = @QuestionID OUTPUT;
@@ -272,7 +272,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Logical s
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) All of the mentioned', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following are the approaches to Artificial Intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -286,7 +286,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) All of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) Applied AI approach', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Face Recognition system is based on which type of approach?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -300,7 +300,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Strong AI
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) All of the above', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is an advantage of artificial intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -314,7 +314,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) All of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) Learning', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following can improve the performance of an AI agent?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -328,7 +328,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) All of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) Both Program and Architecture', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is/are the composition for AI agents?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -342,7 +342,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) Weak approach', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'On which of the following approach A basic line following robot is based?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -357,7 +357,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Cognitive
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) All of the mentioned', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Artificial Intelligence has evolved extremely in all the fields except for _________', 
     @QuestionID = @QuestionID OUTPUT;
@@ -371,7 +371,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) All of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) All of the mentioned', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is an example of artificial intelligent agent/agents?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -385,7 +385,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) All of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) All of the mentioned', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is an expansion of Artificial Intelligence application?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -399,7 +399,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) All of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) All of the mentioned', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is an AI ‘agent’?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -413,7 +413,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) All of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) Deterministic', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following environment is strategic?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -427,7 +427,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Stochasti
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) Fuzzy logic', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is the name of Artificial Intelligence which allows machines to handle vague information with a deftness that mimics human intuition?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -441,7 +441,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Fuzzy log
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) ILP', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following produces hypotheses that are easy to read for humans?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -455,7 +455,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Propositi
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) Complete description of the domain', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What does the Bayesian network provide?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -469,7 +469,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) 2', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is the total number of quantification available in artificial intelligence?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -483,7 +483,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) 2';
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'a) the study of mental faculties using mental models implemented on a computer', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is Weak AI?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -497,7 +497,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) all of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) All of the above', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following are the 5 big ideas of AI?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -512,7 +512,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) All of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) Design problem', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which depends on the percepts and actions available to the agent?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -526,7 +526,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) AI system', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which were built in such a way that humans had to supply the inputs and interpret the outputs?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -540,7 +540,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Actuators
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) MEMS', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which technology uses miniaturized accelerometers and gyroscopes?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -554,7 +554,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'a) Filtering algorithm', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is used for tracking uncertain events?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -568,7 +568,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) Both Objects & Relations', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is not represented by using propositional logic?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -582,7 +582,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) Reward', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which functions are used as preferences over state history?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -596,7 +596,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Implicit'
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) All of the mentioned', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which kind of agent architecture should an agent use?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -610,7 +610,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) All of th
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) Hybrid', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Specify the agent architecture name that is used to capture all kinds of actions.', 
     @QuestionID = @QuestionID OUTPUT;
@@ -624,7 +624,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) Reflective', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which agent enables the deliberation about the computational entities and actions?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -638,7 +638,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) Both Decision-making & Learning algorithm', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What can operate over the joint state space?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -653,7 +653,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Both Deci
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'd) Because it is the simplest linearly inseparable problem that exists.', 
-    @InstructorID = 1, -- John Doe
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Why is the XOR problem exceptionally interesting to neural network researchers?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -667,7 +667,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Because i
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'c) It is the transmission of error back through the network to allow weights to be adjusted so that the network can learn', 
-    @InstructorID = 2, -- Jane Smith
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'What is back propagation?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -681,7 +681,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) None of t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'b) Because they are the only class of problem that Perceptron can solve successfully', 
-    @InstructorID = 3, -- Alice Johnson
+    @InstructorID = 5,
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Why are linearly separable problems of interest of neural network researchers?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -695,7 +695,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) Because t
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'a) It can explain result', 
-    @InstructorID = 4, -- Robert Brown
+    @InstructorID = 4, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Which of the following is not the promise of artificial neural network?', 
     @QuestionID = @QuestionID OUTPUT;
@@ -709,7 +709,7 @@ EXEC insertQuestionBankChoice @questionID = @QuestionID, @choice = 'd) It can ha
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'a) Linear Functions', 
-    @InstructorID = 5, -- Emily Davis
+    @InstructorID = 5, 
     @CourseID = 1, -- Artificial Intelligence
     @QuestionText = 'Neural Networks are complex ______________ with many parameters.', 
     @QuestionID = @QuestionID OUTPUT;
