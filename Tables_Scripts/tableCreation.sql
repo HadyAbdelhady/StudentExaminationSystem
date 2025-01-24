@@ -1,22 +1,3 @@
--- Table: Department
-CREATE TABLE Department (
-    ID INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(100) NOT NULL,
-    ManagerID INT,
-    creationDate DATETIME DEFAULT GETDATE(),
-	isDeleted BIT  DEFAULT 0 
-);
-
--- Table: Track
-CREATE TABLE Track (
-    ID INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(100) NOT NULL,
-    departmentID INT NOT NULL,
-    creationDate DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (departmentID) REFERENCES Department(ID),
-	isDeleted BIT  DEFAULT 0 
-);
-
 -- Table: Instructor
 CREATE TABLE Instructor (
     ID INT PRIMARY KEY IDENTITY(1,1),
@@ -32,7 +13,38 @@ CREATE TABLE Instructor (
 	isDeleted BIT  DEFAULT 0
 );
 
+-- Branch table 
+Create Table Branch
+(
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(200) NOT NULL,
+    Location NVARCHAR(500) NOT NULL,
+    Contact NVARCHAR(20) NOT NULL ,
+    establishmentDate DateTime,
+    ManagerID INT NOT NULL,
+    isDeleted BIT DEFAULT 0 ,
+    FOREIGN KEY (ManagerID) REFERENCES Instructor(ID),
+);
 
+-- Table: Department
+CREATE TABLE Department (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100) NOT NULL,
+    ManagerID INT NOT NULL,
+    creationDate DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (ManagerID) REFERENCES Instructor(ID),
+	isDeleted BIT  DEFAULT 0 
+);
+
+-- Table: Track
+CREATE TABLE Track (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100) NOT NULL,
+    departmentID INT NOT NULL,
+    creationDate DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (departmentID) REFERENCES Department(ID),
+	isDeleted BIT  DEFAULT 0 
+);
 
 -- Table: Student
 CREATE TABLE Student (
@@ -46,10 +58,12 @@ CREATE TABLE Student (
     phone NVARCHAR(15) NOT NULL,
     DateOfBirth DATE NOT NULL,
     address NVARCHAR(200) NOT NULL,
-    trackID INT,
+    trackID INT NOT NULL,
+    branchID INT NOT NULL,
     departmentID INT NOT NULL,
     FOREIGN KEY (trackID) REFERENCES Track(ID),
     FOREIGN KEY (departmentID) REFERENCES Department(ID),
+    FOREIGN KEY (branchID) REFERENCES Branch(ID),
 	isDeleted BIT  DEFAULT 0 
 );
 
@@ -192,3 +206,33 @@ CREATE TABLE Department_Instructor (
     FOREIGN KEY (instructorID) REFERENCES Instructor(ID),
     PRIMARY KEY (departmentID, instructorID)
 );
+
+CREATE TABLE Branch_Department (
+    branchID INT NOT NULL,
+    departmentID INT NOT NULL,
+    creationDate DATETIME NOT NULL,
+    isDeleted BIT DEFAULT 0,
+    FOREIGN KEY (branchID) REFERENCES Branch(ID),
+    FOREIGN KEY (departmentID) REFERENCES Department(ID),
+    PRIMARY KEY (departmentID, branchID)
+)
+
+CREATE TABLE Branch_Track (
+    branchID INT NOT NULL,
+    trackID INT NOT NULL,
+    creationDate DATETIME NOT NULL,
+    isDeleted BIT DEFAULT 0,
+    FOREIGN KEY (branchID) REFERENCES Branch(ID),
+    FOREIGN KEY (trackID) REFERENCES Track(ID),
+    PRIMARY KEY (trackID, branchID)
+)
+
+CREATE TABLE Branch_Instructor (
+    branchID INT NOT NULL,
+    instructorID INT NOT NULL,
+    joinDate DATETIME NOT NULL,
+    isDeleted BIT DEFAULT 0,
+    FOREIGN KEY (branchID) REFERENCES Branch(ID),
+    FOREIGN KEY (instructorID) REFERENCES Instructor(ID),
+    PRIMARY KEY (instructorID, branchID)
+)

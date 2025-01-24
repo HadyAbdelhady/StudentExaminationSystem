@@ -15,6 +15,9 @@ BEGIN TRY
     DROP TABLE IF EXISTS Course_Instructor;
     DROP TABLE IF EXISTS Track_Course;
     DROP TABLE IF EXISTS Department_Instructor;
+    DROP TABLE IF EXISTS Branch_Department;
+    DROP TABLE IF EXISTS Branch_Instructor;
+    DROP TABLE IF EXISTS Branch_Track;
 
     -- Drop dependent tables
     DROP TABLE IF EXISTS StudentSubmit;
@@ -24,9 +27,10 @@ BEGIN TRY
     DROP TABLE IF EXISTS Track;
 
     -- Drop main tables
+    DROP TABLE IF EXISTS Branch;
     DROP TABLE IF EXISTS Course;
-    DROP TABLE IF EXISTS Instructor;
     DROP TABLE IF EXISTS Department;
+    DROP TABLE IF EXISTS Instructor;
 
     -- Re-enable referential integrity
     EXEC sp_MSforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"
