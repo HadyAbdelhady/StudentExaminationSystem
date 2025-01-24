@@ -11,7 +11,7 @@ BEGIN TRY
     DROP TABLE IF EXISTS QuestionBank_Choice;
     DROP TABLE IF EXISTS Course_Topic;
     DROP TABLE IF EXISTS Course_Field;
-    DROP TABLE IF EXISTS Course_Student;
+    DROP TABLE IF EXISTS Course_Student_Instructor;
     DROP TABLE IF EXISTS Course_Instructor;
     DROP TABLE IF EXISTS Track_Course;
     DROP TABLE IF EXISTS Department_Instructor;
