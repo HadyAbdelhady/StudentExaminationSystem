@@ -4,7 +4,7 @@
 --------------------------------------------------------------------------------------
 
 -- view instructor
-CREATE PROCEDURE selectInstructor
+CREATE OR ALTER PROCEDURE selectInstructor
     @inputID INT
 WITH ENCRYPTION
 AS
@@ -31,14 +31,14 @@ END
 GO
 
 -- update instructor
-CREATE PROC updateInstructorData
+CREATE OR ALTER PROC updateInstructorData
     @instId INT,
     @fName VARCHAR(20),
     @lName VARCHAR(20),
     @Gender VARCHAR(1),
-    @ssn INT,
+    @ssn NVARCHAR(20),
     @mail VARCHAR(100),
-    @mobilePhone INT,
+    @mobilePhone NVARCHAR(15),
     @enrollDate DATETIME,
     @DOB DATETIME,
     @homeAt VARCHAR(200)
@@ -77,7 +77,7 @@ END
 GO
 
 -- delete instructor
-CREATE PROC deleteInstructor
+CREATE OR ALTER PROC deleteInstructor
     @instID INT
 WITH ENCRYPTION
 AS
@@ -92,21 +92,11 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- Update all tables that reference the Instructor table
-        UPDATE QuestionBank
-        SET instructorID = 0
+        -- Delete records from tables that reference the Instructor table
+        DELETE FROM Course_Instructor
         WHERE instructorID = @instID;
 
-        UPDATE ExamModel
-        SET instructorID = 0
-        WHERE instructorID = @instID;
-
-        UPDATE Course_Instructor
-        SET instructorID = 0
-        WHERE instructorID = @instID;
-
-        UPDATE Department_Instructor
-        SET instructorID = 0
+        DELETE FROM Department_Instructor
         WHERE instructorID = @instID;
 
         -- Mark the instructor as deleted
@@ -130,13 +120,13 @@ END
 GO
 
 -- Insert Instructor
-CREATE PROC insertInstructor
+CREATE OR ALTER PROC insertInstructor
     @fName VARCHAR(20),
     @lName VARCHAR(20),
     @Gender VARCHAR(1),
-    @ssn INT,
+    @ssn NVARCHAR(20),
     @mail VARCHAR(100),
-    @mobilePhone VARCHAR(20),
+    @mobilePhone NVARCHAR(15),
     @enrollDate DATETIME,
     @DOB DATETIME,
     @homeAt VARCHAR(200)
@@ -147,11 +137,32 @@ BEGIN
         -- Check if the SSN already exists and is not deleted
         IF EXISTS (SELECT 1 FROM Instructor WHERE SSN = @ssn AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with SSN ' + CAST(@ssn AS NVARCHAR) + ' already exists.';
+            PRINT 'Instructor with SSN ' + CAST(@ssn AS NVARCHAR) + ' already exists and is active.';
             RETURN;
         END;
 
-        -- Insert the instructor
+        -- Check if the instructor was previously deleted
+        IF EXISTS (SELECT 1 FROM Instructor WHERE SSN = @ssn AND isDeleted = 1)
+        BEGIN
+            -- Reactivate the instructor by updating isDeleted to 0
+            UPDATE Instructor
+            SET 
+                firstName = @fName,
+                lastName = @lName,
+                gender = @Gender,
+                email = @mail,
+                phone = @mobilePhone,
+                enrollmentDate = @enrollDate,
+                DateOfBirth = @DOB,
+                address = @homeAt,
+                isDeleted = 0
+            WHERE SSN = @ssn;
+
+            PRINT 'Instructor with SSN ' + CAST(@ssn AS NVARCHAR) + ' was previously deleted and has been reactivated.';
+            RETURN;
+        END;
+
+        -- Insert the instructor if they don't exist
         INSERT INTO Instructor
             (firstName, lastName, gender, SSN, email, phone, enrollmentDate, DateOfBirth, address, isDeleted)
         VALUES
@@ -168,45 +179,54 @@ END
 GO
 
 -- get the number of student in each course that the instructor teach
-CREATE PROCEDURE getInstructorCoursesStudentCount
-    @instID INT
+CREATE OR ALTER PROC GetInstructorCoursesWithStudentCount
+    @instructorID INT
 WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
         -- Check if the instructor exists and is not deleted
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM Instructor 
+            WHERE ID = @instructorID AND isDeleted = 0
+        )
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
+            PRINT 'Instructor with ID ' + CAST(@instructorID AS NVARCHAR) + ' does not exist or is deleted.';
             RETURN;
         END;
 
-        -- Get the number of students in each course taught by the instructor
+        -- Get course names and student counts
         SELECT 
-            CI.courseID, 
-            COUNT(CS.studentID) AS studentCount
+            C.Name AS CourseName,
+            COUNT(DISTINCT S.ID) AS StudentCount  -- Distinct to avoid duplicates
         FROM 
             Course_Instructor CI
         INNER JOIN 
-            Course_Student CS ON CI.courseID = CS.courseID
-        INNER JOIN 
-            Course C ON CI.courseID = C.ID
+            Course C ON CI.courseID = C.ID AND C.isDeleted = 0
+        LEFT JOIN 
+            Course_Student_Instructor CSI 
+            ON CI.courseID = CSI.courseID 
+            AND CI.instructorID = CSI.instructorID
+        LEFT JOIN 
+            Student S 
+            ON CSI.studentID = S.ID 
+            AND S.isDeleted = 0  -- Only count active students
         WHERE 
-            CI.instructorID = @instID
-            AND C.isDeleted = 0 -- Ensure the course is not deleted
+            CI.instructorID = @instructorID
         GROUP BY 
-            CI.courseID;
+            C.ID, C.Name;  -- Group by ID to handle duplicate course names
+
+        PRINT 'Courses and student counts retrieved successfully.';
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while retrieving the student count for courses taught by the instructor.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        PRINT 'An error occurred: ' + ERROR_MESSAGE();
     END CATCH;
 END;
 GO
 
 -- get how many course does an instructor teach
-CREATE PROC getInstructorCoursesCount
+CREATE OR ALTER PROC getInstructorCoursesCount
     @instID INT
 WITH ENCRYPTION
 AS
@@ -233,7 +253,7 @@ END
 GO
 
 -- get the names of the courses that the instructor teach
-CREATE PROC getInstructorCourses
+CREATE OR ALTER PROC getInstructorCourses
     @instID INT
 WITH ENCRYPTION
 AS
@@ -249,7 +269,7 @@ BEGIN
         -- Get the names of the courses taught by the instructor
         SELECT Course.Name AS courseName
         FROM Course
-        WHERE ID IN (SELECT courseID FROM Course_Instructor WHERE instructorID = @instID);
+        WHERE ID IN (SELECT courseID FROM Course_Instructor WHERE instructorID = @instID) AND isDeleted = 0;
     END TRY
     BEGIN CATCH
         -- Handle errors
@@ -260,7 +280,7 @@ END
 GO
 
 -- get the number of the exams that the instructor created
-CREATE PROC getInstructorExamsCount
+CREATE OR ALTER PROC getInstructorExamsCount
     @instID INT
 WITH ENCRYPTION
 AS
@@ -286,38 +306,63 @@ BEGIN
 END
 GO
 
--- get success rate per course for the instructor
-CREATE PROC getAvgRatePerCourseCreatedByInstructor
-    @instID INT
+-- Get All the Deleted Instructors
+CREATE OR ALTER PROC getDeletedInstructors
 WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the instructor exists and is not deleted
-        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
-        BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
-            RETURN;
-        END;
+        -- Select all instructors where isDeleted = 1
+        SELECT 
+            ID,
+            firstName,
+            lastName,
+            gender,
+            SSN,
+            email,
+            phone,
+            enrollmentDate,
+            DateOfBirth,
+            address
+        FROM Instructor
+        WHERE isDeleted = 1;
 
-        -- Get the success rate per course created by the instructor
-        SELECT
-            Course.Name AS CourseName,
-            ROUND(AVG(grade), 2) AS successRate,
-            Instructor.firstName + ' ' + Instructor.lastName AS InstructorName
-        FROM
-            StudentSubmit
-            JOIN ExamModel ON StudentSubmit.examModelID = ExamModel.ID
-            JOIN Course ON ExamModel.courseID = Course.ID
-            JOIN Instructor ON ExamModel.instructorID = Instructor.ID
-        WHERE 
-            ExamModel.instructorID = @instID AND Instructor.isDeleted = 0
-        GROUP BY 
-            Course.Name, Instructor.firstName, Instructor.lastName;
+        PRINT 'Retrieved all deleted instructors successfully.';
     END TRY
     BEGIN CATCH
         -- Handle errors
-        PRINT 'An error occurred while retrieving the success rate per course for the instructor.';
+        PRINT 'An error occurred while retrieving deleted instructors.';
+        PRINT 'Error Message: ' + ERROR_MESSAGE();
+    END CATCH;
+END
+GO
+
+--Retrieve All the Current Instructors (that are not deleted)
+CREATE OR ALTER PROC GetAllInstructors
+WITH ENCRYPTION
+AS
+BEGIN
+    BEGIN TRY
+        -- Retrieve all instructors who are not deleted
+        SELECT 
+            ID,
+            firstName,
+            lastName,
+            gender,
+            SSN,
+            email,
+            phone,
+            enrollmentDate,
+            DateOfBirth,
+            address
+        FROM Instructor
+        WHERE isDeleted = 0; -- Only retrieve active instructors
+
+        PRINT 'Retrieved all active instructors successfully.';
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+        PRINT 'An error occurred while retrieving instructors.';
         PRINT 'Error Message: ' + ERROR_MESSAGE();
     END CATCH;
 END
