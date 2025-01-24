@@ -7,7 +7,7 @@ CREATE TABLE Instructor (
     SSN NVARCHAR(20) UNIQUE NOT NULL,
     enrollmentDate DATETIME NOT NULL,
     email NVARCHAR(100) UNIQUE NOT NULL,
-    phone NVARCHAR(15) NOT NULL,
+    phone NVARCHAR(15) NOT NULL unique,
     DateOfBirth DATE NOT NULL,
     address NVARCHAR(200) NOT NULL,
 	isDeleted BIT  DEFAULT 0
@@ -17,11 +17,11 @@ CREATE TABLE Instructor (
 Create Table Branch
 (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(200) NOT NULL,
+    Name NVARCHAR(200) NOT NULL unique,
     Location NVARCHAR(500) NOT NULL,
-    Contact NVARCHAR(20) NOT NULL ,
+    phone NVARCHAR(20) NOT NULL unique,
     establishmentDate DateTime,
-    ManagerID INT NOT NULL,
+    ManagerID INT NOT NULL unique,
     isDeleted BIT DEFAULT 0 ,
     FOREIGN KEY (ManagerID) REFERENCES Instructor(ID),
 );
@@ -29,8 +29,8 @@ Create Table Branch
 -- Table: Department
 CREATE TABLE Department (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(100) NOT NULL,
-    ManagerID INT NOT NULL,
+    Name NVARCHAR(100) NOT NULL unique,
+    ManagerID INT NOT NULL unique,
     creationDate DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (ManagerID) REFERENCES Instructor(ID),
 	isDeleted BIT  DEFAULT 0 
@@ -39,8 +39,8 @@ CREATE TABLE Department (
 -- Table: Track
 CREATE TABLE Track (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(100) NOT NULL,
-    departmentID INT NOT NULL,
+    Name NVARCHAR(100) NOT NULL unique,
+    departmentID INT NOT NULL, --To be deleted in the next commit 
     creationDate DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (departmentID) REFERENCES Department(ID),
 	isDeleted BIT  DEFAULT 0 
@@ -55,7 +55,7 @@ CREATE TABLE Student (
     SSN NVARCHAR(20) UNIQUE NOT NULL,
     enrollmentDate DATETIME NOT NULL,
     email NVARCHAR(100) UNIQUE NOT NULL,
-    phone NVARCHAR(15) NOT NULL,
+    phone NVARCHAR(15) NOT NULL unique,
     DateOfBirth DATE NOT NULL,
     address NVARCHAR(200) NOT NULL,
     trackID INT NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE Student (
 -- Table: Course
 CREATE TABLE Course (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(100) NOT NULL,
+    Name NVARCHAR(100) NOT NULL unique,
 	isDeleted BIT  DEFAULT 0,
     creationDate DATETIME DEFAULT GETDATE(),
 );
@@ -106,7 +106,7 @@ CREATE TABLE ExamModel (
 -- Table: StudentSubmit
 CREATE TABLE StudentSubmit (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    grade INT NOT NULL,
+    grade INT NOT NULL, -- To be deleted
     studentID INT NOT NULL,
     examModelID INT NOT NULL,
     FOREIGN KEY (studentID) REFERENCES Student(ID),
