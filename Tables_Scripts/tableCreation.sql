@@ -40,7 +40,10 @@ CREATE TABLE Department (
 CREATE TABLE Track (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL unique,
-	isDeleted BIT  DEFAULT 0 
+	isDeleted BIT  DEFAULT 0 ,
+    departmentID INT NOT NULL,
+    FOREIGN KEY (departmentID) REFERENCES Department(ID),
+    creationDate DATETIME NOT NULL
 );
 
 -- Table: Student
@@ -103,7 +106,6 @@ CREATE TABLE ExamModel (
 -- Table: StudentSubmit
 CREATE TABLE StudentSubmit (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    grade INT NOT NULL, -- To be deleted
     studentID INT NOT NULL,
     examModelID INT NOT NULL,
     FOREIGN KEY (studentID) REFERENCES Student(ID),
@@ -203,24 +205,6 @@ CREATE TABLE Department_Instructor (
     FOREIGN KEY (instructorID) REFERENCES Instructor(ID),
     PRIMARY KEY (departmentID, instructorID)
 );
-CREATE TABLE Department_Track(
-    departmentID INT NOT NULL,
-    trackID INT NOT NULL,
-    creationDate DATETIME NOT NULL,
-    FOREIGN KEY (departmentID) REFERENCES Department(ID),
-    FOREIGN KEY (trackID) REFERENCES Track(ID),
-    PRIMARY KEY (departmentID, trackID)
-);
-
-CREATE TABLE Branch_Department (
-    branchID INT NOT NULL,
-    departmentID INT NOT NULL,
-    creationDate DATETIME NOT NULL,
-    isDeleted BIT DEFAULT 0,
-    FOREIGN KEY (branchID) REFERENCES Branch(ID),
-    FOREIGN KEY (departmentID) REFERENCES Department(ID),
-    PRIMARY KEY (departmentID, branchID)
-)
 
 CREATE TABLE Branch_Track (
     branchID INT NOT NULL,
@@ -230,14 +214,4 @@ CREATE TABLE Branch_Track (
     FOREIGN KEY (branchID) REFERENCES Branch(ID),
     FOREIGN KEY (trackID) REFERENCES Track(ID),
     PRIMARY KEY (trackID, branchID)
-)
-
-CREATE TABLE Branch_Instructor (
-    branchID INT NOT NULL,
-    instructorID INT NOT NULL,
-    joinDate DATETIME NOT NULL,
-    isDeleted BIT DEFAULT 0,
-    FOREIGN KEY (branchID) REFERENCES Branch(ID),
-    FOREIGN KEY (instructorID) REFERENCES Instructor(ID),
-    PRIMARY KEY (instructorID, branchID)
 )
