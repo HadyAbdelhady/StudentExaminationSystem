@@ -172,13 +172,15 @@ CREATE TABLE ExamModel_StudentSubmit_Student (
     PRIMARY KEY (examModelID, studentSubmitID, studentID)
 );
 
-CREATE TABLE Course_Student (
+CREATE TABLE Course_Student_Instructor (
     courseID INT NOT NULL,
     studentID INT NOT NULL,
+    instructorID INT NOT NULL,
     startDate DATETIME NOT NULL,
     FOREIGN KEY (courseID) REFERENCES Course(ID),
     FOREIGN KEY (studentID) REFERENCES Student(ID),
-    PRIMARY KEY (courseID, studentID)
+    FOREIGN KEY (instructorID) REFERENCES Instructor(ID),
+    PRIMARY KEY (courseID, studentID, instructorID)
 );
 
 CREATE TABLE Course_Instructor (
