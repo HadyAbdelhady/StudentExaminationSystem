@@ -18,6 +18,7 @@ BEGIN TRY
     DROP TABLE IF EXISTS Branch_Department;
     DROP TABLE IF EXISTS Branch_Instructor;
     DROP TABLE IF EXISTS Branch_Track;
+    DROP TABLE IF EXISTS Department_Track;
 
     -- Drop dependent tables
     DROP TABLE IF EXISTS StudentSubmit;

@@ -40,9 +40,6 @@ CREATE TABLE Department (
 CREATE TABLE Track (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL unique,
-    departmentID INT NOT NULL, --To be deleted in the next commit 
-    creationDate DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (departmentID) REFERENCES Department(ID),
 	isDeleted BIT  DEFAULT 0 
 );
 
@@ -205,6 +202,14 @@ CREATE TABLE Department_Instructor (
     FOREIGN KEY (departmentID) REFERENCES Department(ID),
     FOREIGN KEY (instructorID) REFERENCES Instructor(ID),
     PRIMARY KEY (departmentID, instructorID)
+);
+CREATE TABLE Department_Track(
+    departmentID INT NOT NULL,
+    trackID INT NOT NULL,
+    creationDate DATETIME NOT NULL,
+    FOREIGN KEY (departmentID) REFERENCES Department(ID),
+    FOREIGN KEY (trackID) REFERENCES Track(ID),
+    PRIMARY KEY (departmentID, trackID)
 );
 
 CREATE TABLE Branch_Department (
