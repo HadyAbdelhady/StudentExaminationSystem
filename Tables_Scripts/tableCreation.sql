@@ -175,7 +175,7 @@ CREATE TABLE ExamModel_StudentSubmit_Student (
 CREATE TABLE Course_Student_Instructor (
     courseID INT NOT NULL,
     studentID INT NOT NULL,
-    instructorID INT NOT NULL,
+    instructorID INT,
     startDate DATETIME NOT NULL,
     FOREIGN KEY (courseID) REFERENCES Course(ID),
     FOREIGN KEY (studentID) REFERENCES Student(ID),
