@@ -23,7 +23,7 @@ BEGIN
                 IsDeleted = 0
             WHERE Name = @Name;
 
-            SELECT ID AS ID
+            SELECT ID
             FROM Branch
             WHERE Name = @Name;
         END
@@ -37,8 +37,12 @@ BEGIN
         END
     END TRY
     BEGIN CATCH
-        THROW;
-    END CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
+
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState)
+	END CATCH
 END;
 GO
 
@@ -69,9 +73,23 @@ CREATE OR ALTER PROCEDURE GetBranchByID
     @BranchID INT
 AS
 BEGIN
+    BEGIN TRY 
+    IF NOT EXISTS (SELECT 1 FROM Branch WHERE ID = @branchID)
+        BEGIN
+            RAISERROR('The branch does not exist.', 16, 1);
+            RETURN;
+        END 
     SELECT ID, Name, Location, Phone, EstablishmentDate, ManagerID
     FROM Branch
     WHERE ID = @BranchID AND IsDeleted = 0;
+    END TRY
+    BEGIN CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
+
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState)
+	END CATCH
 END;
 GO
 
@@ -87,7 +105,16 @@ AS
 BEGIN
     BEGIN TRY
         IF NOT EXISTS (SELECT 1 FROM Branch WHERE ID = @BranchID AND isDeleted = 0)
-            RAISERROR('The branch does not exist', 16, 1);
+            BEGIN 
+                RAISERROR('The branch does not exist or it has been deleted', 16, 1);
+                RETURN
+            END;
+        IF NOT EXISTS (SELECT 1 FROM Instructor where ID = @managerID AND isDeleted = 0)
+            BEGIN
+                RAISERROR('The manager ID is not valid', 16, 1);
+                RETURN;
+            END;
+        
         UPDATE Branch
         SET Name = @Name,
             Location = @Location,
@@ -115,19 +142,53 @@ GO
 
 -- DELETE PROCEDURE: Soft delete a branch
 CREATE OR ALTER PROCEDURE DeleteBranch
-    @BranchID INT
+    @branchID INT
 AS
 BEGIN
     BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Check if the branch exists and is not already deleted
+        IF NOT EXISTS (SELECT ID FROM Branch WHERE ID = @branchID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('The specified branch does not exist or it is already deleted.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Check for active dependencies in Branch_Department_Track
+        IF EXISTS (SELECT 1 FROM Branch_Department_Track WHERE branchID = @branchID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('The specified branch has active tracks that need to be deleted first.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Soft delete the branch
         UPDATE Branch
         SET IsDeleted = 1
-        WHERE ID = @BranchID;
+        WHERE ID = @branchID;
 
-        DELETE FROM Branch_Track
-        WHERE BranchId = @BranchID;
+        -- Ensure the update affected rows
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('The branch deletion failed; no rows were updated.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        THROW;
+        -- Rollback in case of any error
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        -- Rethrow the error
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
 GO
