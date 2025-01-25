@@ -13,7 +13,7 @@ BEGIN
         -- Check if the instructor exists and is not deleted
         IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @inputID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@inputID AS NVARCHAR) + ' does not exist or is deleted.';
+            RAISERROR('Instructor with ID %d does not exist or is deleted.', 16, 1, @inputID);
             RETURN;
         END;
 
@@ -23,11 +23,18 @@ BEGIN
         WHERE ID = @inputID AND isDeleted = 0;
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while retrieving the instructor.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while retrieving the instructor. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
-END
+END;
 GO
 
 -- update instructor
@@ -49,7 +56,7 @@ BEGIN
         -- Check if the instructor exists and is not deleted
         IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instId AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instId AS NVARCHAR) + ' does not exist or is deleted.';
+            RAISERROR('Instructor with ID %d does not exist or is deleted.', 16, 1, @instId);
             RETURN;
         END;
 
@@ -69,11 +76,18 @@ BEGIN
         PRINT 'Instructor data updated successfully.';
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while updating the instructor data.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while updating the instructor data. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
-END
+END;
 GO
 
 -- delete instructor
@@ -82,14 +96,14 @@ CREATE OR ALTER PROC deleteInstructor
 WITH ENCRYPTION
 AS
 BEGIN
-    -- Check if the instructor exists and is not already deleted
-    IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
-    BEGIN
-        PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is already deleted.';
-        RETURN;
-    END;
-
     BEGIN TRY
+        -- Check if the instructor exists and is not already deleted
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('Instructor with ID %d does not exist or is already deleted.', 16, 1, @instID);
+            RETURN;
+        END;
+
         BEGIN TRANSACTION;
 
         -- Delete records from tables that reference the Instructor table
@@ -107,16 +121,24 @@ BEGIN
         -- Commit the transaction
         COMMIT TRANSACTION;
 
-        -- Print success message
         PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' has been marked as deleted. All references have been updated to instructorID = 0.';
     END TRY
     BEGIN CATCH
         -- Rollback the transaction in case of an error
         ROLLBACK TRANSACTION;
-        PRINT 'An error occurred while deleting the instructor. Changes have been rolled back.';
-        PRINT ERROR_MESSAGE();
+
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while deleting the instructor. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
-END
+END;
 GO
 
 -- Insert Instructor
@@ -137,7 +159,7 @@ BEGIN
         -- Check if the SSN already exists and is not deleted
         IF EXISTS (SELECT 1 FROM Instructor WHERE SSN = @ssn AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with SSN ' + CAST(@ssn AS NVARCHAR) + ' already exists and is active.';
+            RAISERROR('Instructor with SSN %s already exists and is active.', 16, 1, @ssn);
             RETURN;
         END;
 
@@ -171,11 +193,18 @@ BEGIN
         PRINT 'Instructor inserted successfully.';
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while inserting the instructor.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while inserting the instructor. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
-END
+END;
 GO
 
 -- get the number of student in each course that the instructor teach
@@ -192,14 +221,14 @@ BEGIN
             WHERE ID = @instructorID AND isDeleted = 0
         )
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instructorID AS NVARCHAR) + ' does not exist or is deleted.';
+            RAISERROR('Instructor with ID %d does not exist or is deleted.', 16, 1, @instructorID);
             RETURN;
         END;
 
         -- Get course names and student counts
         SELECT 
             C.Name AS CourseName,
-            COUNT(DISTINCT S.ID) AS StudentCount  -- Distinct to avoid duplicates
+            COUNT(DISTINCT S.ID) AS StudentCount
         FROM 
             Course_Instructor CI
         INNER JOIN 
@@ -211,16 +240,25 @@ BEGIN
         LEFT JOIN 
             Student S 
             ON CSI.studentID = S.ID 
-            AND S.isDeleted = 0  -- Only count active students
+            AND S.isDeleted = 0
         WHERE 
             CI.instructorID = @instructorID
         GROUP BY 
-            C.ID, C.Name;  -- Group by ID to handle duplicate course names
+            C.ID, C.Name;
 
         PRINT 'Courses and student counts retrieved successfully.';
     END TRY
     BEGIN CATCH
-        PRINT 'An error occurred: ' + ERROR_MESSAGE();
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while retrieving courses and student counts. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
 END;
 GO
@@ -235,7 +273,7 @@ BEGIN
         -- Check if the instructor exists and is not deleted
         IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
+            RAISERROR('Instructor with ID %d does not exist or is deleted.', 16, 1, @instID);
             RETURN;
         END;
 
@@ -245,11 +283,18 @@ BEGIN
         WHERE instructorID = @instID;
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while retrieving the course count for the instructor.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while retrieving the course count for the instructor. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
-END
+END;
 GO
 
 -- get the names of the courses that the instructor teach
@@ -262,7 +307,7 @@ BEGIN
         -- Check if the instructor exists and is not deleted
         IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
+            RAISERROR('Instructor with ID %d does not exist or is deleted.', 16, 1, @instID);
             RETURN;
         END;
 
@@ -272,11 +317,18 @@ BEGIN
         WHERE ID IN (SELECT courseID FROM Course_Instructor WHERE instructorID = @instID) AND isDeleted = 0;
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while retrieving the courses taught by the instructor.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while retrieving the courses taught by the instructor. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
-END
+END;
 GO
 
 -- get the number of the exams that the instructor created
@@ -289,7 +341,7 @@ BEGIN
         -- Check if the instructor exists and is not deleted
         IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instID AND isDeleted = 0)
         BEGIN
-            PRINT 'Instructor with ID ' + CAST(@instID AS NVARCHAR) + ' does not exist or is deleted.';
+            RAISERROR('Instructor with ID %d does not exist or is deleted.', 16, 1, @instID);
             RETURN;
         END;
 
@@ -299,11 +351,18 @@ BEGIN
         WHERE instructorID = @instID;
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while retrieving the exam count for the instructor.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while retrieving the exam count for the instructor. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
-END
+END;
 GO
 
 -- Get All the Deleted Instructors
@@ -330,11 +389,18 @@ BEGIN
         PRINT 'Retrieved all deleted instructors successfully.';
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while retrieving deleted instructors.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while retrieving deleted instructors. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
-END
+END;
 GO
 
 --Retrieve All the Current Instructors (that are not deleted)
@@ -356,14 +422,21 @@ BEGIN
             DateOfBirth,
             address
         FROM Instructor
-        WHERE isDeleted = 0; -- Only retrieve active instructors
+        WHERE isDeleted = 0;
 
         PRINT 'Retrieved all active instructors successfully.';
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        PRINT 'An error occurred while retrieving instructors.';
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while retrieving instructors. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
     END CATCH;
-END
+END;
 GO
