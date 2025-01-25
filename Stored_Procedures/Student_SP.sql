@@ -1,29 +1,72 @@
 --- Add a New Student
-CREATE PROCEDURE InsertStudent
+CREATE OR ALTER PROCEDURE InsertStudent
     @firstName NVARCHAR(20),
     @lastName NVARCHAR(20),
     @gender NVARCHAR(10),
     @SSN NVARCHAR(20),
+    @enrollmentDate DATETIME = GETDATE,
     @Email NVARCHAR(100),
     @phone NVARCHAR(15),
     @DateOfBirth DATE,
     @address NVARCHAR(200),
     @trackID INT,
+    @branchID INT,
     @departmentID INT
 AS 
 BEGIN
     BEGIN TRY
+    BEGIN TRANSACTION
         DECLARE @studentID INT;
-        
-        -- Insert the new student
-        INSERT INTO Student (firstName, lastName, gender, SSN, enrollmentDate, email, phone, DateOfBirth, address, trackID, departmentID)
-        VALUES (@firstName, @lastName, @gender, @SSN, GETDATE(), @Email, @phone, @DateOfBirth, @address, @trackID, @departmentID);
-        
-        -- Get the ID of the inserted student
-        SET @studentID = SCOPE_IDENTITY();
+        -- Handling Data Dublication
+        IF EXISTS (SELECT 1 FROM Student WHERE SSN = @SSN AND isDeleted = 0)
+            BEGIN
+                RAISERROR('Student with this SSN : "%s" already exists', 16, 1, @SSN)
+			    IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+                RETURN
+            END;
+        -- Handling Department existance 
+        IF NOT EXISTS (SELECT 1 FROM Branch_Department_Track 
+               WHERE branchID = @branchID 
+                 AND departmentID = @departmentID 
+                 AND trackID = @trackID 
+                 AND isDeleted = 0)
+            BEGIN
+                RAISERROR('check the avilability of that track in the specified department or branch', 16, 2)
+			    RETURN
+            END;
+        IF EXISTS (SELECT 1 FROM Student WHERE SSN = @SSN AND isDeleted = 1)
+            BEGIN
+                UPDATE Student 
+                SET firstName = @firstName ,
+                    lastName = @lastName ,
+                    gender = @gender,
+                    enrollmentDate = @enrollmentDate,
+                    email = @email,
+                    phone = @phone,
+                    DateOfBirth = @DateOfBirth,
+                    address = @address,
+                    branchID = @branchID,
+                    departmentID = @departmentID,
+                    trackId = @trackID,
+                    isDeleted = 0
+                WHERE SSN = @SSN; 
+
+                -- RETURNING THE ID OF THE NEWLY UPDATED (REINSERTED) STUDENT 
+                SELECT @studentID =  ID FROM Student
+                WHERE SSN = @SSN;
+            END
+            ELSE 
+            BEGIN 
+                -- Insert the new student
+                INSERT INTO Student (firstName, lastName, gender, SSN, enrollmentDate, email, phone, DateOfBirth, address, trackID, departmentID, branchID)
+                VALUES (@firstName, @lastName, @gender, @SSN, @enrollmentDate , @email, @phone, @DateOfBirth, @address, @trackID, @departmentID, @branchID);
+                
+                -- Get the ID of the inserted student
+                SET @studentID = SCOPE_IDENTITY();
+            END;
 
         -- Enroll the student in all courses associated with the track
-        INSERT INTO Course_Student (courseID, studentID, startDate)
+        INSERT INTO Course_Student_Instructor (courseID, studentID, startDate)
         SELECT 
             tc.courseID,
             @studentID,
@@ -32,6 +75,8 @@ BEGIN
             Track_Course tc
         WHERE 
             tc.trackID = @trackID;
+        
+    COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
         -- Rollback the transaction in case of error
@@ -56,20 +101,35 @@ END;
 GO
 
 --Get Student by ID
-CREATE PROCEDURE GetStudentById
+CREATE OR ALTER PROCEDURE GetStudentById
     @StudentID INT
 AS
 BEGIN
     SELECT 
-        Std.*, 
-        Dept.Name AS [departmentName], 
-        T.Name AS [trackName]
+        Std.ID, 
+        Std.firstName, 
+        Std.lastName, 
+        Std.gender, 
+        Std.SSN, 
+        Std.enrollmentDate, 
+        Std.email, 
+        Std.phone, 
+        Std.DateOfBirth, 
+        Std.address, 
+        Std.trackID, 
+        Std.departmentID, 
+        Std.branchID, 
+        D.Name AS [departmentName], 
+        T.Name AS [trackName], 
+        B.Name AS [branchName]
     FROM 
         Student Std 
     INNER JOIN 
-        Department Dept ON Std.departmentID = Dept.ID
+        Department D ON Std.departmentID = D.ID
     INNER JOIN 
         Track T ON Std.trackID = T.ID
+    INNER JOIN 
+        Branch B ON B.ID = std.branchID
     WHERE 
         Std.ID = @StudentID 
         AND Std.isDeleted = 0;
@@ -77,7 +137,7 @@ END;
 GO
 
 --Remove a Student
-CREATE PROCEDURE DeleteStudent
+CREATE OR ALTER PROCEDURE DeleteStudent
     @StudentID INT
 AS
 BEGIN
@@ -95,6 +155,9 @@ BEGIN
         UPDATE Student
         SET isDeleted = 1
         WHERE ID = @StudentID;
+
+        DELETE FROM Course_Student_Instructor
+        WHERE studentID = @studentID;
 
         COMMIT TRANSACTION;
     END TRY
@@ -117,7 +180,7 @@ END;
 GO
 
 --Update Student Information
-CREATE PROCEDURE UpdateStudent
+CREATE OR ALTER PROCEDURE UpdateStudent
     @StudentID INT,
     @firstName NVARCHAR(20),
     @lastName NVARCHAR(20),
@@ -128,19 +191,58 @@ CREATE PROCEDURE UpdateStudent
     @DateOfBirth DATE,
     @address NVARCHAR(200),
     @trackID INT,
-    @departmentID INT
+    @departmentID INT,
+    @branchID INT
 AS
 BEGIN
     BEGIN TRANSACTION;
 
     BEGIN TRY
         -- Check if the student exists and is not deleted
-        IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @StudentID AND isDeleted = 0)
+        Declare @oldTrackID INT;
+        SELECT @oldTrackID = (SELECT trackId FROM STUDENT WHERE ID = @StudentID AND isDeleted = 0);
         BEGIN
             RAISERROR('Student with ID %d does not exist or is deleted.', 16, 1, @StudentID);
             RETURN;
         END;
 
+        -- Check if the track matches the department
+        IF @oldTrackID <> @trackID
+        BEGIN
+            RAISERROR('Invalid department or track ... make sure that the track match the department', 16, 1);
+            RETURN;
+        END
+        -- Validation logic for Branch, Department, and Track
+            IF NOT EXISTS (
+                SELECT 1
+                FROM Branch_Department_Track bdt
+                WHERE bdt.trackID = @trackID
+                  AND bdt.departmentID = @departmentID
+                  AND bdt.branchID = @branchID
+                  AND bdt.isDeleted = 0
+            )
+            BEGIN
+                RAISERROR('Invalid combination of Branch, Department, or Track. Ensure all IDs are valid and active.', 16, 1);
+                RETURN;
+            END;
+ 
+        IF @oldTrackID NOT IN (SELECT @trackID)
+        BEGIN
+            DELETE FROM Course_Student_Instructor
+            WHERE studentID = @StudentID;
+            
+            -- Enroll the student in all courses associated with the track
+            INSERT INTO Course_Student_Instructor (courseID, studentID, startDate)
+            SELECT 
+                tc.courseID,
+                @studentID,
+                GETDATE() 
+            FROM 
+                Track_Course tc
+            WHERE 
+            tc.trackID = @trackID;
+
+        END
         -- Update the student information
         UPDATE Student
         SET 
@@ -153,10 +255,12 @@ BEGIN
             DateOfBirth = @DateOfBirth,
             address = @address,
             trackID = @trackID,
-            departmentID = @departmentID
+            departmentID = @departmentID,
+            branchID = @branchID
         WHERE 
             ID = @StudentID;
 
+            
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -178,53 +282,78 @@ END;
 GO
 
 --Enroll Student in a Course
-CREATE PROCEDURE InsertStudentInCourse
+CREATE OR ALTER PROCEDURE InsertStudentInCourse
     @courseID INT,
     @studentID INT,
+    @instructorID INT,
     @startDate DATETIME
 AS
 BEGIN
     BEGIN TRY
-        -- Check if the student exists and is not deleted
-        IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @studentID AND isDeleted = 0)
+        BEGIN TRANSACTION;
+
+        DECLARE @studentTrackID INT;
+
+        -- Check if student exists and get their track
+        SELECT @studentTrackID = trackID 
+        FROM Student 
+        WHERE ID = @studentID AND isDeleted = 0;
+
+        IF @studentTrackID IS NULL
         BEGIN
             RAISERROR('Student with ID %d does not exist or is deleted.', 16, 1, @studentID);
             RETURN;
         END;
 
-        -- Check if the course exists and is not deleted
+        -- Check course existence
         IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID AND isDeleted = 0)
         BEGIN
             RAISERROR('Course with ID %d does not exist or is deleted.', 16, 1, @courseID);
             RETURN;
         END;
 
-        -- Check if the student is already enrolled in the course
-        IF EXISTS (SELECT 1 FROM Course_Student WHERE courseID = @courseID AND studentID = @studentID)
+        -- Check if course is part of student's track
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM Track_Course 
+            WHERE trackID = @studentTrackID 
+            AND courseID = @courseID
+        )
         BEGIN
-            RAISERROR('The student is already enrolled in the specified course.', 16, 1);
+            RAISERROR('Course ID %d is not available in the student''s track.', 16, 1, @courseID);
             RETURN;
         END;
 
-        -- Enroll the student in the course
-        INSERT INTO Course_Student (courseID, studentID, startDate)
-        VALUES (@courseID, @studentID, @startDate);
+        -- Check existing enrollment
+        IF EXISTS (
+            SELECT 1 
+            FROM Course_Student_Instructor 
+            WHERE courseID = @courseID 
+            AND studentID = @studentID
+        )
+        BEGIN
+            RAISERROR('Student is already enrolled in course ID %d.', 16, 1, @courseID);
+            RETURN;
+        END;
+
+        -- Insert enrollment
+        INSERT INTO Course_Student_Instructor (courseID, studentID, instructorID, startDate)
+        VALUES (@courseID, @studentID, @instructorID, @startDate);
+
+        COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
-        SELECT 
-            @ErrorMessage = ERROR_MESSAGE(), 
-            @ErrorSeverity = ERROR_SEVERITY(), 
-            @ErrorState = ERROR_STATE();
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
 
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrorMessage, 16, 1);
     END CATCH
 END;
 GO
 
 --Get Courses Enrolled by a Student
-CREATE PROCEDURE GetCoursesEnrolledByStudent
+CREATE OR ALTER PROCEDURE GetCoursesEnrolledByStudent
     @studentID INT
 AS
 BEGIN
@@ -240,13 +369,13 @@ BEGIN
         SELECT 
             c.ID,
             c.Name,
-            cs.startDate
+            CSI.startDate
         FROM 
-            Course_Student cs
+            Course_Student_Instructor CSI
         INNER JOIN 
-            Course c ON cs.courseID = c.ID
+            Course c ON CSI.courseID = c.ID
         WHERE 
-            cs.studentID = @studentID
+            CSI.studentID = @studentID
             AND c.isDeleted = 0;
     END TRY
     BEGIN CATCH
@@ -262,7 +391,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DeleteCourseForStudent
+CREATE OR ALTER PROCEDURE DeleteCourseFromStudent
     @courseID INT,
     @studentID INT
 AS
@@ -273,7 +402,7 @@ BEGIN
 
         IF NOT EXISTS (
             SELECT 1
-            FROM Course_Student
+            FROM Course_Student_Instructor
             WHERE courseID = @courseID AND studentID = @studentID
         )
         BEGIN
@@ -281,7 +410,7 @@ BEGIN
             RETURN;
         END;
 
-        DELETE FROM Course_Student
+        DELETE FROM Course_Student_Instructor
         WHERE courseID = @courseID AND studentID = @studentID;
 
         COMMIT TRANSACTION;
@@ -303,153 +432,24 @@ END;
 -------------------------------------------------
 GO
 --Count Students Enrolled in a Course
-CREATE PROCEDURE GetCountStudentInCourse
+CREATE OR ALTER PROCEDURE GetCountStudentInCourse
     @courseID INT
 AS
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID)
+    IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @courseID AND isDeleted = 0)
     BEGIN
         RAISERROR ('The specified course ID does not exist.', 16, 1);
         RETURN;
     END;
-    SELECT COUNT(CS.studentID) AS StudentCount
-    FROM Course_Student CS
-    WHERE CS.courseID = @courseID;
+    SELECT COUNT(CSI.studentID) AS StudentCount
+    FROM Course_Student_Instructor CSI
+    WHERE CSI.courseID = @courseID;
 END;
-
--------------------------------------------------------------------
-
-GO
---Submit Answer for a Question
-CREATE PROCEDURE InsertAnswerForStudentSubmition
-    @StudentSubmitID INT,
-    @examModelID INT,
-    @questionID INT,
-    @studentAnswer NVARCHAR(200)
-AS
-BEGIN
-    BEGIN TRANSACTION;
-
-    BEGIN TRY
-
-        IF NOT EXISTS (SELECT 1 FROM StudentSubmit WHERE ID = @StudentSubmitID)
-        BEGIN
-            RAISERROR ('Invalid StudentSubmitID.', 16, 1);
-            RETURN;
-        END;
-
-
-        IF NOT EXISTS (SELECT 1 FROM ExamModel WHERE ID = @examModelID)
-        BEGIN
-            RAISERROR ('Invalid examModelID.', 16, 1);
-            RETURN;
-        END;
-
-  
-        IF NOT EXISTS (SELECT 1 FROM QuestionBank WHERE ID = @questionID)
-        BEGIN
-            RAISERROR ('Invalid questionID.', 16, 1);
-            RETURN;
-        END;
-
-        -- Check for duplicate submission
-        IF EXISTS (
-            SELECT 1
-            FROM StudentSubmit_Answer
-            WHERE StudentSubmitID = @StudentSubmitID
-              AND examModelID = @examModelID
-              AND questionID = @questionID
-        )
-        BEGIN
-            RAISERROR ('Duplicate submission answer is not allowed for the same question.', 16, 1);
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
-
- 
-        INSERT INTO StudentSubmit_Answer (StudentSubmitID, examModelID, questionID, studentAnswer)
-        VALUES (@StudentSubmitID, @examModelID, @questionID, @studentAnswer);
-
-        COMMIT TRANSACTION;
-
-        PRINT 'Answer submitted successfully.';
-    END TRY
-    BEGIN CATCH
-
-        IF @@TRANCOUNT > 0
-        BEGIN
-            ROLLBACK TRANSACTION;
-        END;
-
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
-			SELECT @ErrorMessage = ERROR_MESSAGE(), 
-				   @ErrorSeverity = ERROR_SEVERITY(), 
-				   @ErrorState = ERROR_STATE();
-			RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
-    END CATCH
-END;
-
------------------------------------
-GO
----------useless SP----------
--- Stored Procedure: Update a Submitted Answer
-CREATE PROCEDURE UpdateStudentSubmitAnswer
-    @studentSubmitID INT,
-    @examModelID INT,
-    @questionID INT,
-    @newAnswer NVARCHAR(200)
-AS
-BEGIN
-    BEGIN TRY
-        BEGIN TRANSACTION;
-    UPDATE StudentSubmit_Answer
-    SET studentAnswer = @newAnswer
-    WHERE StudentSubmitID = @studentSubmitID 
-    AND examModelID = @examModelID
-    AND questionID = @questionID;
-
-    -- Check if the answer already exists
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM StudentSubmit_Answer 
-            WHERE StudentSubmitID = @studentSubmitID 
-              AND examModelID = @examModelID 
-              AND questionID = @questionID
-        )
-        BEGIN
-            RAISERROR('The specified answer does not exist. Cannot update.', 16, 1);
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
-
-        COMMIT TRANSACTION;
-    END TRY
-
-    BEGIN CATCH
-        -- Rollback the transaction if an error occurs
-        IF @@TRANCOUNT > 0
-        BEGIN
-            ROLLBACK TRANSACTION;
-        END;
-    DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
-        SELECT @ErrorMessage = ERROR_MESSAGE(), 
-               @ErrorSeverity = ERROR_SEVERITY(), 
-               @ErrorState = ERROR_STATE();
-
-        RAISERROR('Error updating answer: %s', @ErrorSeverity, @ErrorState, @ErrorMessage);
-
-        -- Return failure status
-        SELECT 0 AS Status, 'Failed to update answer.' AS Message;
-    END CATCH;
-END;
-
-
-
 
 
 ------------------------EXTRA MAHARAT------------------------------------------------
 GO 
-CREATE PROCEDURE GetCountExamAnsweredByStudent
+CREATE OR ALTER PROCEDURE GetCountExamAnsweredByStudent
     @StudentID INT
 AS
 BEGIN
@@ -467,7 +467,7 @@ END;
 --------------------------------------------------------------
 
 GO
-CREATE PROCEDURE GetExamCourseNamesByStudent
+CREATE OR ALTER PROCEDURE GetExamCourseNamesByStudent
     @StudentID INT
 AS
 BEGIN
@@ -488,55 +488,197 @@ END;
 
 ----------------------------------------------------------------------
 
+
 GO
---- Get All Exam Answers Submitted by a Student
-CREATE PROCEDURE GetStudentAnswersPerExam
-    @studentID INT,
-    @examModelID INT
+CREATE OR ALTER PROCEDURE GetAllStudentsInBranch
+    @BranchID INT
 AS
 BEGIN
-
-	IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @studentID)
+    -- Check for active branch
+    IF NOT EXISTS (SELECT 1 FROM Branch WHERE ID = @BranchID AND isDeleted = 0)
     BEGIN
-        RAISERROR('Student with ID %d not found.', 16, 1, @studentID);
+        RAISERROR('Branch with ID %d does not exist or is deleted.', 16, 1, @BranchID);
         RETURN;
-    END
-
-    IF NOT EXISTS (SELECT 1 FROM ExamModel WHERE ID = @examModelID)
-    BEGIN
-        RAISERROR('Exam model with ID %d not found.', 16, 1, @examModelID);
-        RETURN;
-    END
-
-    IF NOT EXISTS (
-    SELECT 1 
-    FROM StudentSubmit_Answer ssa
-    INNER JOIN ExamModel_StudentSubmit_Student emss 
-        ON ssa.StudentSubmitID = emss.studentSubmitID
-    WHERE emss.studentID = @studentID 
-      AND emss.examModelID = @examModelID
-)
-BEGIN
-    RAISERROR('No answers found for student with ID %d and exam model with ID %d.', 16, 1, @studentID, @examModelID);
-    RETURN;
-END
+    END;
 
     SELECT 
-        ssa.questionID,
-        qb.questionText,
-        ssa.studentAnswer,
-        qb.correctChoice,
-        CASE 
-            WHEN ssa.studentAnswer = qb.correctChoice THEN 'Correct'
-            ELSE 'Incorrect'
-        END AS AnswerStatus
+        S.ID, 
+        S.firstName,
+        S.lastName,
+        S.email,
+        S.phone,
+        B.Name AS [BranchName]
     FROM 
-        StudentSubmit_Answer ssa
+        Student S
     INNER JOIN 
-        ExamModel_StudentSubmit_Student emss ON ssa.StudentSubmitID = emss.studentSubmitID
+        Branch B ON S.branchID = B.ID AND B.isDeleted = 0
     INNER JOIN 
-        QuestionBank qb ON ssa.questionID = qb.ID
+        Branch_Department_Track BDT 
+        ON S.branchID = BDT.branchID 
+        AND S.departmentID = BDT.departmentID 
+        AND S.trackID = BDT.trackID 
+        AND BDT.isDeleted = 0
     WHERE 
-        emss.studentID = @studentID 
-        AND emss.examModelID = @examModelID;
+        S.branchID = @BranchID
+        AND S.isDeleted = 0;
 END;
+GO
+CREATE OR ALTER PROCEDURE GetAllStudentsInDepartment
+    @DepartmentID INT
+AS
+BEGIN
+    -- Check for active department
+    IF NOT EXISTS (SELECT 1 FROM Department WHERE ID = @DepartmentID AND isDeleted = 0)
+    BEGIN
+        RAISERROR('Department with ID %d does not exist or is deleted.', 16, 1, @DepartmentID);
+        RETURN;
+    END;
+
+    SELECT 
+        S.ID,
+        S.firstName,
+        S.lastName,
+        S.email,
+        S.phone,
+        D.Name AS DepartmentName
+    FROM 
+        Student S
+    INNER JOIN 
+        Department D ON S.departmentID = D.ID AND D.isDeleted = 0
+    INNER JOIN 
+        Branch_Department_Track BDT 
+        ON S.branchID = BDT.branchID 
+        AND S.departmentID = BDT.departmentID 
+        AND S.trackID = BDT.trackID 
+        AND BDT.isDeleted = 0
+    WHERE 
+        S.departmentID = @DepartmentID
+        AND S.isDeleted = 0;
+END;
+GO
+CREATE OR ALTER PROCEDURE GetAllStudentsInTrack
+    @TrackID INT
+AS
+BEGIN
+    -- Check for active track
+    IF NOT EXISTS (SELECT 1 FROM Track WHERE ID = @TrackID AND isDeleted = 0)
+    BEGIN
+        RAISERROR('Track with ID %d does not exist or is deleted.', 16, 1, @TrackID);
+        RETURN;
+    END;
+
+    SELECT 
+        S.ID,
+        S.firstName,
+        S.lastName,
+        S.email,
+        S.phone,
+        T.Name AS TrackName
+    FROM 
+        Student S
+    INNER JOIN 
+        Track T ON S.trackID = T.ID AND T.isDeleted = 0
+    INNER JOIN 
+        Branch_Department_Track BDT 
+        ON S.branchID = BDT.branchID 
+        AND S.departmentID = BDT.departmentID 
+        AND S.trackID = BDT.trackID 
+        AND BDT.isDeleted = 0
+    WHERE 
+        S.trackID = @TrackID
+        AND S.isDeleted = 0;
+END;
+GO
+CREATE OR ALTER PROCEDURE GetStudentCountInBranch
+    @BranchID INT
+AS
+BEGIN
+    -- Check for active branch
+    IF NOT EXISTS (SELECT 1 FROM Branch WHERE ID = @BranchID AND isDeleted = 0)
+    BEGIN
+        RAISERROR('Branch with ID %d does not exist or is deleted.', 16, 1, @BranchID);
+        RETURN;
+    END;
+
+    SELECT 
+        COUNT(*) AS StudentCount,
+        B.Name AS BranchName
+    FROM 
+        Student S
+    INNER JOIN 
+        Branch B ON S.branchID = B.ID AND B.isDeleted = 0
+    INNER JOIN 
+        Branch_Department_Track BDT 
+        ON S.branchID = BDT.branchID 
+        AND S.departmentID = BDT.departmentID 
+        AND S.trackID = BDT.trackID 
+        AND BDT.isDeleted = 0
+    WHERE 
+        S.branchID = @BranchID
+        AND S.isDeleted = 0
+    GROUP BY 
+        B.Name;
+END;
+GO
+CREATE OR ALTER PROCEDURE GetStudentCountInDepartment
+    @DepartmentID INT
+AS
+BEGIN
+    -- Check for active department
+    IF NOT EXISTS (SELECT 1 FROM Department WHERE ID = @DepartmentID AND isDeleted = 0)
+    BEGIN
+        RAISERROR('Department with ID %d does not exist or is deleted.', 16, 1, @DepartmentID);
+        RETURN;
+    END;
+
+    SELECT 
+        COUNT(*) AS StudentCount,
+        D.Name AS DepartmentName
+    FROM 
+        Student S
+    INNER JOIN 
+        Department D ON S.departmentID = D.ID AND D.isDeleted = 0
+    INNER JOIN 
+        Branch_Department_Track BDT 
+        ON S.branchID = BDT.branchID 
+        AND S.departmentID = BDT.departmentID 
+        AND S.trackID = BDT.trackID 
+        AND BDT.isDeleted = 0
+    WHERE 
+        S.departmentID = @DepartmentID
+        AND S.isDeleted = 0
+    GROUP BY 
+        D.Name;
+END;
+GO
+CREATE OR ALTER PROCEDURE GetStudentCountInTrack
+    @TrackID INT
+AS
+BEGIN
+    -- Check for active track
+    IF NOT EXISTS (SELECT 1 FROM Track WHERE ID = @TrackID AND isDeleted = 0)
+    BEGIN
+        RAISERROR('Track with ID %d does not exist or is deleted.', 16, 1, @TrackID);
+        RETURN;
+    END;
+
+    SELECT 
+        COUNT(*) AS StudentCount,
+        T.Name AS TrackName
+    FROM 
+        Student S
+    INNER JOIN 
+        Track T ON S.trackID = T.ID AND T.isDeleted = 0
+    INNER JOIN 
+        Branch_Department_Track BDT 
+        ON S.branchID = BDT.branchID 
+        AND S.departmentID = BDT.departmentID 
+        AND S.trackID = BDT.trackID 
+        AND BDT.isDeleted = 0
+    WHERE 
+        S.trackID = @TrackID
+        AND S.isDeleted = 0
+    GROUP BY 
+        T.Name;
+END;
+GO
