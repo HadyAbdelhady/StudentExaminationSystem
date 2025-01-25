@@ -15,13 +15,13 @@ BEGIN TRY
     DROP TABLE IF EXISTS Course_Instructor;
     DROP TABLE IF EXISTS Track_Course;
     DROP TABLE IF EXISTS Department_Instructor;
-    DROP TABLE IF EXISTS Branch_Department_Track;
 
     -- Drop dependent tables
     DROP TABLE IF EXISTS StudentSubmit;
     DROP TABLE IF EXISTS ExamModel;
     DROP TABLE IF EXISTS QuestionBank;
     DROP TABLE IF EXISTS Student;
+    DROP TABLE IF EXISTS Branch_Department_Track;
     DROP TABLE IF EXISTS Track;
 
     -- Drop main tables

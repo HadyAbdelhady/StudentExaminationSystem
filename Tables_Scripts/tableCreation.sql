@@ -46,6 +46,22 @@ CREATE TABLE Track (
     creationDate DATETIME NOT NULL
 );
 
+CREATE TABLE Branch_Department_Track (
+    branchID INT NOT NULL,
+    trackID INT NOT NULL,
+    departmentID INT NOT NULL,
+    creationDate DATETIME NOT NULL,
+    departmentManagerID INT NOT NULL,
+    trackManagerID INT NOT NULL,
+    isDeleted BIT DEFAULT 0,
+    FOREIGN KEY (branchID) REFERENCES Branch(ID),
+    FOREIGN KEY (trackID) REFERENCES Track(ID),
+    FOREIGN KEY (departmentID) REFERENCES Department(ID),
+    FOREIGN KEY (departmentManagerID) REFERENCES Instructor(ID),
+    FOREIGN KEY (trackManagerID) REFERENCES Instructor(ID),
+    PRIMARY KEY (trackID, departmentID, branchID)
+);
+
 -- Table: Student
 CREATE TABLE Student (
     ID INT PRIMARY KEY IDENTITY(1,1),
@@ -61,9 +77,7 @@ CREATE TABLE Student (
     trackID INT NOT NULL,
     branchID INT NOT NULL,
     departmentID INT NOT NULL,
-    FOREIGN KEY (trackID) REFERENCES Branch_Department_Track(trackID),
-    FOREIGN KEY (departmentID) REFERENCES Branch_Department_Track(departmentID),
-    FOREIGN KEY (branchID) REFERENCES Branch_Department_Track(branchID),
+    FOREIGN KEY (trackID, departmentID, branchID) REFERENCES Branch_Department_Track(trackID, departmentID, branchID),
 	isDeleted BIT  DEFAULT 0 
 );
 
@@ -207,19 +221,3 @@ CREATE TABLE Department_Instructor (
     FOREIGN KEY (instructorID) REFERENCES Instructor(ID),
     PRIMARY KEY (departmentID, instructorID)
 );
-
-CREATE TABLE Branch_Department_Track (
-    branchID INT NOT NULL,
-    trackID INT NOT NULL,
-    departmentID INT NOT NULL,
-    creationDate DATETIME NOT NULL,
-    departmentManagerID INT NOT NULL,
-    trackManagerID INT NOT NULL,
-    isDeleted BIT DEFAULT 0,
-    FOREIGN KEY (branchID) REFERENCES Branch(ID),
-    FOREIGN KEY (trackID) REFERENCES Track(ID),
-    FOREIGN KEY (departmentID) REFERENCES Department(ID),
-    FOREIGN KEY (departmentManagerID) REFERENCES Instructor(ID),
-    FOREIGN KEY (trackManagerID) REFERENCES Instructor(ID),
-    PRIMARY KEY (trackID, branchID, departmentID)
-)
