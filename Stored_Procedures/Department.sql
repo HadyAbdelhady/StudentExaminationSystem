@@ -3,7 +3,7 @@
 -----------------------------------------------------
 
 -- getting all the departments data
-CREATE PROCEDURE GetDepartmentData
+CREATE OR ALTER PROCEDURE GetDepartmentData
 AS
 BEGIN
     SELECT *
@@ -13,44 +13,139 @@ END;
 GO
 
 -- getting the manager data of a specific department
-CREATE PROCEDURE GetDepartmentManager
+CREATE OR ALTER PROCEDURE GetDepartmentManager
     @MANAGERID INT
+WITH ENCRYPTION
 AS
 BEGIN
-    SELECT INST.*
-    FROM DEPARTMENT DEPT
-    INNER JOIN INSTRUCTOR INST ON DEPT.ManagerID = INST.ID
-    WHERE DEPT.ManagerID = @MANAGERID AND DEPT.isDeleted = 0;
+    BEGIN TRY
+        -- Check if manager exists and is active
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM Instructor 
+            WHERE ID = @MANAGERID 
+            AND isDeleted = 0
+        )
+        BEGIN
+            PRINT 'Manager with ID ' + CAST(@MANAGERID AS NVARCHAR) + ' does not exist or is deleted.';
+            RETURN;
+        END;
+
+        -- Check if department exists and is active
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM Department 
+            WHERE ManagerID = @MANAGERID 
+            AND isDeleted = 0
+        )
+        BEGIN
+            PRINT 'No active department found for manager ID ' + CAST(@MANAGERID AS NVARCHAR);
+            RETURN;
+        END;
+
+        -- Retrieve manager details
+        SELECT INST.*
+        FROM DEPARTMENT DEPT
+        INNER JOIN INSTRUCTOR INST 
+            ON DEPT.ManagerID = INST.ID
+            AND INST.isDeleted = 0
+        WHERE DEPT.ManagerID = @MANAGERID 
+          AND DEPT.isDeleted = 0;
+
+        PRINT 'Manager details retrieved successfully for ID ' + CAST(@MANAGERID AS NVARCHAR);
+    END TRY
+    BEGIN CATCH
+        PRINT 'An error occurred while retrieving department manager:';
+        PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS NVARCHAR);
+        PRINT 'Error Message: ' + ERROR_MESSAGE();
+    END CATCH;
 END;
 GO
 
 -- create new department 
-CREATE PROCEDURE InsertDepartment
-    @DEPTNAME VARCHAR(100),
+CREATE OR ALTER PROCEDURE InsertDepartment
+    @DEPTNAME NVARCHAR(100),
     @DEPTMANAGER INT,
     @NewDepartmentID INT OUTPUT
+WITH ENCRYPTION
 AS
 BEGIN
-    -- Check if the manager is not deleted
-    IF EXISTS (SELECT 1 FROM Instructor WHERE ID = @DEPTMANAGER AND isDeleted = 0)
-    BEGIN
-        INSERT INTO DEPARTMENT
-            (NAME, MANAGERID, CREATIONDATE)
-        VALUES
-            (@DEPTNAME, @DEPTMANAGER, GETDATE());
+    BEGIN TRY
+        BEGIN TRANSACTION;
 
-        -- Set the output parameter to the last inserted identity value
-        SET @NewDepartmentID = SCOPE_IDENTITY();
-    END
-    ELSE
-    BEGIN
-        RAISERROR ('Manager is deleted or does not exist.', 16, 1);
-    END
+        -- Check manager validation for all cases
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM Instructor 
+            WHERE ID = @DEPTMANAGER 
+            AND isDeleted = 0
+        )
+        BEGIN
+            RAISERROR ('Invalid ManagerID: Manager does not exist or is deleted.', 16, 1);
+            RETURN;
+        END
+
+        -- Check if department name exists
+        IF EXISTS (SELECT 1 FROM Department WHERE Name = @DEPTNAME)
+        BEGIN
+            -- Handle existing department
+            IF EXISTS (
+                SELECT 1 
+                FROM Department 
+                WHERE Name = @DEPTNAME 
+                AND isDeleted = 1
+            )
+            BEGIN
+                -- Reactivate department with new manager
+                UPDATE Department
+                SET isDeleted = 0,
+                    ManagerID = @DEPTMANAGER,  -- Update to new valid manager
+                    creationDate = GETDATE()
+                WHERE Name = @DEPTNAME;
+
+                SELECT @NewDepartmentID = ID
+                FROM Department 
+                WHERE Name = @DEPTNAME;
+
+                PRINT 'Reactivated department "' + @DEPTNAME + '" with new ManagerID: ' 
+                      + CAST(@DEPTMANAGER AS NVARCHAR);
+            END
+            ELSE
+            BEGIN
+                RAISERROR ('Department name already exists and is active.', 16, 1);
+                RETURN;
+            END
+        END
+        ELSE
+        BEGIN
+            -- Insert new department with validated manager
+            INSERT INTO DEPARTMENT
+                (Name, ManagerID, creationDate)
+            VALUES
+                (@DEPTNAME, @DEPTMANAGER, GETDATE());
+
+            SET @NewDepartmentID = SCOPE_IDENTITY();
+            PRINT 'New department "' + @DEPTNAME + '" created with ManagerID: ' 
+                  + CAST(@DEPTMANAGER AS NVARCHAR);
+        END
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+        
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+        RETURN;
+    END CATCH
 END;
 GO
 
 -- update department
-CREATE PROCEDURE UpdateDepartment
+CREATE OR ALTER PROCEDURE UpdateDepartment
     @DepartmentID INT,
     @NewName NVARCHAR(100) = NULL,
     @NewManagerID INT = NULL
@@ -116,7 +211,7 @@ GO
 
 
 -- delete a department 
-CREATE PROCEDURE DeleteDepartment
+CREATE OR ALTER PROCEDURE DeleteDepartment
     @DEPTID INT
 AS
 BEGIN
