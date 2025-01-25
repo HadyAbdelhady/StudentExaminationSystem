@@ -3,7 +3,7 @@
 -------------------------------------------
 
 -- Insertion SP
-CREATE OR ALTER PROCEDURE InsertIntoDepartmenttInstructor
+CREATE OR ALTER PROCEDURE InsertIntoDepartmentInstructor
     @DEPTID INT,
     @INSTID INT
 AS

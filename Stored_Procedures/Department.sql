@@ -12,52 +12,87 @@ BEGIN
 END;
 GO
 
--- getting the manager data of a specific department
-CREATE OR ALTER PROCEDURE GetDepartmentManager
-    @MANAGERID INT
+--getting all the departements in a specific branch 
+CREATE OR ALTER PROCEDURE GetDepartmentsBranchData
+    @BranchID INT
 WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
-        -- Check if manager exists and is active
+        -- Check if branch exists and is active
         IF NOT EXISTS (
             SELECT 1 
-            FROM Instructor 
-            WHERE ID = @MANAGERID 
+            FROM Branch 
+            WHERE ID = @BranchID 
             AND isDeleted = 0
         )
         BEGIN
-            PRINT 'Manager with ID ' + CAST(@MANAGERID AS NVARCHAR) + ' does not exist or is deleted.';
+            RAISERROR ('Branch ID %d does not exist or is deleted.', 16, 1, @BranchID);
             RETURN;
         END;
 
-        -- Check if department exists and is active
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM Department 
-            WHERE ManagerID = @MANAGERID 
-            AND isDeleted = 0
-        )
-        BEGIN
-            PRINT 'No active department found for manager ID ' + CAST(@MANAGERID AS NVARCHAR);
-            RETURN;
-        END;
+        -- Get distinct departments for the specific branch
+        SELECT DISTINCT
+            D.ID AS DepartmentID,
+            D.Name AS DepartmentName,
+            D.creationDate AS DepartmentCreationDate,
+            BDT.departmentManagerID AS DepartmentManagerID
+        FROM Branch_Department_Track BDT
+        INNER JOIN Department D 
+            ON BDT.departmentID = D.ID
+            AND D.isDeleted = 0
+        WHERE BDT.branchID = @BranchID
+          AND BDT.isDeleted = 0;
 
-        -- Retrieve manager details
-        SELECT INST.*
-        FROM DEPARTMENT DEPT
-        INNER JOIN INSTRUCTOR INST 
-            ON DEPT.ManagerID = INST.ID
-            AND INST.isDeleted = 0
-        WHERE DEPT.ManagerID = @MANAGERID 
-          AND DEPT.isDeleted = 0;
-
-        PRINT 'Manager details retrieved successfully for ID ' + CAST(@MANAGERID AS NVARCHAR);
+        PRINT 'Distinct department data retrieved for branch ID ' + CAST(@BranchID AS NVARCHAR);
     END TRY
     BEGIN CATCH
-        PRINT 'An error occurred while retrieving department manager:';
-        PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS NVARCHAR);
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        PRINT 'Error retrieving department data: ' + ERROR_MESSAGE();
+    END CATCH;
+END;
+GO
+
+-- getting the manager data of a specific department
+CREATE OR ALTER PROCEDURE GetDepartmentManager
+    @BranchID INT,
+    @DepartmentID INT
+WITH ENCRYPTION
+AS
+BEGIN
+    BEGIN TRY
+        -- Check branch-department relationship
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM Branch_Department_Track 
+            WHERE branchID = @BranchID 
+            AND departmentID = @DepartmentID
+            AND isDeleted = 0
+        )
+        BEGIN
+            RAISERROR ('Department %d does not exist in branch %d or is deleted.', 16, 1, @DepartmentID, @BranchID);
+            RETURN;
+        END;
+
+        -- Get branch-specific department manager
+        SELECT 
+            I.*,
+            BDT.departmentManagerID AS BranchDepartmentManagerID,
+            D.ManagerID AS GlobalDepartmentManagerID
+        FROM Branch_Department_Track BDT
+        INNER JOIN Instructor I 
+            ON BDT.departmentManagerID = I.ID
+            AND I.isDeleted = 0
+        INNER JOIN Department D 
+            ON BDT.departmentID = D.ID
+            AND D.isDeleted = 0
+        WHERE BDT.branchID = @BranchID
+          AND BDT.departmentID = @DepartmentID;
+
+        PRINT 'Department manager retrieved for branch ' + CAST(@BranchID AS NVARCHAR) 
+            + ' and department ' + CAST(@DepartmentID AS NVARCHAR);
+    END TRY
+    BEGIN CATCH
+        PRINT 'Error retrieving department manager: ' + ERROR_MESSAGE();
     END CATCH;
 END;
 GO
@@ -65,25 +100,12 @@ GO
 -- create new department 
 CREATE OR ALTER PROCEDURE InsertDepartment
     @DEPTNAME NVARCHAR(100),
-    @DEPTMANAGER INT,
     @NewDepartmentID INT OUTPUT
 WITH ENCRYPTION
 AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
-
-        -- Check manager validation for all cases
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM Instructor 
-            WHERE ID = @DEPTMANAGER 
-            AND isDeleted = 0
-        )
-        BEGIN
-            RAISERROR ('Invalid ManagerID: Manager does not exist or is deleted.', 16, 1);
-            RETURN;
-        END
 
         -- Check if department name exists
         IF EXISTS (SELECT 1 FROM Department WHERE Name = @DEPTNAME)
@@ -99,7 +121,6 @@ BEGIN
                 -- Reactivate department with new manager
                 UPDATE Department
                 SET isDeleted = 0,
-                    ManagerID = @DEPTMANAGER,  -- Update to new valid manager
                     creationDate = GETDATE()
                 WHERE Name = @DEPTNAME;
 
@@ -107,8 +128,7 @@ BEGIN
                 FROM Department 
                 WHERE Name = @DEPTNAME;
 
-                PRINT 'Reactivated department "' + @DEPTNAME + '" with new ManagerID: ' 
-                      + CAST(@DEPTMANAGER AS NVARCHAR);
+                PRINT 'Reactivated department "' + @DEPTNAME ;
             END
             ELSE
             BEGIN
@@ -120,13 +140,12 @@ BEGIN
         BEGIN
             -- Insert new department with validated manager
             INSERT INTO DEPARTMENT
-                (Name, ManagerID, creationDate)
+                (Name, creationDate)
             VALUES
-                (@DEPTNAME, @DEPTMANAGER, GETDATE());
+                (@DEPTNAME, GETDATE());
 
             SET @NewDepartmentID = SCOPE_IDENTITY();
-            PRINT 'New department "' + @DEPTNAME + '" created with ManagerID: ' 
-                  + CAST(@DEPTMANAGER AS NVARCHAR);
+            PRINT 'New department "' + @DEPTNAME + '" is created';
         END
 
         COMMIT TRANSACTION;
@@ -147,8 +166,7 @@ GO
 -- update department
 CREATE OR ALTER PROCEDURE UpdateDepartment
     @DepartmentID INT,
-    @NewName NVARCHAR(100) = NULL,
-    @NewManagerID INT = NULL
+    @NewName NVARCHAR(100) = NULL
 AS
 BEGIN
     -- Check if the department exists and is not deleted
@@ -159,7 +177,7 @@ BEGIN
     END;
 
     -- Initialize variables for feedback
-    DECLARE @NameUpdated BIT = 0, @ManagerUpdated BIT = 0;
+    DECLARE @NameUpdated BIT = 0;
 
     -- Update the Name if a new name is provided and it's unique
     IF @NewName IS NOT NULL AND
@@ -174,34 +192,8 @@ BEGIN
     BEGIN
         SELECT 'Department name already exists or is invalid.' AS Message;
     END;
-
-    -- Update the ManagerID if a new manager ID is provided and not assigned elsewhere
-    IF @NewManagerID IS NOT NULL
-    BEGIN
-        -- Check if the new manager exists and is not deleted
-        IF EXISTS (SELECT 1 FROM Instructor WHERE ID = @NewManagerID AND isDeleted = 0)
-        BEGIN
-            -- Check if the new manager is not already assigned to another department
-            IF NOT EXISTS (SELECT 1 FROM Department WHERE ManagerID = @NewManagerID AND ID != @DepartmentID)
-            BEGIN
-                UPDATE Department
-                SET ManagerID = @NewManagerID
-                WHERE ID = @DepartmentID;
-                SET @ManagerUpdated = 1;
-            END
-            ELSE
-            BEGIN
-                SELECT 'Manager is already assigned to another department.' AS Message;
-            END;
-        END
-        ELSE
-        BEGIN
-            SELECT 'Manager is deleted or does not exist.' AS Message;
-        END;
-    END;
-
     -- Return success message if any updates were made
-    IF @NameUpdated = 1 OR @ManagerUpdated = 1
+    IF @NameUpdated = 1
     BEGIN
         SELECT 'Department updated successfully.' AS Message;
     END;
