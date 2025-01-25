@@ -30,9 +30,7 @@ Create Table Branch
 CREATE TABLE Department (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL unique,
-    ManagerID INT NOT NULL unique,
     creationDate DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (ManagerID) REFERENCES Instructor(ID),
 	isDeleted BIT  DEFAULT 0 
 );
 
@@ -53,6 +51,8 @@ CREATE TABLE Branch_Department_Track (
     creationDate DATETIME NOT NULL,
     departmentManagerID INT NOT NULL,
     trackManagerID INT NOT NULL,
+    DepartementManagerJoinDate DATETIME NOT NULL,
+    TrackManagerJoinDate DATETIME NOT NULL,
     isDeleted BIT DEFAULT 0,
     FOREIGN KEY (branchID) REFERENCES Branch(ID),
     FOREIGN KEY (trackID) REFERENCES Track(ID),
