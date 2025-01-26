@@ -1,13 +1,13 @@
 -----------------------------------------------------
 --------------------- ExamModel ---------------------
 -----------------------------------------------------
-CREATE PROCEDURE InsertExamModel
+CREATE OR ALTER PROCEDURE InsertExamModel
     @date DATE,
     @startTime TIME,
     @endTime TIME,
     @CourseID INT,
     @instructorID INT,
-    @NewExamModelID INT OUTPUT
+    @examModelID INT OUTPUT
 -- New output parameter to return the identity value
 AS
 BEGIN
@@ -17,18 +17,34 @@ BEGIN
         -- Check if the instructor ID is valid
         IF NOT EXISTS (SELECT 1
     FROM Instructor
-    WHERE ID = @instructorID)
+    WHERE ID = @instructorID AND isDeleted = 0)
         BEGIN
-        RAISERROR('The Instructor ID is not valid.', 16, 1);
+        RAISERROR('The Instructor ID does not exist. Maybe it has been deleted or invalid.', 16, 1);
         RETURN;
     END
+
+    IF EXISTS (
+        SELECT 1
+        FROM ExamModel
+        WHERE CourseID = @CourseID
+            AND instructorID = @instructorID
+            AND date = @date
+            AND (
+                    (startTime <= @endTime AND endTime >= @startTime)
+                )
+            AND isDeleted = 0
+    )
+    BEGIN
+        RAISERROR('An overlapping exam exists for the same course and instructor.', 16, 1);
+        RETURN;
+    END;
 
         -- Check if the course ID is valid
         IF NOT EXISTS (SELECT 1
     FROM Course
-    WHERE ID = @CourseID)
+    WHERE ID = @CourseID And isDeleted = 0)
         BEGIN
-        RAISERROR('The Course ID is not valid.', 16, 1);
+        RAISERROR('The Course ID does not exist. Maybe it has been deleted or invalid.', 16, 1);
         RETURN;
     END
 
@@ -37,7 +53,14 @@ BEGIN
         BEGIN
         RAISERROR('The end time must be after the start time.', 16, 1);
         RETURN;
-    END
+    END;
+
+        -- Check if date is valid
+        IF @date < CAST(GETDATE() AS DATE)
+        BEGIN
+        RAISERROR('The date entered must be today or a future date.', 16, 1);
+        RETURN;
+    END;
 
         -- Insert into ExamModel table
         INSERT INTO ExamModel
@@ -46,7 +69,7 @@ BEGIN
         (@date, @startTime, @endTime, @CourseID, @instructorID);
 
         -- Set the output parameter to the last inserted identity value
-        SET @NewExamModelID = SCOPE_IDENTITY();
+        SET @examModelID = SCOPE_IDENTITY();
 
         -- Return success message
         SELECT 'Exam model inserted successfully.' AS Message;
@@ -68,7 +91,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DeleteExamModel
+CREATE OR ALTER PROCEDURE DeleteExamModel
     @examModelID INT
 AS
 BEGIN
@@ -76,29 +99,49 @@ BEGIN
     -- Suppress "rows affected" messages
 
     BEGIN TRY
+    BEGIN TRANSACTION; -- Start a transaction
         -- Check if the exam model ID exists
-        IF NOT EXISTS (SELECT 1
-    FROM ExamModel
-    WHERE ID = @examModelID)
-        BEGIN
-        RAISERROR('The Exam Model with ID %d does not exist or may already be deleted.', 16, 1, @examModelID);
+    IF NOT EXISTS (SELECT 1
+        FROM ExamModel
+        WHERE ID = @examModelID AND isDeleted = 0)
+    BEGIN
+        RAISERROR('The Exam Model with ID %d does not exist or may be it is already deleted.', 16, 1, @examModelID);
         RETURN;
     END
 
-        BEGIN TRANSACTION; -- Start a transaction
+    -- check if the exam time has come so you can't edit it
+        DECLARE @startTime TIME; 
+        DECLARE @endTime TIME; 
+        DECLARE @date DATE; 
+    
+        SELECT @startTime = startTime, @endTime = endTime , @date = date FROM ExamModel Where ID = @examModelID;
+    
+        IF CONVERT(TIME, GETDATE()) > @startTime AND CONVERT(TIME, GETDATE()) < @endTime AND GETDATE() = @date 
+            BEGIN
+                RAISERROR('You can not edit this exam because is available to students right now!', 16, 1);
+                RETURN;
+            END;
+    
 
-        -- Delete the exam model questions first
-        DELETE FROM ExamModel_Question
+    IF EXISTS (SELECT 1 FROM StudentSubmit WHERE examModelID = @examModelID)
+    BEGIN
+        RAISERROR('You can not delete this exam because it has been answered by at least one student', 16, 1, @examModelID);
+    RETURN;
+
+        -- Soft Delete the exam model questions first
+        Delete FROM ExamModel_Question
         WHERE examModelID = @examModelID;
 
-        -- Delete the exam model
-        DELETE FROM ExamModel
+        -- Soft Delete the exam model
+        Update ExamModel
+        SET isDeleted = 1
         WHERE ID = @examModelID;
 
+        -- Student Submitions won't be affected on purpose
         COMMIT TRANSACTION; -- Commit the transaction if successful
-
         -- Return success message
-        SELECT 'Exam Model and its questions deleted successfully.' AS Message;
+        SELECT 'Exam Model and its questions were deleted successfully.' AS Message;
+    END
     END TRY
     BEGIN CATCH
         -- Rollback the transaction in case of an error
@@ -123,7 +166,7 @@ END;
 GO
 -- update 
 -- update the timing of the exam
-CREATE PROCEDURE UpdateExamModelDateAndTime
+CREATE OR ALTER PROCEDURE UpdateExamModelDateAndTime
     @examModelId INT,
     @date DATE,
     @startTime TIME,
@@ -132,19 +175,36 @@ AS
 BEGIN
     SET NOCOUNT ON;
     -- Suppress "rows affected" messages
-
     BEGIN TRY
+        -- check for avilability for change
+        IF CONVERT(TIME, GETDATE()) > @startTime AND CONVERT(TIME, GETDATE()) < @endTime AND GETDATE() = @date 
+            BEGIN
+                RAISERROR('You cannot edit this exam because is available to students right now!', 16, 1);
+                RETURN;
+            END;
         -- Validate input parameters
         IF @examModelId IS NULL OR @date IS NULL OR @startTime IS NULL OR @endTime IS NULL
         BEGIN
-        RAISERROR('None of the input parameters can be NULL.', 16, 1);
+            RAISERROR('None of the input parameters can be NULL.', 16, 1);
+            RETURN;
+        END;
+
+    BEGIN
+        RAISERROR('An overlapping exam exists for the same course and instructor.', 16, 1);
         RETURN;
-    END
+    END;
+
+        IF @date < CAST(GETDATE() AS DATE)
+        BEGIN
+            RAISERROR('The date entered must be today or a future date.', 16, 1);
+            RETURN;
+        END;
+
 
         -- Check if the exam model ID exists
         IF NOT EXISTS (SELECT 1
     FROM ExamModel
-    WHERE ID = @examModelId)
+    WHERE ID = @examModelId AND isDeleted = 0)
         BEGIN
         RAISERROR('The Exam Model with ID %d does not exist.', 16, 1, @examModelId);
         RETURN;
@@ -194,14 +254,63 @@ END;
 
 GO
 -- Read 
-CREATE PROCEDURE GetExamModel
+CREATE OR ALTER PROCEDURE GetExamModel
+    @ExamModelID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF @ExamModelID IS NULL
+    BEGIN
+        RAISERROR('The ExamModelID cannot be NULL.', 16, 1);
+        RETURN;
+    END;
+
+    SELECT EM.ID,EM.date, EM.startTime, EM.endTime, EM.CreationDate ,EM.CourseID, EM.instructorID
+    FROM ExamModel EM
+    WHERE EM.ID = @ExamModelID AND EM.isDeleted = 0;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE GetExamModelQuestionsWithOptions
     @ExamModelID INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT *
-    FROM ExamModel
-    WHERE ID = @ExamModelID;
+    -- Common Table Expression (CTE) to retrieve questions and their options
+    WITH QuestionOptions AS
+    (
+        SELECT 
+            EMQ.examModelID,
+            QB.ID AS QuestionID,
+            QB.questionText AS QuestionText,
+            QB.type AS QuestionType,
+            QB.correctChoice AS ModelAnswer,
+            QC.Choice AS OptionChoice,
+            ROW_NUMBER() OVER (PARTITION BY QB.ID ORDER BY QC.Choice) AS ChoiceNumber
+        FROM 
+            ExamModel_Question EMQ
+        INNER JOIN 
+            QuestionBank QB ON EMQ.questionID = QB.ID
+        LEFT JOIN 
+            QuestionBank_Choice QC ON QB.ID = QC.questionID
+        WHERE 
+            EMQ.examModelID = @ExamModelID
+    )
+
+    -- Pivot the options for each question
+    SELECT 
+        QuestionText,
+        MAX(CASE WHEN ChoiceNumber = 1 THEN OptionChoice END) AS OptionOne,
+        MAX(CASE WHEN ChoiceNumber = 2 THEN OptionChoice END) AS OptionTwo,
+        MAX(CASE WHEN ChoiceNumber = 3 THEN OptionChoice END) AS OptionThree,
+        MAX(CASE WHEN ChoiceNumber = 4 THEN OptionChoice END) AS OptionFour,
+        ModelAnswer
+    FROM 
+        QuestionOptions
+    GROUP BY 
+        QuestionText, ModelAnswer
+    ORDER BY 
+        QuestionText;
 END;
 GO

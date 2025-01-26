@@ -1,7 +1,7 @@
 /****************************QuestionBank Table**********************************/
 GO
 --create
-CREATE PROCEDURE InsertQuestion
+CREATE OR ALTER PROCEDURE InsertQuestion
     @Type NVARCHAR(50),
     @CorrectChoice NVARCHAR(100),
     @InstructorID INT,
@@ -10,6 +10,18 @@ CREATE PROCEDURE InsertQuestion
     @QuestionID INT OUTPUT
 AS
 BEGIN
+    -- Check for validation of the Instructor ID and the CourseID
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE isDeleted = 0)
+            BEGIN
+                RAISERROR('Invalid instructor ID ... may be it has been delted', 16, 1)
+                RETURN;
+            END;
+
+        IF NOT EXISTS (SELECT 1 FROM Course WHERE isDeleted = 0)
+            BEGIN
+                RAISERROR('Invalid Course ID ... may be it has been delted', 16, 1)
+                RETURN;
+            END;
     -- Insert the new question
     INSERT INTO QuestionBank
         (Type, CorrectChoice, InstructorID, CourseID, insertionDate, QuestionText)
@@ -21,8 +33,8 @@ BEGIN
 END;
 GO
 
---Read
-CREATE PROCEDURE SelectQuestion
+--Read ---------------------------------------------------------------------------------------------------------------------------------
+CREATE OR ALTER PROCEDURE SelectQuestion
     @ID INT
 AS
 BEGIN
@@ -33,7 +45,7 @@ END;
 GO
 
 --Update
-CREATE PROCEDURE UpdateQuestion
+CREATE OR ALTER PROCEDURE UpdateQuestion
     @ID INT,
     @Type NVARCHAR(50),
     @CorrectChoice NVARCHAR(200),
@@ -49,6 +61,18 @@ BEGIN
         RETURN;
     END;
 
+    -- Check for validation of the Instructor ID and the CourseID
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE isDeleted = 0)
+            BEGIN
+                RAISERROR('Invalid instructor ID ... may be it has been delted', 16, 1)
+                RETURN;
+            END;
+
+        IF NOT EXISTS (SELECT 1 FROM Course WHERE isDeleted = 0)
+            BEGIN
+                RAISERROR('Invalid Course ID ... may be it has been delted', 16, 1)
+                RETURN;
+            END;
     -- Update the question
     UPDATE QuestionBank 
     SET Type = @Type, 
@@ -62,12 +86,12 @@ END;
 GO
 
 --Delete
-CREATE PROCEDURE DeleteQuestion
-    @ID INT
+CREATE OR ALTER PROCEDURE DeleteQuestion
+    @questionID INT
 AS
 BEGIN
     -- Check if the question exists and is not already deleted
-    IF NOT EXISTS (SELECT 1 FROM QuestionBank WHERE ID = @ID AND isDeleted = 0)
+    IF NOT EXISTS (SELECT 1 FROM QuestionBank WHERE ID = @questionID AND isDeleted = 0)
     BEGIN
         RAISERROR('Question does not exist or is already deleted.', 16, 1);
         RETURN;
@@ -76,12 +100,12 @@ BEGIN
     -- Mark the question as deleted
     UPDATE QuestionBank
     SET isDeleted = 1
-    WHERE ID = @ID;
+    WHERE ID = @questionID;
 END;
 GO
 
 --get all questions for specific course
-CREATE PROCEDURE GetQuestionsByCourse
+CREATE OR ALTER PROCEDURE GetQuestionsByCourse
     @CourseID INT
 AS
 BEGIN
@@ -92,93 +116,131 @@ BEGIN
 END;
 GO
 
---Generate random questions with specific numbers of true or false and MCQ Questions using courseID
-CREATE PROCEDURE GetRandomQuestions
+CREATE OR ALTER PROCEDURE GenerateRandomExamModel
     @CourseID INT,
+    @InstructorID INT,
+    @StartTime TIME,
+    @EndTime TIME,
+    @Date DATE,
+    @markForEachQuestion INT = 1,
     @NumOfTrueOrFalse INT = NULL,
-    @NumOfMultiple INT = NULL
+    @NumOfMultiple INT = NULL,
+    @ExamModelID INT OUTPUT
 AS
 BEGIN
+    SET NOCOUNT ON;
     BEGIN TRY
-        -- Temporary table to hold selected questions
-        CREATE TABLE #Questions
-    (
-        QuestionID INT,
-        QuestionText VARCHAR(1000),
-        QuestionType VARCHAR(50)
-    );
+        BEGIN TRANSACTION;
 
-        -- Handle True/False questions
-        IF @NumOfTrueOrFalse IS NOT NULL
+        -- Validate at least one question type is requested
+        IF COALESCE(@NumOfTrueOrFalse, 0) + COALESCE(@NumOfMultiple, 0) = 0
         BEGIN
-        DECLARE @AvailableTrueOrFalse INT;
-        SELECT @AvailableTrueOrFalse = COUNT(*)
-        FROM QuestionBank
-        WHERE CourseID = @CourseID AND Type = 'TrueOrFalse' AND isDeleted = 0;
-
-        IF @NumOfTrueOrFalse > @AvailableTrueOrFalse
-            BEGIN
-            RAISERROR('The number of requested True/False questions exceeds the available questions. Available: %d', 16, 1, @AvailableTrueOrFalse);
+            RAISERROR('Must specify at least one question type count (True/False or Multiple Choice)', 16, 1);
             RETURN;
+        END;
+
+        -- Create exam model
+        INSERT INTO ExamModel (CourseID, InstructorID, StartTime, EndTime, date, CreationDate)
+        VALUES (@CourseID, @InstructorID, @StartTime, @EndTime, @Date, GETDATE());
+        SET @ExamModelID = SCOPE_IDENTITY();
+
+        -- Question selection and validation
+        DECLARE @SelectedQuestions TABLE (
+            QuestionID INT PRIMARY KEY,
+            CorrectChoice NVARCHAR(200),
+            QuestionType NVARCHAR(50)
+        );
+
+        -- True/False questions handling
+        IF @NumOfTrueOrFalse > 0
+        BEGIN
+            INSERT INTO @SelectedQuestions (QuestionID, CorrectChoice, QuestionType)
+            SELECT TOP (@NumOfTrueOrFalse) 
+                ID, 
+                CorrectChoice, 
+                Type
+            FROM QuestionBank
+            WHERE CourseID = @CourseID
+                AND Type = 'TrueOrFalse'
+                AND isDeleted = 0
+            ORDER BY NEWID();
+
+            -- Validate sufficient questions
+            IF @@ROWCOUNT < @NumOfTrueOrFalse
+            BEGIN
+                DECLARE @tfAvailable INT = (
+                    SELECT COUNT(*) 
+                    FROM QuestionBank 
+                    WHERE CourseID = @CourseID
+                        AND InstructorID = @InstructorID
+                        AND Type = 'TrueOrFalse'
+                        AND isDeleted = 0
+                );
+                RAISERROR('Requested %d True/False questions, but only %d available', 16, 1, @NumOfTrueOrFalse, @tfAvailable);
+                RETURN;
+            END
         END
 
-        INSERT INTO #Questions
-            (QuestionID, QuestionText, QuestionType)
-        SELECT TOP (@NumOfTrueOrFalse)
-            ID, QuestionText, Type
-        FROM QuestionBank
-        WHERE CourseID = @CourseID AND Type = 'TrueOrFalse' AND isDeleted = 0
-        ORDER BY NEWID();
-    END
-
-        -- Handle Multiple Choice questions
-        IF @NumOfMultiple IS NOT NULL
+        -- Multiple Choice questions handling
+        IF @NumOfMultiple > 0
         BEGIN
-        DECLARE @AvailableMultiple INT;
-        SELECT @AvailableMultiple = COUNT(*)
-        FROM QuestionBank
-        WHERE CourseID = @CourseID AND Type = 'MultipleChoice' AND isDeleted = 0;
+            INSERT INTO @SelectedQuestions (QuestionID, CorrectChoice, QuestionType)
+            SELECT TOP (@NumOfMultiple) 
+                ID, 
+                CorrectChoice, 
+                Type
+            FROM QuestionBank
+            WHERE CourseID = @CourseID
+                AND Type = 'MultipleChoice'
+                AND isDeleted = 0
+            ORDER BY NEWID();
 
-        IF @NumOfMultiple > @AvailableMultiple
+            -- Validate sufficient questions
+            IF @@ROWCOUNT < @NumOfMultiple
             BEGIN
-            RAISERROR('The number of requested Multiple Choice questions exceeds the available questions. Available: %d', 16, 1, @AvailableMultiple);
-            RETURN;
+                DECLARE @mcAvailable INT = (
+                    SELECT COUNT(*) 
+                    FROM QuestionBank 
+                    WHERE CourseID = @CourseID
+                        AND Type = 'MultipleChoice'
+                        AND isDeleted = 0
+                );
+                RAISERROR('Requested %d Multiple Choice questions, but only %d available', 16, 1, @NumOfMultiple, @mcAvailable);
+                RETURN;
+            END
         END
 
-        INSERT INTO #Questions
-            (QuestionID, QuestionText, QuestionType)
-        SELECT TOP (@NumOfMultiple)
-            ID, QuestionText, Type
-        FROM QuestionBank
-        WHERE CourseID = @CourseID AND Type = 'MultipleChoice' AND isDeleted = 0
-        ORDER BY NEWID();
-    END
+        -- Insert into exam model
+        INSERT INTO ExamModel_Question (ExamModelID, QuestionID, correctChoice, mark)
+        SELECT 
+            @ExamModelID,
+            QuestionID,
+            CorrectChoice,
+            @markForEachQuestion -- Default mark = 1;
+        FROM @SelectedQuestions;
 
-        -- Return the selected questions
-        SELECT QuestionID, QuestionText, QuestionType
-    FROM #Questions;
-
-        -- Drop the temporary table
-        DROP TABLE #Questions;
-
+        COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        -- Handle errors
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
-        SELECT
-        @ErrorMessage = ERROR_MESSAGE(),
-        @ErrorSeverity = ERROR_SEVERITY(),
-        @ErrorState = ERROR_STATE();
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE(),
+                @ErrorSeverity INT = ERROR_SEVERITY(),
+                @ErrorState INT = ERROR_STATE();
 
+        -- Preserve original error information
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+        RETURN;
     END CATCH
 END;
 GO
 
+
 -- Procedure to Get Questions by Topic with Random Selection for Specific Types
-CREATE PROCEDURE GetRandomQuestionsByTopic
+CREATE OR ALTER PROCEDURE GetRandomQuestionsByTopic
     @CourseID INT,
-    @Topic NVARCHAR(50) = NULL,
+    @mark INT,
+    @Topic NVARCHAR(50),
     @NumOfTrueOrFalse INT = NULL,
     @NumOfMultiple INT = NULL
 AS
@@ -201,7 +263,7 @@ BEGIN
             JOIN Course_Topic CT ON QB.CourseID = CT.CourseID
         WHERE QB.CourseID = @CourseID
             AND QB.Type = 'TrueOrFalse'
-            AND (CT.Topic = @Topic OR @Topic IS NULL)
+            AND CT.Topic = @Topic
             AND QB.isDeleted = 0;
 
         IF @AvailableTrueOrFalse < @NumOfTrueOrFalse
@@ -218,7 +280,7 @@ BEGIN
             JOIN Course_Topic CT ON QB.CourseID = CT.CourseID
         WHERE QB.CourseID = @CourseID
             AND QB.Type = 'TrueOrFalse'
-            AND (CT.Topic = @Topic OR @Topic IS NULL)
+            AND CT.Topic = @Topic
             AND QB.isDeleted = 0
         ORDER BY NEWID();
     END
@@ -232,7 +294,7 @@ BEGIN
             JOIN Course_Topic CT ON QB.CourseID = CT.CourseID
         WHERE QB.CourseID = @CourseID
             AND QB.Type = 'MultipleChoice'
-            AND (CT.Topic = @Topic OR @Topic IS NULL)
+            AND CT.Topic = @Topic
             AND QB.isDeleted = 0;
 
         IF @AvailableMultiple < @NumOfMultiple
@@ -273,3 +335,40 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE GetQuestionDetailsWithOptions
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    WITH QuestionOptions AS (
+        SELECT 
+            QB.ID AS QuestionID,
+            QB.QuestionText,
+            QB.Type AS QuestionType,
+            QB.CorrectChoice AS ModelAnswer,
+            QC.Choice,
+            ROW_NUMBER() OVER (
+                PARTITION BY QB.ID 
+                ORDER BY QC.Choice
+            ) AS ChoiceNum
+        FROM QuestionBank QB
+        LEFT JOIN QuestionBank_Choice QC 
+            ON QB.ID = QC.QuestionID 
+        WHERE QB.isDeleted = 0
+    )
+    
+    SELECT 
+        q.QuestionText,
+        MAX(CASE WHEN q.ChoiceNum = 1 THEN q.Choice END) AS OptionOne,
+        MAX(CASE WHEN q.ChoiceNum = 2 THEN q.Choice END) AS OptionTwo,
+        CASE WHEN q.QuestionType = 'MultipleChoice' 
+            THEN MAX(CASE WHEN q.ChoiceNum = 3 THEN q.Choice END) 
+            ELSE NULL END AS OptionThree,
+        CASE WHEN q.QuestionType = 'MultipleChoice' 
+            THEN MAX(CASE WHEN q.ChoiceNum = 4 THEN q.Choice END) 
+            ELSE NULL END AS OptionFour,
+        q.ModelAnswer
+    FROM QuestionOptions q
+    GROUP BY q.QuestionID, q.QuestionText, q.ModelAnswer, q.QuestionType
+    ORDER BY q.QuestionID;
+END;
