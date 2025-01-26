@@ -23,18 +23,17 @@ BEGIN
         END;
 
         -- Check if the Track_Course relationship already exists and is not deleted
-        IF EXISTS (SELECT 1 FROM Track_Course WHERE TrackID = @TrackID AND CourseID = @CourseID AND isDeleted = 0)
+        IF EXISTS (SELECT 1 FROM Track_Course WHERE TrackID = @TrackID AND CourseID = @CourseID)
         BEGIN
             RAISERROR('The Track_Course relationship already exists for TrackID %d and CourseID %d.', 16, 1, @TrackID, @CourseID);
             RETURN;
         END;
 
         -- Check if the Track_Course relationship exists but is deleted
-        IF EXISTS (SELECT 1 FROM Track_Course WHERE TrackID = @TrackID AND CourseID = @CourseID AND isDeleted = 1)
+        IF EXISTS (SELECT 1 FROM Track_Course WHERE TrackID = @TrackID AND CourseID = @CourseID)
         BEGIN
             -- Reactivate the relationship by setting isDeleted = 0
-            UPDATE Track_Course
-            SET isDeleted = 0
+            DELETE FROM Track_Course
             WHERE TrackID = @TrackID AND CourseID = @CourseID;
 
             PRINT 'Track_Course relationship for TrackID ' + CAST(@TrackID AS NVARCHAR) + ' and CourseID ' + CAST(@CourseID AS NVARCHAR) + ' was previously deleted and has been reactivated.';
@@ -42,8 +41,8 @@ BEGIN
         END;
 
         -- Insert the Track_Course relationship
-        INSERT INTO Track_Course (TrackID, CourseID, isDeleted)
-        VALUES (@TrackID, @CourseID, 0);
+        INSERT INTO Track_Course (TrackID, CourseID)
+        VALUES (@TrackID, @CourseID);
 
         PRINT 'Track_Course relationship inserted successfully for TrackID ' + CAST(@TrackID AS NVARCHAR) + ' and CourseID ' + CAST(@CourseID AS NVARCHAR) + '.';
     END TRY
@@ -85,7 +84,6 @@ BEGIN
         FROM Track_Course TC
         INNER JOIN Course C ON TC.CourseID = C.ID
         WHERE TC.TrackID = @TrackID
-          AND TC.isDeleted = 0 -- Ensure the relationship is not deleted
           AND C.isDeleted = 0; -- Ensure the course is not deleted
 
         PRINT 'Courses in Track with ID ' + CAST(@TrackID AS NVARCHAR) + ' retrieved successfully.';
@@ -118,7 +116,7 @@ BEGIN
             FROM Track T
             INNER JOIN Track_Course TC ON T.ID = TC.TrackID
             INNER JOIN Course C ON TC.CourseID = C.ID
-            WHERE T.isDeleted = 0 AND C.isDeleted = 0 AND TC.isDeleted = 0
+            WHERE T.isDeleted = 0 AND C.isDeleted = 0
         )
         BEGIN
             RAISERROR('No active tracks or courses found.', 16, 1);
@@ -136,7 +134,6 @@ BEGIN
         INNER JOIN Course C ON TC.CourseID = C.ID
         WHERE T.isDeleted = 0 -- Ensure the track is not deleted
           AND C.isDeleted = 0 -- Ensure the course is not deleted
-          AND TC.isDeleted = 0; -- Ensure the relationship is not deleted
 
         PRINT 'All active courses with track names retrieved successfully.';
     END TRY
@@ -179,7 +176,7 @@ BEGIN
         END;
 
         -- Check if the Track_Course relationship exists and is not deleted
-        IF NOT EXISTS (SELECT 1 FROM Track_Course WHERE TrackID = @TrackID AND CourseID = @CourseID AND isDeleted = 0)
+        IF NOT EXISTS (SELECT 1 FROM Track_Course WHERE TrackID = @TrackID AND CourseID = @CourseID )
         BEGIN
             RAISERROR('The Track_Course relationship for TrackID %d and CourseID %d does not exist or is already deleted.', 16, 1, @TrackID, @CourseID);
             RETURN;

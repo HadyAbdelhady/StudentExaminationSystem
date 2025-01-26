@@ -223,7 +223,7 @@ END;
 GO
 
 --Select all tracks under a specific department
-CREATE PROCEDURE GetTracksByDepartment
+CREATE OR ALTER PROCEDURE GetTracksByDepartment
     @DepartmentID INT
 AS
 BEGIN

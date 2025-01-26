@@ -76,10 +76,9 @@ BEGIN
         -- Get branch-specific department manager
         SELECT 
             I.*,
-            BDT.departmentManagerID AS BranchDepartmentManagerID,
-            D.ManagerID AS GlobalDepartmentManagerID
+            BDT.departmentManagerID AS BranchDepartmentManagerID
         FROM Branch_Department_Track BDT
-        INNER JOIN Instructor I 
+        INNER JOIN Instructor I
             ON BDT.departmentManagerID = I.ID
             AND I.isDeleted = 0
         INNER JOIN Department D 
@@ -100,6 +99,7 @@ GO
 -- create new department 
 CREATE OR ALTER PROCEDURE InsertDepartment
     @DEPTNAME NVARCHAR(100),
+	@DeptManagerID INT,
     @NewDepartmentID INT OUTPUT
 WITH ENCRYPTION
 AS

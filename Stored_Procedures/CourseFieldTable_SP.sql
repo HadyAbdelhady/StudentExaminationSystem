@@ -268,7 +268,6 @@ BEGIN
         SELECT 
             C.ID AS CourseID,
             C.Name AS CourseName,
-            C.Description AS CourseDescription,
             CF.field AS FieldName,
             CF.creationDate AS FieldCreationDate
         FROM Course_Field CF
@@ -286,7 +285,6 @@ BEGIN
             'An error occurred while soft deleting all fields for the course with ID %d. Error Message: %s',
             16,
             1,
-            @CourseID,
             @ErrorMessage
         );
     END CATCH;
