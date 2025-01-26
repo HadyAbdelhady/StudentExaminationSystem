@@ -109,10 +109,10 @@ CREATE TABLE ExamModel (
     date DATE NOT NULL,
     startTime TIME NOT NULL,
     endTime TIME NOT NULL,
-    TotalMark INT NOT NULL,
     CourseID INT NOT NULL,
     instructorID INT NOT NULL,
     creationDate DATETIME DEFAULT GETDATE(),
+    isDeleted BIT DEFAULT 0 ,
     FOREIGN KEY (CourseID) REFERENCES Course(ID),
     FOREIGN KEY (instructorID) REFERENCES Instructor(ID)
 );
@@ -122,6 +122,7 @@ CREATE TABLE StudentSubmit (
     ID INT PRIMARY KEY IDENTITY(1,1),
     studentID INT NOT NULL,
     examModelID INT NOT NULL,
+    isDeleted BIT DEFAULT 0 ,
     FOREIGN KEY (studentID) REFERENCES Student(ID),
     FOREIGN KEY (examModelID) REFERENCES ExamModel(ID),
     submitDate DATETIME DEFAULT GETDATE()
@@ -149,6 +150,7 @@ CREATE TABLE Course_Field (
 CREATE TABLE QuestionBank_Choice (
     questionID INT NOT NULL,
     Choice NVARCHAR(200) NOT NULL,
+    isDeleted BIT DEFAULT 0,
     FOREIGN KEY (questionID) REFERENCES QuestionBank(ID),
     PRIMARY KEY (questionID, Choice)
 );
@@ -170,21 +172,12 @@ CREATE TABLE StudentSubmit_Answer (
     examModelID INT NOT NULL, 
     questionID INT NOT NULL,
     studentAnswer NVARCHAR(200) ,
+    isDeleted BIT DEFAULT 0,
     FOREIGN KEY (StudentSubmitID) REFERENCES StudentSubmit(ID),
     FOREIGN KEY (examModelID, questionID) REFERENCES ExamModel_Question(examModelID, questionID),
 	PRIMARY KEY (StudentSubmitID,studentAnswer)
 );
 
-CREATE TABLE ExamModel_StudentSubmit_Student (
-    examModelID INT NOT NULL,
-    studentSubmitID INT NOT NULL,
-    studentID INT NOT NULL,
-    submitDate DATETIME NOT NULL,
-    FOREIGN KEY (examModelID) REFERENCES ExamModel(ID),
-    FOREIGN KEY (studentSubmitID) REFERENCES StudentSubmit(ID),
-    FOREIGN KEY (studentID) REFERENCES Student(ID),
-    PRIMARY KEY (examModelID, studentSubmitID, studentID)
-);
 
 CREATE TABLE Course_Student_Instructor (
     courseID INT NOT NULL,

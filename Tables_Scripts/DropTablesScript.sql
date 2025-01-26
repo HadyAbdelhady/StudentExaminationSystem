@@ -5,7 +5,6 @@ BEGIN TRY
     EXEC sp_MSforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"
 
     -- Drop junction tables first (no dependencies on them)
-    DROP TABLE IF EXISTS ExamModel_StudentSubmit_Student;
     DROP TABLE IF EXISTS StudentSubmit_Answer;
     DROP TABLE IF EXISTS ExamModel_Question;
     DROP TABLE IF EXISTS QuestionBank_Choice;
