@@ -205,62 +205,55 @@ GO
 -- delete a department 
 CREATE OR ALTER PROCEDURE DeleteDepartment
     @DEPTID INT
+WITH ENCRYPTION
 AS
 BEGIN
-    -- Check if the department exists and is not already deleted
-    IF NOT EXISTS (SELECT 1 FROM Department WHERE ID = @DEPTID AND isDeleted = 0)
-    BEGIN
-        SELECT 'Department does not exist or is already deleted.' AS Message;
-        RETURN;
-    END;
+    BEGIN TRY
+        BEGIN TRANSACTION;
 
-    -- Check if there are dependent instructors
-    DECLARE @NumOfDependantInstructors INT;
-    SET @NumOfDependantInstructors = (
-        SELECT COUNT(*)
-        FROM Department_Instructor
-        WHERE departmentID = @DEPTID
-    );
+        -- Check if the department exists and is not already deleted
+        IF NOT EXISTS (SELECT 1 FROM Department WHERE ID = @DEPTID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('Department with ID %d does not exist or is already deleted.', 16, 1, @DEPTID);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
 
-    IF @NumOfDependantInstructors > 0 
-    BEGIN
-        SELECT 'Department cannot be deleted. Some instructors are assigned to it.' AS Message;
-        RETURN;
-    END;
+        -- Check for active dependencies in Branch_Department_Track
+        IF EXISTS (SELECT 1 FROM Branch_Department_Track WHERE departmentID = @DEPTID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('Department with ID %d has active dependencies in Branch_Department_Track. Delete them first.', 16, 1, @DEPTID);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
 
-    -- Check if there are dependent tracks
-    DECLARE @NumOfDependantTracks INT;
-    SET @NumOfDependantTracks = (
-        SELECT COUNT(*)
-        FROM TRACK
-        WHERE DEPARTMENTID = @DEPTID
-    );
+        -- Soft delete the department
+        UPDATE Department
+        SET isDeleted = 1
+        WHERE ID = @DEPTID;
 
-    IF @NumOfDependantTracks > 0 
-    BEGIN
-        SELECT 'Department cannot be deleted. Some tracks have been added to it.' AS Message;
-        RETURN;
-    END;
+        -- Ensure the update affected rows
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('The department deletion failed; no rows were updated.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
 
-    -- Check if there are dependent students
-    DECLARE @NumOfDependantStudents INT;
-    SET @NumOfDependantStudents = (
-        SELECT COUNT(ID)
-        FROM STUDENT
-        WHERE DEPARTMENTID = @DEPTID
-    );
+        COMMIT TRANSACTION;
 
-    IF @NumOfDependantStudents > 0 
-    BEGIN
-        SELECT 'Department cannot be deleted. Some students have been enrolled in it.' AS Message;
-        RETURN;
-    END;
+        PRINT 'Department with ID ' + CAST(@DEPTID AS NVARCHAR) + ' has been soft deleted successfully.';
+    END TRY
+    BEGIN CATCH
+        -- Rollback in case of any error
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
 
-    -- If no dependencies, mark the department as deleted
-    UPDATE Department
-    SET isDeleted = 1
-    WHERE ID = @DEPTID;
-
-    SELECT 'Department marked as deleted successfully.' AS Message;
+        -- Rethrow the error
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 GO
