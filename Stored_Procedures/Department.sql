@@ -232,6 +232,15 @@ BEGIN
         SET isDeleted = 1
         WHERE ID = @DEPTID;
 
+        --hard delet from Departement_Instructor table
+        DELETE FROM Department_Instructor
+        WHERE departmentID = @DEPTID
+
+        -- Soft delete the track
+        UPDATE Track
+        SET isDeleted = 1
+        WHERE departmentID = @DEPTID;
+
         -- Ensure the update affected rows
         IF @@ROWCOUNT = 0
         BEGIN
