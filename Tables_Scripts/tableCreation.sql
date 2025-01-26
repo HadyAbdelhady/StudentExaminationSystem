@@ -41,7 +41,7 @@ CREATE TABLE Track (
 	isDeleted BIT  DEFAULT 0 ,
     departmentID INT NOT NULL,
     FOREIGN KEY (departmentID) REFERENCES Department(ID),
-    creationDate DATETIME NOT NULL
+    creationDate DATETIME NOT NULL DEFAULT GETDATE()
 );
 
 CREATE TABLE Branch_Department_Track (
