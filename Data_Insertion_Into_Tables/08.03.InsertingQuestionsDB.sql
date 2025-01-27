@@ -1,8 +1,7 @@
 BEGIN TRY
     BEGIN TRANSACTION;
-    
     DECLARE @InstructorID INT = 2;  -- Set Instructor ID to 2
-    DECLARE @CourseID INT = 5;      -- Set Course ID to 5
+    DECLARE @CourseID INT = 31;      -- Set Course ID to 5
     DECLARE @Type NVARCHAR(50) = 'Multiple Choice';
     DECLARE @QuestionID INT;
 
@@ -155,7 +154,7 @@ BEGIN CATCH
     PRINT 'Error Message: ' + ERROR_MESSAGE();
 END CATCH;
 ------------------------------------------------------------------
-
+GO
 BEGIN TRY
     BEGIN TRANSACTION;
     
@@ -311,4 +310,199 @@ BEGIN CATCH
     ROLLBACK TRANSACTION;
     PRINT 'An error occurred while inserting the questions.';
     PRINT 'Error Message: ' + ERROR_MESSAGE();
+END CATCH;
+
+GO 
+
+BEGIN TRY
+    BEGIN TRANSACTION;
+    DECLARE @InstructorID INT = 2;  -- Set Instructor ID to 2
+    DECLARE @CourseID INT = 31;     -- Set Course ID to 31
+    DECLARE @Type NVARCHAR(50) = 'TrueOrFalse';
+    DECLARE @QuestionID INT;
+
+    -- Question 1: SQL Basics
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The SELECT command is used to retrieve data from a database.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 2: SQL Basics
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'SQL stands for Structured Query Listing.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 3: Database Normalization
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'Normalization helps to eliminate redundant data in a database.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 4: Database Transactions
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'A transaction in a database can consist of multiple operations.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 5: SQL JOIN Operations
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The LEFT JOIN operation returns only the matching rows from the left table.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 6: SQL Data Types
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'VARCHAR data type in SQL is used to store variable-length strings.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 7: SQL Constraints
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'PRIMARY KEY constraint allows duplicate values in a column.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 8: SQL Data Manipulation
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The DELETE command is used to remove records from a table in SQL.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 9: Database Indexing
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'Indexing improves the speed of data retrieval operations in a database.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 10: SQL Data Definition
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The CREATE command in SQL is used to delete a database table.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 11: Database ACID Properties
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'ACID properties in databases ensure reliable transaction processing.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 12: SQL Constraints
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'FOREIGN KEY constraint is used to ensure that a column contains only unique values.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 13: SQL Views
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'A view in SQL can be used to simplify complex queries.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 14: SQL Basics
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The WHERE clause in SQL is used to sort the result set.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 15: SQL Data Manipulation
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The UPDATE command in SQL is used to modify existing records in a table.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
 END CATCH;

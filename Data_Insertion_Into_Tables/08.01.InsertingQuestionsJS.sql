@@ -1,8 +1,7 @@
 BEGIN TRY
     BEGIN TRANSACTION;
-    
-    DECLARE @InstructorID INT = 1;
-    DECLARE @CourseID INT = 7;
+    DECLARE @InstructorID INT = 4;
+    DECLARE @CourseID INT = 1;
     DECLARE @Type NVARCHAR(50) = 'Multiple Choice';
     DECLARE @QuestionID INT;
 
@@ -159,9 +158,8 @@ GO
 
 BEGIN TRY
     BEGIN TRANSACTION;
-    
-    DECLARE @InstructorID INT = 1;
-    DECLARE @CourseID INT = 7;
+    DECLARE @InstructorID INT = 4;
+    DECLARE @CourseID INT = 1;
     DECLARE @Type NVARCHAR(50) = 'Multiple Choice';
     DECLARE @QuestionID INT;
 
@@ -319,7 +317,7 @@ GO
 BEGIN TRY
     BEGIN TRANSACTION;
     
-    DECLARE @InstructorID INT = 1;
+    DECLARE @InstructorID INT = 4;
     DECLARE @CourseID INT = 1;
     DECLARE @Type NVARCHAR(50) = 'Multiple Choice';
     DECLARE @QuestionID INT;
@@ -618,7 +616,7 @@ GO
 BEGIN TRY
     BEGIN TRANSACTION;
     
-    DECLARE @InstructorID INT = 1;
+    DECLARE @InstructorID INT = 4;
     DECLARE @CourseID INT = 1;
     DECLARE @Type NVARCHAR(50) = 'Multiple Choice';
     DECLARE @QuestionID INT;
@@ -911,3 +909,280 @@ BEGIN CATCH
     PRINT 'An error occurred while inserting the questions.';
     PRINT 'Error Message: ' + ERROR_MESSAGE();
 END CATCH;
+
+GO
+
+BEGIN TRY
+    BEGIN TRANSACTION;
+
+    DECLARE @InstructorID INT = 4;
+    DECLARE @CourseID INT = 1;
+    DECLARE @Type NVARCHAR(50) = 'TrueOrFalse';
+    DECLARE @QuestionID INT;
+
+    -- Question 1
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'In JavaScript, "null" is considered an object.',
+        @QuestionID = @QuestionID OUTPUT;
+    
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 2
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The "===" operator checks both value and type in JavaScript.',
+        @QuestionID = @QuestionID OUTPUT;
+    
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 3
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'In JavaScript, "undefined" and "null" are the same.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 4
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'JavaScript is a case-sensitive language.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 5
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The "forEach()" method is used to add elements to an array.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 6
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'Arrow functions do not have their own "this" context.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 7
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The "let" keyword is used to declare constants in JavaScript.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 8
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The "push()" method adds elements to the end of an array.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 9
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'In JavaScript, "NaN" stands for "Not a Name."',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 10
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'JavaScript supports both primitive and reference data types.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 11
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'JavaScript is single-threaded.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 12
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The "map()" method modifies the original array.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 13
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'JavaScript allows dynamic typing.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 14
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The "async" keyword is used to define synchronous functions.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 15
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'JavaScript functions can be treated as first-class citizens.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;
+
+GO
+BEGIN TRY
+    BEGIN TRANSACTION;
+
+    DECLARE @InstructorID INT = 4;
+    DECLARE @CourseID INT = 1;
+    DECLARE @Type NVARCHAR(50) = 'TrueOrFalse';
+    DECLARE @QuestionID INT;
+
+    -- Question 16
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'JavaScript supports object-oriented programming concepts like inheritance and encapsulation.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 17
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The "var" keyword declares a block-scoped variable in JavaScript.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 18
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'The "reduce()" method executes a reducer function on each element of an array and returns a single value.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 19
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'False',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'JavaScript is a compiled language.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    -- Question 20
+    EXEC InsertQuestion 
+        @Type = @Type,
+        @CorrectChoice = 'True',
+        @InstructorID = @InstructorID,
+        @CourseID = @CourseID,
+        @QuestionText = 'Functions in JavaScript can be assigned to variables.',
+        @QuestionID = @QuestionID OUTPUT;
+
+    EXEC insertQuestionBankChoice @QuestionID, 'True';
+    EXEC insertQuestionBankChoice @QuestionID, 'False';
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;
+
+GO
+
+SELECT * FROM QuestionBank;

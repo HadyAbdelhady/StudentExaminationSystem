@@ -1,10 +1,9 @@
 DECLARE @QuestionID INT;
-
 EXEC InsertQuestion 
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'A way to store and organize data', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'What is a data structure?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -17,7 +16,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'There are chances of wastage of memory space if elements inserted in an array are lesser than the allocated size', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'What are the disadvantages of arrays?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -30,7 +29,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Stack', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which data structure is used for implementing recursion?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -43,7 +42,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Stack', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The data structure required to check whether an expression contains a balanced parenthesis is?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -56,7 +55,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Data Transfer between two asynchronous process', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following is not the application of stack?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -69,7 +68,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Stack', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which data structure is needed to convert infix notation to postfix notation?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -82,7 +81,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = '-18', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'What is the value of the postfix expression 6 3 2 4 + – *?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -95,7 +94,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Stack', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'What data structure would you mostly likely see in non recursive implementation of a recursive algorithm?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -108,7 +107,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Stack is the FIFO data structure', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following statement(s) about stack data structure is/are NOT correct?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -121,7 +120,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Queue', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The data structure required for Breadth First Traversal on a graph is?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -135,7 +134,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = '-A/B*C^DE', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The prefix form of A-B/ (C * D ^ E) is?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -149,7 +148,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Access of elements in linked list takes less time than compared to arrays', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following points is/are not true about Linked List data structure when it is compared with an array?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -163,7 +162,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Stack', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which data structure is based on the Last In First Out (LIFO) principle?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -177,7 +176,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Allocating CPU to resources', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following application makes use of a circular linked list?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -191,7 +190,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Data structure that compactly stores bits', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'What is a bit array?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -205,7 +204,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'B-tree', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following tree data structures is not a balanced binary tree?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -219,7 +218,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Single ended queue', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following is not the type of queue?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -233,7 +232,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Stack', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following data structures can be used for parentheses matching?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -247,7 +246,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Divide and Conquer', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which algorithm is used in the top tree data structure?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -261,7 +260,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'effective usage of memory', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'What is the need for a circular queue?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -275,7 +274,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Algorithm', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The word ____________comes from the name of a Persian mathematician Abu Ja’far Mohammed ibn-i Musa al Khowarizmi.', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -289,7 +288,7 @@ EXEC InsertQuestion
     @Type = 'True/False', 
     @CorrectChoice = 'True', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'In computer science, algorithm refers to a special method usable by a computer for the solution to a problem.', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -301,7 +300,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Performance', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'This characteristic often draws the line between what is feasible and what is impossible.', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -315,7 +314,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Running', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The time that depends on the input: an already sorted sequence that is easier to sort.', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -329,7 +328,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'as syntax', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following is incorrect? Algorithms can be represented:', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -343,7 +342,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Program', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'When an algorithm is written in the form of a programming language, it becomes a _________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -357,7 +356,7 @@ EXEC InsertQuestion
     @Type = 'True/False', 
     @CorrectChoice = 'False', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Any algorithm is a program.', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -369,7 +368,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Queue', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'A system wherein items are added from one and removed from the other end.', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -383,7 +382,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Linear arrays', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Another name for 1-D arrays.', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -397,7 +396,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Queue', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'A data structure that follows the FIFO principle.', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -412,7 +411,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'analysing the zero flow', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The first step in the naïve greedy algorithm is?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -426,7 +425,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = '100', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Suppose you have coins of denominations 1,3 and 4. You use a greedy algorithm, in which you choose the largest denomination coin which is not greater than the remaining sum. For which of the following sums, will the algorithm produce an optimal answer?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -440,7 +439,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'branch and bound divides a problem into at least 2 new restricted sub problems', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Choose the correct statement from the following.', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -454,7 +453,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Greedy algorithm', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Dijkstra’s Algorithm is the prime example for ___________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -468,7 +467,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Dynamic Programming', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Bellmann Ford Algorithm is an example for ____________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -482,7 +481,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'greedy algorithm', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following algorithms is the best approach for solving Huffman codes?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -496,7 +495,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Greedy algorithm', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Fractional knapsack problem is solved most efficiently by which of the following algorithm?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -510,7 +509,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'It can accept cycles in the MST', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following is false about the Kruskal’s algorithm?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -525,7 +524,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Null case', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'Which of the following case does not exist in complexity theory?', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -539,7 +538,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'O(n)', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The complexity of linear search algorithm is _________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -553,7 +552,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'O(log n)', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The complexity of Binary search algorithm is _________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -567,7 +566,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'O(n log n)', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The complexity of merge sort algorithm is _________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -581,7 +580,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'O(n2)', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The complexity of Bubble sort algorithm is _________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -595,7 +594,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Item is the last element in the array or is not there at all', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The Worst case occur in linear search algorithm when _________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -609,7 +608,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'O(n2)', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The worst case complexity for insertion sort is _________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -623,7 +622,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'O(2n)', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The complexity of Fibonacci series is _________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -637,7 +636,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'Pivot is the smallest element', 
     @InstructorID = 2, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The worst case occurs in quick sort when _________', 
     @QuestionID = @QuestionID OUTPUT;
 
@@ -651,7 +650,7 @@ EXEC InsertQuestion
     @Type = 'Multiple Choice', 
     @CorrectChoice = 'O(n2)', 
     @InstructorID = 1, 
-    @CourseID = 2, 
+    @CourseID = 21, 
     @QuestionText = 'The worst case complexity of quick sort is _________', 
     @QuestionID = @QuestionID OUTPUT;
 
