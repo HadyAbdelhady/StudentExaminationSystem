@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        input[type="radio"] {
+            margin-left: 10px;
+            margin-right: 0;
+        }
+
+        label {
+            margin-right: 30px;
+        }
+
+        /* #startExamBtn {
+            background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+            border: none;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        #startExamBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 81, 191, 0.4);
+        } */
+
+        #examContainer {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            background-color: #f8f9fa;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border: 2px solid rgba(76, 82, 191, 0.699);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        h2 {
+            color: #2d3748;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #4c51bf;
+            padding-bottom: 1rem;
+            display: inline-block;
+        }
+
+        h5 {
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: #4a5568;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+
+
+        label {
+            color: #4a5568;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        label:hover {
+            color: #2d3748;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+        }
+
+        /* Custom Radio Button Styling */
+        .radio-group {
+            display: flex;
+            gap: 2rem;
+            align-items: self-start;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keep your existing radio button styles */
+        input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e0;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        input[type="radio"]:checked {
+            border-color: #4c51bf;
+            background-color: #4c51bf;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
+        }
+
+        /* Answer Options Layout */
+        .card-body>div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        /* Timer Style (you can add this later) */
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2d3748;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* Side Panels */
+        .side-panel {
+            position: fixed;
+            top: 20px;
+            width: 200px;
+            padding: 1rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+
+        #timerPanel {
+            left: 20px;
+        }
+
+        #infoPanel {
+            right: 20px;
+        }
+
+        .exam-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-label {
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #2d3748;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        #countdown {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4c51bf;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        /* Adjust main exam container */
+        #examContainer {
+            margin: 2rem 320px;
+            /* Adjust based on side panel width */
+            max-width: 800px;
+        }
+
+        @media (max-width: 500px) {
+            .side-panel {
+                position: static;
+                width: 50%;
+                margin: 1rem 0;
+            }
+
+            #examContainer {
+                margin: 2rem auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Start Exam Button -->
+    <!-- <div class="container text-center mt-5">
+        <button id="startExamBtn" class="btn btn-primary">Start Exam</button>
+    </div> -->
+    <!-- Add these HTML elements before the exam container -->
+    <div class="globalContainer row">
+        <div class="side-panel col-3" id="timerPanel">
+            <h5>Remaining Time</h5>
+            <div id="countdown">00:00:00</div>
+        </div>
+
+        <!-- Exam Container -->
+        <div class="container mt-3 col-6" id="examContainer">
+            <h2 class="text-center mb-4">General Knowledge Exam</h2>
+            <form id="examForm">
+
+                <!-- Question 1 -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>Question 1:</h5>
+                        <p>What is the capital of France?</p>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="q1a1" name="q1" value="Paris">
+                                <label for="q1a1">Paris</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q1a2" name="q1" value="London">
+                                <label for="q1a2">London</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q1a3" name="q1" value="Berlin">
+                                <label for="q1a3">Berlin</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>Question 2:</h5>
+                        <p>What is 5 + 3?</p>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="q2a1" name="q2" value="6">
+                                <label for="q2a1">6</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q2a2" name="q2" value="8">
+                                <label for="q2a2">8</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q2a3" name="q2" value="10">
+                                <label for="q2a3">10</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>Question 3:</h5>
+                        <p>What is the square root of 16?</p>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="q3a1" name="q3" value="4">
+                                <label for="q3a1">4</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q3a2" name="q3" value="6">
+                                <label for="q3a2">6</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q3a3" name="q3" value="8">
+                                <label for="q3a3">8</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>Question 4:</h5>
+                        <p>Which planet is known as the Red Planet?</p>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="q4a1" name="q4" value="Venus">
+                                <label for="q4a1">Venus</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q4a2" name="q4" value="Mars">
+                                <label for="q4a2">Mars</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q4a3" name="q4" value="Jupiter">
+                                <label for="q4a3">Jupiter</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>Question 5:</h5>
+                        <p>Who painted the Mona Lisa?</p>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="q5a1" name="q5" value="Van Gogh">
+                                <label for="q5a1">Vincent van Gogh</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q5a2" name="q5" value="Da Vinci">
+                                <label for="q5a2">Leonardo da Vinci</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q5a3" name="q5" value="Picasso">
+                                <label for="q5a3">Pablo Picasso</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success">Submit Exam</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="side-panel col-3" id="infoPanel">
+            <h5 class="mb-3">Exam Information</h5>
+            <div class="exam-detail">
+                <span class="detail-label">Exam Name:</span>
+                <span class="detail-value">General Knowledge Exam</span>
+            </div>
+            <div class="exam-detail">
+                <span class="detail-label">Instructor:</span>
+                <span class="detail-value">Dr. John Smith</span>
+            </div>
+            <div class="exam-detail">
+                <span class="detail-label">Start Date:</span>
+                <span class="detail-value">2023-08-01 09:00</span>
+            </div>
+            <div class="exam-detail">
+                <span class="detail-label">End Date:</span>
+                <span class="detail-value">2023-08-01 11:00</span>
+            </div>
+            <div class="exam-detail">
+                <span class="detail-label">Total Marks:</span>
+                <span class="detail-value">100</span>
+            </div>
+            <div class="exam-detail">
+                <span class="detail-label">Questions:</span>
+                <span class="detail-value">10</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('examForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            alert('Exam Submitted!');
+        });
+
+        // Timer functionality
+        let examDuration = 7200; // 2 hours in seconds
+        let timer;
+
+        function startTimer(duration) {
+            let timerDisplay = document.getElementById('countdown');
+
+            function updateTimer() {
+                let hours = Math.floor(duration / 3600);
+                let minutes = Math.floor((duration % 3600) / 60);
+                let seconds = duration % 60;
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                timerDisplay.textContent = hours + ":" + minutes + ":" + seconds;
+
+                if (--duration < 0) {
+                    clearInterval(timer);
+                    alert('Time is up! Submitting exam...');
+                    document.getElementById('examForm').submit();
+                }
+            }
+
+            updateTimer();
+            timer = setInterval(updateTimer, 1000);
+        }
+        startTimer(examDuration);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>insertQuestion</title>
+    <style>
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            padding: 1rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            background-color: #f8f9fa;
+            transition: transform 0.2s ease;
+            margin: 1rem;
+            width: 90%;
+            max-width: 600px;
+            margin: 1rem 0;
+            flex-shrink: 1;
+
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border: 2px solid rgba(76, 82, 191, 0.699);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: .75rem;
+        }
+
+        .form-control {
+            padding: 0.8rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: none;
+            overflow-y: hidden;
+            min-height: 50px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(76, 81, 191, 0.2);
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 81, 191, 0.3);
+            background: linear-gradient(135deg, #4c51bf 0%, #667eea 100%);
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            width: 100%;
+        }
+
+        .radio-option input[type="radio"] {
+            align-self: center;
+            margin: 0;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .radio-option .form-control {
+            align-self: center;
+            /* Center textarea vertically */
+            flex-grow: 1;
+            padding: 0.6rem;
+            line-height: 1.4;
+            /* Better text alignment */
+            margin: 2px 0;
+            /* Add subtle vertical margin */
+        }
+
+        /* True/False toggle styling */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .radio-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 48%;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        /* True/False radio group */
+        .radio-group-tf {
+            display: none;
+            flex-direction: row;
+            gap: 2rem;
+            margin-top: .1rem;
+        }
+
+        /* Keep existing radio styles */
+        input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e0;
+            border-radius: 50%;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        input[type="radio"]:checked {
+            border-color: #4c51bf;
+            background-color: #4c51bf;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card-container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Insert Question</h1>
+                <form class="form-group">
+                    <div class="toggle-container">
+                        <input type="checkbox" id="tfToggle">
+                        <label for="tfToggle">True/False Question</label>
+                    </div>
+
+                    <label for="question">Question</label>
+                    <textarea class="form-control" id="question" name="question" required></textarea>
+
+                    <!-- Multiple Choice Answers -->
+
+                    <div class="radio-group" id="multipleChoice">
+                        <div class="radio-column">
+                            <div class="radio-option">
+                                <input type="radio" id="correctAnswer1" name="correctAnswer">
+                                <textarea class="form-control answer-input" id="a1" name="a1" placeholder="Answer 1"
+                                    required></textarea>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="correctAnswer2" name="correctAnswer">
+                                <textarea class="form-control answer-input" id="a2" name="a2" placeholder="Answer 2"
+                                    required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="radio-column">
+                            <div class="radio-option">
+                                <input type="radio" id="correctAnswer3" name="correctAnswer">
+                                <textarea class="form-control answer-input" id="a3" name="a3" placeholder="Answer 3"
+                                    required></textarea>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="correctAnswer4" name="correctAnswer">
+                                <textarea class="form-control answer-input" id="a4" name="a4" placeholder="Answer 4"
+                                    required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- True/False Answers -->
+                    <div class="radio-group-tf" id="trueFalse">
+                        <div class="radio-option">
+                            <input type="radio" id="trueAnswer" name="correctAnswer">
+                            <label for="trueAnswer">True</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="falseAnswer" name="correctAnswer">
+                            <label for="falseAnswer">False</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn">Submit Question</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Toggle between True/False and Multiple Choice
+        const tfToggle = document.getElementById('tfToggle');
+        const multipleChoice = document.getElementById('multipleChoice');
+        const trueFalse = document.getElementById('trueFalse');
+    
+        tfToggle.addEventListener('change', function() {
+            if (this.checked) {
+                multipleChoice.style.display = 'none';
+                trueFalse.style.display = 'flex';
+            } else {
+                multipleChoice.style.display = 'flex';
+                trueFalse.style.display = 'none';
+                // Reset columns layout
+                document.querySelectorAll('.radio-column').forEach(col => {
+                    col.style.display = 'flex';
+                });
+            }
+        });
+    
+        // Auto-expanding textareas (updated for columns)
+        function autoResize() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        }
+    
+        // Initialize for all textareas
+        document.querySelectorAll('.form-control').forEach(textarea => {
+            textarea.addEventListener('input', autoResize);
+            autoResize.call(textarea);
+        });
+    </script>
+</body>
+
+</html>
