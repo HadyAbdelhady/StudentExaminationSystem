@@ -99,7 +99,6 @@ GO
 -- create new department 
 CREATE OR ALTER PROCEDURE InsertDepartment
     @DEPTNAME NVARCHAR(100),
-	@DeptManagerID INT,
     @NewDepartmentID INT OUTPUT
 WITH ENCRYPTION
 AS

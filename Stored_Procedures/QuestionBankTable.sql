@@ -140,11 +140,11 @@ BEGIN
         END;
 
         -- Create exam model
-        INSERT INTO ExamModel (CourseID, InstructorID, StartTime, EndTime, date, CreationDate)
+        INSERT INTO ExamModel (CourseID, InstructorID, StartTime, EndTime, Date, CreationDate)
         VALUES (@CourseID, @InstructorID, @StartTime, @EndTime, @Date, GETDATE());
         SET @ExamModelID = SCOPE_IDENTITY();
 
-        -- Question selection and validation
+        -- Table for selected questions
         DECLARE @SelectedQuestions TABLE (
             QuestionID INT PRIMARY KEY,
             CorrectChoice NVARCHAR(200),
@@ -172,14 +172,14 @@ BEGIN
                     SELECT COUNT(*) 
                     FROM QuestionBank 
                     WHERE CourseID = @CourseID
-                        AND InstructorID = @InstructorID
                         AND Type = 'TrueOrFalse'
                         AND isDeleted = 0
                 );
-                RAISERROR('Requested %d True/False questions, but only %d available', 16, 1, @NumOfTrueOrFalse, @tfAvailable);
+                ROLLBACK TRANSACTION;
+                RAISERROR('Requested %d True/False questions, but only %d available.', 16, 1, @NumOfTrueOrFalse, @tfAvailable);
                 RETURN;
-            END
-        END
+            END;
+        END;
 
         -- Multiple Choice questions handling
         IF @NumOfMultiple > 0
@@ -205,12 +205,13 @@ BEGIN
                         AND Type = 'MultipleChoice'
                         AND isDeleted = 0
                 );
-                RAISERROR('Requested %d Multiple Choice questions, but only %d available', 16, 1, @NumOfMultiple, @mcAvailable);
+                ROLLBACK TRANSACTION;
+                RAISERROR('Requested %d Multiple Choice questions, but only %d available.', 16, 1, @NumOfMultiple, @mcAvailable);
                 RETURN;
-            END
-        END
+            END;
+        END;
 
-        -- Insert into exam model
+        -- Insert selected questions into ExamModel_Question
         INSERT INTO ExamModel_Question (ExamModelID, QuestionID, correctChoice, mark)
         SELECT 
             @ExamModelID,
@@ -219,21 +220,23 @@ BEGIN
             @markForEachQuestion -- Default mark = 1;
         FROM @SelectedQuestions;
 
+        -- Commit transaction if everything succeeds
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
+        -- Rollback transaction on any error
         IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
-        
+
+        -- Rethrow the error with full details
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE(),
                 @ErrorSeverity INT = ERROR_SEVERITY(),
                 @ErrorState INT = ERROR_STATE();
 
-        -- Preserve original error information
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-        RETURN;
-    END CATCH
+    END CATCH;
 END;
 GO
+
 
 
 -- Procedure to Get Questions by Topic with Random Selection for Specific Types

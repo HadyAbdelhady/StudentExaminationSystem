@@ -28,34 +28,69 @@ END
 GO
 
 -- Insert Submition 
-CREATE OR ALTER PROC insertStudentSubmition
+CREATE OR ALTER PROC insertStudentSubmission
     @stdID INT,
-    @examMdlID INT
+    @examMdlID INT,
+    @SubmissionID INT OUTPUT -- Define the output parameter
 WITH ENCRYPTION
 AS
 BEGIN
-    -- Handling Dublicate Student Submition
-            DECLARE @studentSubmitionID INT;
-            SELECT @studentSubmitionID = ID FROM StudentSubmit WHERE studentID = @stdID AND examModelID = @examMdlID;
-            IF EXISTS (SELECT 1 FROM StudentSubmit WHERE studentID = @stdID AND examModelID = @examMdlID)
-                BEGIN
-                    -- Guarding against dublication of submition to the same exam
-                    Update StudentSubmit
-                    set isDeleted = 0 
-                    where ID = @studentSubmitionID;
+    SET NOCOUNT ON;
 
-                    SELECT @studentSubmitionID ;
+    BEGIN TRY
+        BEGIN TRANSACTION;
 
-                    RETURN; --No need to insert new submition
-                END
-    -- Insert the grade into the StudentSubmit table as 0 (not graded yet)
-    INSERT INTO StudentSubmit
-        (studentID, examModelID, submitDate)
-    VALUES
-        (@stdID, @examMdlID, GETDATE());
-    SELECT SCOPE_IDENTITY();
+        -- Check if there is an existing submission for the student and exam
+        DECLARE @existingSubmissionID INT;
+        SELECT @existingSubmissionID = ID 
+        FROM StudentSubmit 
+        WHERE studentID = @stdID AND examModelID = @examMdlID;
+
+        IF @existingSubmissionID IS NOT NULL
+        BEGIN
+            -- Check if the submission is marked as deleted
+            IF EXISTS (
+                SELECT 1 
+                FROM StudentSubmit 
+                WHERE ID = @existingSubmissionID AND isDeleted = 1
+            )
+            BEGIN
+                -- Reactivate the submission
+                UPDATE StudentSubmit
+                SET isDeleted = 0
+                WHERE ID = @existingSubmissionID;
+
+                SET @SubmissionID = @existingSubmissionID; -- Return existing submission ID
+            END
+            ELSE
+            BEGIN
+                -- Duplicate active submission, return existing ID
+                SET @SubmissionID = @existingSubmissionID; -- Return existing submission ID
+            END
+
+            COMMIT TRANSACTION;
+            RETURN; -- Exit after handling duplicate
+        END
+
+        -- Insert new submission
+        INSERT INTO StudentSubmit (studentID, examModelID, submitDate)
+        VALUES (@stdID, @examMdlID, GETDATE());
+
+        -- Get the ID of the newly inserted submission
+        SET @SubmissionID = SCOPE_IDENTITY(); -- Assign to the output parameter
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+
+        -- Propagate error details
+        THROW;
+    END CATCH
 END
 GO
+
+
 
 -- get Submittion
 
