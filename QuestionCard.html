@@ -14,7 +14,6 @@
             align-items: center;
             align-self: center;
             height: 100vh;
-
         }
 
         .card {
@@ -49,6 +48,19 @@
             gap: 0.5rem;
         }
 
+        .radio-option.selected.correct {
+
+            border-radius: .5rem;
+            padding: 0.1rem;
+            border: 2px solid rgba(67, 168, 8, 0.644);
+        }
+
+        .radio-option.selected {
+            border-radius: .5rem;
+            padding: 0.1rem;
+            border: 2px solid rgba(192, 11, 11, 0.644);
+        }
+
         /* Keep your existing radio button styles */
         input[type="radio"] {
             -webkit-appearance: none;
@@ -59,6 +71,7 @@
             border: 2px solid #cbd5e0;
             border-radius: 50%;
             cursor: pointer;
+            display: none;
         }
 
         input[type="radio"]:checked {
@@ -76,11 +89,11 @@
                 <h5>Question 5:</h5>
                 <p>Who painted the Mona Lisa?</p>
                 <div class="radio-group">
-                    <div class="radio-option">
+                    <div class="radio-option selected">
                         <input type="radio" id="q5a1" name="q5" value="Van Gogh">
                         <label for="q5a1">Vincent van Gogh</label>
                     </div>
-                    <div class="radio-option">
+                    <div class="radio-option correct selected">
                         <input type="radio" id="q5a2" name="q5" value="Da Vinci">
                         <label for="q5a2">Leonardo da Vinci</label>
                     </div>
