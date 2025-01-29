@@ -1,3 +1,6 @@
+using Examination_System.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Examination_System
 {
     public class Program
@@ -8,6 +11,9 @@ namespace Examination_System
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<StudentExaminationSystemContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
