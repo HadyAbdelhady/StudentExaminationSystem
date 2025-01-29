@@ -15,29 +15,63 @@
     body {
       background-color: #f8f9fa;
       font-family: 'Segoe UI', system-ui, sans-serif;
+
     }
 
     .container {
       padding: 2rem;
       max-width: 1200px;
+      width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
     }
 
     /* Header Styles */
     h2 {
-      color: #2d3748;
+      color: #40449b;
       font-weight: 700;
       padding-bottom: 1rem;
       margin-bottom: 2rem;
       border-bottom: 3px solid #4c51bf;
-      background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    }
+
+    /* Review Exam Button */
+    .btn-review {
+      background: linear-gradient(135deg, #a6a7a6, #555454 40%) !important;
+      border: none !important;
+      padding: 0.8rem 1.5rem !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.2) !important;
+      transition: all 0.3s ease !important;
+      color: white !important;
+    }
+
+    .btn-review:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%) !important;
+
+    }
+
+    /* Adjust header container */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Modify existing button container */
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
     }
 
     /* Button Styles */
     #addExamBtn {
-      background: linear-gradient(135deg, #4c51bf, #667eea);
+      background: linear-gradient(135deg, #a6a7a6, #555454 40%);
       border: none;
       padding: 0.8rem 1.5rem;
       border-radius: 8px;
@@ -47,7 +81,7 @@
 
     #addExamBtn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(76, 81, 191, 0.3);
+      background: linear-gradient(135deg, #4c51bf 15%, #2d1744 100%);
     }
 
     /* Table Container */
@@ -55,7 +89,7 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      overflow: hidden;
+      overflow: auto;
     }
 
     /* Table Styles */
@@ -129,6 +163,7 @@
     /* Search & Pagination */
     .dataTables_filter {
       padding: 0 1rem 1rem;
+
     }
 
     .dataTables_filter input {
@@ -137,9 +172,9 @@
       padding: 0.6rem 1rem !important;
       background: rgba(255, 255, 255, 0.9) !important;
       transition: all 0.3s ease;
-      width: 10rem;
+      width: 25rem;
       margin: .5rem;
-
+      margin-top: 1rem;
     }
 
     .dataTables_filter input:focus {
@@ -193,51 +228,71 @@
         width: 100%;
       }
     }
+
+
+    table.dataTable thead .sorting::after,
+    table.dataTable thead .sorting_asc::after,
+    table.dataTable thead .sorting_desc::after {
+
+      margin: auto;
+    }
   </style>
 </head>
 
 <body>
   <div class="container mt-5">
-    <h2 class="text-center mb-4">Exam Manager</h2>
+    <h2 class="text-center mb-4">Question Bank</h2>
 
     <!-- Add New Exam Button -->
     <div class="mb-3 text-end">
-      <button class="btn btn-primary" id="addExamBtn">Add New Exam</button>
+      <button class="btn btn-primary" id="addExamBtn">Add New Question</button>
+      <button class="btn btn-review" id="reviewExamBtn">Review Exam</button>
     </div>
 
     <!-- Exam Manager Table -->
     <table id="examManagerTable" class="table table-striped table-bordered">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Exam Name</th>
+          <th></th>
+          <th>Question</th>
+          <th>instructor</th>
+          <th>Course</th>
           <th>Date</th>
-          <th>Status</th>
+          <th>Type</th>
           <th>Actions</th>
+          <th>Select</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>1</td>
-          <td>Math Test</td>
+          <td>what is the equivelant of 5*55 and divided by 15 taken to the exponintial of 55 with the relative to ln
+          </td>
+          <td>Dr. Ahmed</td>
+          <td>Math</td>
           <td>2025-02-15</td>
-          <td>Scheduled</td>
+          <td>T/F</td>
           <td>
             <button class="btn btn-success btn-sm">View</button>
             <button class="btn btn-warning btn-sm">Edit</button>
             <button class="btn btn-danger btn-sm">Delete</button>
           </td>
+          <td><input type="checkbox"></td>
         </tr>
         <tr>
           <td>2</td>
           <td>Science Quiz</td>
+          <td>Dr. Ahmed</td>
+          <td>Dunno</td>
           <td>2025-03-10</td>
-          <td>Completed</td>
+          <td>MCQ</td>
           <td>
             <button class="btn btn-success btn-sm">View</button>
             <button class="btn btn-warning btn-sm">Edit</button>
             <button class="btn btn-danger btn-sm">Delete</button>
           </td>
+          <td><input type="checkbox"></td>
+
         </tr>
       </tbody>
     </table>
@@ -254,13 +309,10 @@
     $(document).ready(function () {
       $('#examManagerTable').DataTable({
         responsive: true,
-        pageLength: 5,
+        pageLength: 20,
         lengthChange: false,
         ordering: true,
         searching: true,
-        language: {
-          search: "Search Exams:"
-        }
       });
 
       $('#addExamBtn').on('click', function () {

@@ -5,25 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>insertQuestion</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #2d1744 100%);
+            min-height: 100vh;
+        }
+
         .card-container {
             display: flex;
             justify-content: center;
             align-items: start;
             padding: 1rem;
+            max-width: 100%;
         }
 
         .card {
             border: none;
             border-radius: 12px;
-            background-color: #f8f9fa;
+            background-color: #f0efef;
             transition: transform 0.2s ease;
             margin: 1rem;
-            width: 90%;
-            max-width: 600px;
+            width: 60%;
             margin: 1rem 0;
             flex-shrink: 1;
-
         }
 
         .card:hover {
@@ -36,6 +42,7 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+
         }
 
         .form-group {
@@ -93,22 +100,20 @@
 
         .radio-option .form-control {
             align-self: center;
-            /* Center textarea vertically */
             flex-grow: 1;
             padding: 0.6rem;
             line-height: 1.4;
-            /* Better text alignment */
             margin: 2px 0;
-            /* Add subtle vertical margin */
+            max-width: 85%;
         }
 
         /* True/False toggle styling */
-        .toggle-container {
+        /* .toggle-container {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 1rem;
-        }
+        } */
 
         .radio-column {
             display: flex;
@@ -157,11 +162,11 @@
     <div class="card-container">
         <div class="card">
             <div class="card-body">
-                <h1 class="card-title">Insert Question</h1>
+                <h1 class="card-title text-center">Insert Question</h1>
                 <form class="form-group">
-                    <div class="toggle-container">
-                        <input type="checkbox" id="tfToggle">
-                        <label for="tfToggle">True/False Question</label>
+                    <div class="toggle-container row ml-1 d-flex align-items-center">
+                        <input type="checkbox" id="tfToggle" class="mr-1">
+                        <label for="tfToggle" class="col-md-3 mb-0">True/False Question</label>
                     </div>
 
                     <label for="question">Question</label>
@@ -218,8 +223,8 @@
         const tfToggle = document.getElementById('tfToggle');
         const multipleChoice = document.getElementById('multipleChoice');
         const trueFalse = document.getElementById('trueFalse');
-    
-        tfToggle.addEventListener('change', function() {
+
+        tfToggle.addEventListener('change', function () {
             if (this.checked) {
                 multipleChoice.style.display = 'none';
                 trueFalse.style.display = 'flex';
@@ -232,13 +237,13 @@
                 });
             }
         });
-    
+
         // Auto-expanding textareas (updated for columns)
         function autoResize() {
             this.style.height = 'auto';
             this.style.height = this.scrollHeight + 'px';
         }
-    
+
         // Initialize for all textareas
         document.querySelectorAll('.form-control').forEach(textarea => {
             textarea.addEventListener('input', autoResize);
