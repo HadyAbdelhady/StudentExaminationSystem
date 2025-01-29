@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>insertDepartment</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style ></style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h1 class="card-title text-center mb-4">Create New Department</h1>
+                        <form>
+                            <div class="form-group">
+                                <label>Department Name</label>
+                                <textarea class="form-control" rows="2" 
+                                          placeholder="Enter Department name" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Manager</label>
+                                <select class="form-control" required>
+                                    <option value="">Select Manager</option>
+                                    <option>Sarah Johnson</option>
+                                    <option>Michael Chen</option>
+                                    <option>Emma Wilson</option>
+                                    <option>James Thompson</option>
+                                </select>
+                            </div>
+                            
+                            <form class="form-group">
+                                <label for="Enrollment">Enrollment Date</label>
+                                <input type="date" id="Enrollment" name="Enrollment" class="form-control" required>
+                            </form>
+
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Create Department
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

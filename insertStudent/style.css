@@ -1,0 +1,41 @@
+body {
+    background: linear-gradient(135deg, #667eea 0%, #2d1744 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.95);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.form-control {
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    margin-bottom: .5rem;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+}

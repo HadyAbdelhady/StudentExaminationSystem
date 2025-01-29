@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>insertQuestion</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style ></style>
+</head>
+
+<body>
+    <div class="card-container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title text-center">Insert Question</h1>
+                <form class="form-group">
+                    <div class="toggle-container row ml-1 d-flex align-items-center">
+                        <input type="checkbox" id="tfToggle" class="mr-1">
+                        <label for="tfToggle" class="col-md-3 mb-0">True/False Question</label>
+                    </div>
+
+                    <label for="question">Question</label>
+                    <textarea class="form-control" id="question" name="question" required></textarea>
+
+                    <!-- Multiple Choice Answers -->
+
+                    <div class="radio-group" id="multipleChoice">
+                        <div class="radio-column">
+                            <div class="radio-option">
+                                <input type="radio" id="correctAnswer1" name="correctAnswer">
+                                <textarea class="form-control answer-input" id="a1" name="a1" placeholder="Answer 1"
+                                    required></textarea>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="correctAnswer2" name="correctAnswer">
+                                <textarea class="form-control answer-input" id="a2" name="a2" placeholder="Answer 2"
+                                    required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="radio-column">
+                            <div class="radio-option">
+                                <input type="radio" id="correctAnswer3" name="correctAnswer">
+                                <textarea class="form-control answer-input" id="a3" name="a3" placeholder="Answer 3"
+                                    required></textarea>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="correctAnswer4" name="correctAnswer">
+                                <textarea class="form-control answer-input" id="a4" name="a4" placeholder="Answer 4"
+                                    required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- True/False Answers -->
+                    <div class="radio-group-tf" id="trueFalse">
+                        <div class="radio-option">
+                            <input type="radio" id="trueAnswer" name="correctAnswer">
+                            <label for="trueAnswer">True</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="falseAnswer" name="correctAnswer">
+                            <label for="falseAnswer">False</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn">Submit Question</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
