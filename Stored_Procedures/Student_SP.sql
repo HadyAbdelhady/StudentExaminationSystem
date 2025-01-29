@@ -502,12 +502,22 @@ BEGIN
     END;
 
     SELECT 
-        S.ID, 
+        S.ID,
         S.firstName,
         S.lastName,
+        S.gender,
+        S.SSN,
+        S.enrollmentDate,
         S.email,
         S.phone,
-        B.Name AS [BranchName]
+        S.DateOfBirth,
+        S.address,
+        S.trackID,
+        S.branchID,
+        S.departmentID,
+        T.Name AS [TrackName],
+        D.Name AS [DepartmentName],
+        B.Name AS [branchName]
     FROM 
         Student S
     INNER JOIN 
@@ -518,9 +528,12 @@ BEGIN
         AND S.departmentID = BDT.departmentID 
         AND S.trackID = BDT.trackID 
         AND BDT.isDeleted = 0
+    INNER JOIN Department D ON D.ID = S.departmentID
+    INNER JOIN Track T ON T.ID = S.trackID
     WHERE 
         S.branchID = @BranchID
         AND S.isDeleted = 0;
+
 END;
 GO
 CREATE OR ALTER PROCEDURE GetAllStudentsInDepartment
@@ -538,9 +551,19 @@ BEGIN
         S.ID,
         S.firstName,
         S.lastName,
+        S.gender,
+        S.SSN,
+        S.enrollmentDate,
         S.email,
         S.phone,
-        D.Name AS DepartmentName
+        S.DateOfBirth,
+        S.address,
+        S.trackID,
+        S.branchID,
+        S.departmentID,
+        T.Name AS [TrackName],
+        D.Name AS [DepartmentName],
+        B.Name AS [branchName]
     FROM 
         Student S
     INNER JOIN 
@@ -551,6 +574,8 @@ BEGIN
         AND S.departmentID = BDT.departmentID 
         AND S.trackID = BDT.trackID 
         AND BDT.isDeleted = 0
+    INNER JOIN Track T ON T.ID = S.trackID
+    INNER JOIN Branch B ON B.ID = S.branchID
     WHERE 
         S.departmentID = @DepartmentID
         AND S.isDeleted = 0;
@@ -571,9 +596,19 @@ BEGIN
         S.ID,
         S.firstName,
         S.lastName,
+        S.gender,
+        S.SSN,
+        S.enrollmentDate,
         S.email,
         S.phone,
-        T.Name AS TrackName
+        S.DateOfBirth,
+        S.address,
+        S.trackID,
+        S.branchID,
+        S.departmentID,
+        T.Name AS [TrackName],
+        D.Name AS [DepartmentName],
+        B.Name AS [branchName]
     FROM 
         Student S
     INNER JOIN 
@@ -584,6 +619,10 @@ BEGIN
         AND S.departmentID = BDT.departmentID 
         AND S.trackID = BDT.trackID 
         AND BDT.isDeleted = 0
+    INNER JOIN 
+        Branch B ON B.ID = S.branchID
+    INNER JOIN 
+        Department D ON D.ID = S.departmentID
     WHERE 
         S.trackID = @TrackID
         AND S.isDeleted = 0;
@@ -682,3 +721,61 @@ BEGIN
         T.Name;
 END;
 GO
+
+CREATE OR ALTER PROCEDURE GetAllStudents
+AS 
+BEGIN
+    SELECT 
+        S.ID,
+        S.firstName,
+        S.lastName,
+        S.gender,
+        S.SSN,
+        S.enrollmentDate,
+        S.email,
+        S.phone,
+        S.DateOfBirth,
+        S.address,
+        S.trackID,
+        S.branchID,
+        S.departmentID,
+        T.Name AS [TrackName],
+        D.Name AS [DepartmentName],
+        B.Name AS [branchName] 
+    FROM Student S
+    INNER JOIN Department D on D.ID = S.departmentID
+    INNER JOIN Track T ON T.ID = S.trackID
+    INNER JOIN Branch B ON B.ID = S.branchID
+    WHERE S.isDeleted = 0;
+END;
+
+GO
+
+CREATE OR ALTER PROCEDURE GetAllStudentsInCourse 
+@courseID INT
+AS 
+BEGIN
+    SELECT 
+        S.ID,
+        S.firstName,
+        S.lastName,
+        S.gender,
+        S.SSN,
+        S.enrollmentDate,
+        S.email,
+        S.phone,
+        S.DateOfBirth,
+        S.address,
+        S.trackID,
+        S.branchID,
+        S.departmentID,
+        T.Name AS [TrackName],
+        D.Name AS [DepartmentName],
+        B.Name AS [branchName] 
+    FROM Student S
+    INNER JOIN Department D on D.ID = S.departmentID
+    INNER JOIN Track T ON T.ID = S.trackID
+    INNER JOIN Branch B ON B.ID = S.branchID
+    INNER JOIN Student_Course_instructor SCI ON SCI.studentID = S.ID
+    WHERE S.isDeleted = 0 AND SCI.courseID = @courseID;
+END;
