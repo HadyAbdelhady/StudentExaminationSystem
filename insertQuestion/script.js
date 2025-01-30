@@ -15,9 +15,9 @@
                 multipleChoice.style.display = 'flex';
                 trueFalse.style.display = 'none';
                 // Reset columns layout
-                document.querySelectorAll('.radio-column').forEach(col => {
-                    col.style.display = 'flex';
-                });
+                // document.querySelectorAll('.radio-column').forEach(col => {
+                //     col.style.display = 'flex';
+                // });
             } 
         });
 
