@@ -158,7 +158,7 @@ input[type="radio"]:checked {
     display: none;
 }
 
-@media(min-width:768px){
+@media(min-width:935px){
     .radio-column{
         width:48%;
     }
