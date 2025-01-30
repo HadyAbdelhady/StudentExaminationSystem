@@ -17,9 +17,15 @@
             <div class="card-body">
                 <h1 class="card-title text-center">Insert Question</h1>
                 <form class="form-group">
-                    <div class="toggle-container row ml-1 d-flex align-items-center">
-                        <input type="checkbox" id="tfToggle" class="mr-1">
-                        <label for="tfToggle" class="col-md-3 mb-0">True/False Question</label>
+                    <div class = "radio-row">
+                        <div class="toggle-container row ml-1 d-flex align-items-center">
+                            <input type="radio" id="tfToggle" class="mr-1" name="questionType">
+                            <label for="tfToggle" class="col-md-3 mb-0">True/False Question</label>
+                        </div>
+                        <div class="toggle-container row ml-1 d-flex align-items-center">
+                            <input type="radio" id="mcqToggle" class="mr-1" name = "questionType">
+                            <label for="mcqToggle" class="col-md-3 mb-0">MCQ</label>
+                        </div>
                     </div>
 
                     <label for="question">Question</label>

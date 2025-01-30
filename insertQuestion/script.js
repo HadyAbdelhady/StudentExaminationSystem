@@ -7,14 +7,18 @@
             if (this.checked) {
                 multipleChoice.style.display = 'none';
                 trueFalse.style.display = 'flex';
-            } else {
+            } 
+          
+        });
+        mcqToggle.addEventListener('change', function () {
+            if (this.checked) {
                 multipleChoice.style.display = 'flex';
                 trueFalse.style.display = 'none';
                 // Reset columns layout
                 document.querySelectorAll('.radio-column').forEach(col => {
                     col.style.display = 'flex';
                 });
-            }
+            } 
         });
 
         // Auto-expanding textareas (updated for columns)

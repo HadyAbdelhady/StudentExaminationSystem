@@ -14,7 +14,7 @@ body {
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
 .form-control {
@@ -33,9 +33,15 @@ body {
     border: none;
     padding: 0.8rem 1.5rem;
     transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 19px;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+}
+
+label{
+    font-weight: 600;
 }

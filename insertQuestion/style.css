@@ -20,11 +20,13 @@ body {
     width: 60%;
     margin: 1rem 0;
     flex-shrink: 1;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 .card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-5px);
     border: 2px solid rgba(76, 82, 191, 0.699);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
 .card-body {
@@ -136,4 +138,10 @@ input[type="radio"]:checked {
     border-color: #4c51bf;
     background-color: #4c51bf;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
+}
+
+.radio-row {
+    display: flex;
+    gap: 6rem;
+    width: 48%;
 }
