@@ -33,10 +33,10 @@ BEGIN
 
         -- Get distinct departments for the specific branch
         SELECT DISTINCT
-            D.ID AS DepartmentID,
-            D.Name AS DepartmentName,
-            D.creationDate AS DepartmentCreationDate,
-            BDT.departmentManagerID AS DepartmentManagerID
+            D.ID,
+            D.Name,
+            D.creationDate,
+            BDT.departmentManagerID
         FROM Branch_Department_Track BDT
         INNER JOIN Department D 
             ON BDT.departmentID = D.ID
