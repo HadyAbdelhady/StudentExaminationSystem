@@ -103,7 +103,7 @@ BEGIN
     END
 
         -- Retrieve all tracks in the specified branch
-        SELECT t.ID AS TrackID, t.Name AS TrackName, t.CreationDate AS TrackCreationDate,
+        SELECT t.ID, t.Name, t.CreationDate,
         d.ID AS DepartmentID, d.Name AS DepartmentName
     FROM Branch_Department_Track bdt
         INNER JOIN Track t ON bdt.TrackID = t.ID AND t.IsDeleted = 0
