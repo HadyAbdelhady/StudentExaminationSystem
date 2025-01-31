@@ -13,7 +13,13 @@ body {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     position: relative;
 }
-
+.card-body.instructor{
+    display: flex;
+    max-height: 45vh;
+    overflow-y: auto;
+    position: relative;
+    flex-direction: column; 
+}
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
