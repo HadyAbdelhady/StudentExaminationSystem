@@ -265,12 +265,28 @@ BEGIN
         RETURN;
     END;
 
-    SELECT EM.ID,EM.date, EM.startTime, EM.endTime, EM.CreationDate ,EM.CourseID, EM.instructorID
+    SELECT EM.ID,EM.date, EM.startTime, EM.endTime, EM.CreationDate ,EM.CourseID, EM.instructorID, C.Name AS CourseName , Inst.firstName, Inst.lastName
     FROM ExamModel EM
+    INNER JOIN Instructor Inst ON EM.instructorID = Inst.ID
+    INNER JOIN Course C ON C.ID = EM.CourseID
     WHERE EM.ID = @ExamModelID AND EM.isDeleted = 0;
 END;
 GO
 
+CREATE OR ALTER PROCEDURE GetAllExamModels
+AS 
+BEGIN
+    SELECT EM.ID,EM.date, EM.startTime, EM.endTime, EM.CreationDate ,EM.CourseID, EM.instructorID, C.Name AS CourseName , Inst.firstName, Inst.lastName
+    FROM ExamModel EM
+    INNER JOIN Instructor Inst ON EM.instructorID = Inst.ID
+    INNER JOIN Course C ON C.ID = EM.CourseID
+    WHERE EM.isDeleted = 0;
+END
+EXEC GetAllExamModels;
+GO
+
+EXEC GetExamModelQuestionsWithOptions @examModelId = 1; 
+go
 CREATE OR ALTER PROCEDURE GetExamModelQuestionsWithOptions
     @ExamModelID INT
 AS
