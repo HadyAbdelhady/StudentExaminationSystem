@@ -64,6 +64,7 @@ body {
     color: white;
     font-size: 1rem;
     cursor: pointer;
+    font-size: 19px;
 }
 
 .btn:hover {
@@ -188,4 +189,11 @@ label{
     padding:0 !important;
 }
 
-/* 1107-768 */
+label{
+    font-weight: 600;
+}
+label[for = "question"]{
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-size: 19px;
+}

@@ -45,3 +45,8 @@ body {
 label{
     font-weight: 600;
 }
+
+textarea{
+    resize: none;
+    overflow: auto;
+}
