@@ -2,6 +2,31 @@
 ------------------ Department -----------------------
 -----------------------------------------------------
 
+-- READ PROCEDURE: Get Department by ID
+CREATE OR ALTER PROCEDURE GetDepartmentByID
+    @DepartmentID INT
+AS
+BEGIN
+    BEGIN TRY 
+    IF NOT EXISTS (SELECT 1 FROM Department WHERE ID = @DepartmentID)
+        BEGIN
+            RAISERROR('The department does not exist.', 16, 1);
+            RETURN;
+        END 
+    SELECT ID, Name, CreationDate
+    FROM Department
+    WHERE ID = @DepartmentID AND IsDeleted = 0;
+    END TRY
+    BEGIN CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
+
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState)
+	END CATCH
+END;
+GO
+
 -- getting all the departments data
 CREATE OR ALTER PROCEDURE GetDepartmentData
 AS
