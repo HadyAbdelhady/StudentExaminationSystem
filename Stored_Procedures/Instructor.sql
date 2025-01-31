@@ -215,18 +215,15 @@ AS
 BEGIN
     BEGIN TRY
         -- Check if the instructor exists and is not deleted
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM Instructor 
-            WHERE ID = @instructorID AND isDeleted = 0
-        )
+        IF NOT EXISTS (SELECT 1 FROM Instructor WHERE ID = @instructorID AND isDeleted = 0)
         BEGIN
             RAISERROR('Instructor with ID %d does not exist or is deleted.', 16, 1, @instructorID);
             RETURN;
         END;
 
-        -- Get course names and student counts
+        -- Get course names, IDs, and student counts
         SELECT 
+            C.ID AS CourseId,  -- Include CourseId
             C.Name AS CourseName,
             COUNT(DISTINCT S.ID) AS StudentCount
         FROM 
