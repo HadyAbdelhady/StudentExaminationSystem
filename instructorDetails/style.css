@@ -201,3 +201,23 @@ h1, h4 {
     background: #667eea;
     border-radius: 10px;
 }
+
+@media(max-width:950px)
+{
+    .card-body.instructor{
+        overflow-y: auto;
+    }  
+}
+
+.card-body.instructor::-webkit-scrollbar {
+    width: 8px;
+}
+
+.card-body.instructor::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+.card-body.instructor::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
