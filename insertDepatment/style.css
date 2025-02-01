@@ -44,3 +44,13 @@ body {
 label{
     font-weight: 600;
 }
+.footer {
+    /* background-color: #343a40; */
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it stays above other content */
+}

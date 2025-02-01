@@ -1,0 +1,106 @@
+ body {
+     background: linear-gradient(135deg, #667eea 0%, #2d1744 100%);
+     min-height: 100vh;
+     padding: 20px;
+     color: #2d1744;
+ }
+
+ .card {
+     border: none;
+     border-radius: 15px;
+     background-color: rgba(255, 255, 255, 0.95);
+     transition: all 0.3s ease;
+     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+ }
+
+ .card:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+ }
+
+ .btn-primary {
+     background: rgb(14, 164, 233);
+     border: none;
+     padding: 0.8rem 1.5rem;
+     transition: all 0.3s ease;
+     font-weight: 600;
+     font-size: 15px;
+ }
+
+ .btn-primary:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+ }
+
+ .btn-danger {
+     background: #db3941;
+     border: none;
+     padding: 0.8rem 1.5rem;
+     transition: all 0.3s ease;
+     font-weight: 600;
+     font-size: 15px;
+     /* width: 6rem;
+            height: 50px; */
+ }
+
+ .btn-info {
+     background: rgb(14, 164, 233);
+     border: none;
+     padding: 0.5rem 1rem;
+     transition: all 0.3s ease;
+     font-weight: 600;
+     font-size: 14px;
+ }
+
+ .btn-info:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+ }
+
+ h1,
+ h4 {
+     color: white;
+     font-weight: 600;
+ }
+
+ .card-title {
+     color: #2d1744 !important;
+     font-weight: 700 !important;
+ }
+
+ .table {
+     background-color: rgba(255, 255, 255, 0.95);
+     border-radius: 10px;
+     overflow: hidden;
+ }
+
+ .table thead th {
+     background-color: #667eea;
+     color: white;
+     font-weight: 600;
+ }
+
+ .table-striped tbody tr:nth-of-type(odd) {
+     background-color: rgba(102, 126, 234, 0.1);
+ }
+
+ .table-bordered {
+     border: 1px solid #dee2e6;
+ }
+
+ .table-bordered th,
+ .table-bordered td {
+     border: 1px solid #dee2e6;
+ }
+
+ .track-row {
+     background-color: rgba(102, 126, 234, 0.05);
+ }
+
+ @media(max-width:415px) {
+     .dep-table {
+         max-width: 100%;
+
+         overflow-x: auto;
+     }
+ }

@@ -1,0 +1,237 @@
+ /* Base Styles */
+ body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+
+  }
+
+  .container {
+    padding: 2rem;
+    max-width: 1200px;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Header Styles */
+  h2 {
+    color: #40449b;
+    font-weight: 700;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid #4c51bf;
+  }
+
+  /* Review Exam Button */
+  .btn-review {
+    background: linear-gradient(135deg, #a6a7a6, #555454 40%) !important;
+    border: none !important;
+    padding: 0.8rem 1.5rem !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.2) !important;
+    transition: all 0.3s ease !important;
+    color: white !important;
+  }
+
+  .btn-review:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%) !important;
+
+  }
+
+  /* Adjust header container */
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Modify existing button container */
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  /* Button Styles */
+  #addExamBtn {
+    background: linear-gradient(135deg, #a6a7a6, #555454 40%);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(76, 81, 191, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  #addExamBtn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #4c51bf 15%, #2d1744 100%);
+  }
+
+  /* Table Container */
+  #examManagerTable_wrapper {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    overflow: auto;
+  }
+
+  /* Table Styles */
+  #examManagerTable {
+    border-collapse: collapse;
+    margin: 0;
+  }
+
+  #examManagerTable thead {
+    background: #2d1744;
+    color: white;
+  }
+
+  #examManagerTable thead th {
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+  }
+
+  #examManagerTable tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-color: #e9ecef;
+  }
+
+  #examManagerTable tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+
+  /* Action Buttons */
+  .btn-success {
+    background-color: #4c51bf !important;
+    border-color: #4c51bf !important;
+    color: white !important;
+  }
+
+  .btn-warning {
+    background-color: #667eea !important;
+    border-color: #667eea !important;
+    color: white !important;
+  }
+
+  .btn-danger {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+  }
+
+  /* Status Badges */
+  .status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .status-scheduled {
+    background: rgba(76, 81, 191, 0.1);
+    color: #4c51bf;
+  }
+
+  .status-active {
+    background: rgba(76, 81, 191, 0.1);
+    color: #4c51bf;
+  }
+
+  .status-completed {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+  }
+
+  /* Search & Pagination */
+  .dataTables_filter {
+    padding: 0 1rem 1rem;
+
+  }
+
+  .dataTables_filter input {
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 0.6rem 1rem !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    transition: all 0.3s ease;
+    width: 25rem;
+    margin: .5rem;
+    margin-top: 1rem;
+  }
+
+  .dataTables_filter input:focus {
+    border-color: #4c51bf !important;
+    box-shadow: 0 0 0 3px rgba(76, 81, 191, 0.15) !important;
+    outline: none;
+  }
+
+  .dataTables_paginate {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .dataTables_paginate .paginate_button {
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    margin: 0 2px !important;
+    color: #4c51bf !important;
+  }
+
+  .dataTables_paginate .paginate_button:hover {
+    background: #4c51bf !important;
+    color: white !important;
+    transform: translateY(-1px);
+  }
+
+  .dataTables_paginate .paginate_button.current {
+    font-weight: 700;
+    background: transparent !important;
+    color: #4c51bf !important;
+  }
+
+  .dataTables_paginate .paginate_button.previous,
+  .dataTables_paginate .paginate_button.next {
+    background: rgba(76, 81, 191, 0.1) !important;
+    font-weight: 500;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+
+    #examManagerTable_wrapper {
+      border-radius: 8px;
+    }
+
+    .dataTables_filter input {
+      width: 100%;
+    }
+  }
+
+
+  table.dataTable thead .sorting::after,
+  table.dataTable thead .sorting_asc::after,
+  table.dataTable thead .sorting_desc::after {
+
+    margin: auto;
+  }
+
+  .footer {
+    /* background-color: #343a40; */
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    /* Ensure it stays above other content */
+  }
