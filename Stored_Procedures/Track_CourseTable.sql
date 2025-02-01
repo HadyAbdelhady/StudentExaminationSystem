@@ -78,9 +78,9 @@ BEGIN
 
         -- Retrieve all courses in the track (active courses only)
         SELECT 
-            C.ID AS CourseID,
-            C.Name AS CourseName,
-            C.creationDate AS CourseCreationDate
+            C.ID,
+            C.Name,
+            C.creationDate
         FROM Track_Course TC
         INNER JOIN Course C ON TC.CourseID = C.ID
         WHERE TC.TrackID = @TrackID
