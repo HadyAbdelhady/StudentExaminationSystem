@@ -329,3 +329,15 @@ BEGIN
 
     PRINT 'Department Manager updated successfully.';
 END;
+
+GO
+CREATE OR ALTER PROCEDURE GetAllAvilableTracks
+AS
+BEGIN
+    SELECT BDT.* , B.Name AS [BranchName], D.Name AS [DepartmentName], T.Name AS [TrackName]
+    FROM Branch_Department_Track BDT
+    INNER JOIN Branch B ON B.Id = BDT.branchID
+    INNER JOIN Department D ON D.Id =  BDT.departmentID
+    INNER JOIN Track T ON  T.Id = BDT.trackId
+    WHERE BDT.isDeleted = 0;
+END;
