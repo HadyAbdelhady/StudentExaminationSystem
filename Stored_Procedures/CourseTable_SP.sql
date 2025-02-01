@@ -124,4 +124,31 @@ CREATE OR ALTER PROCEDURE GetCourse
 AS
 BEGIN
 	SELECT * FROM Course where isDeleted = 0
-END
+END;
+
+GO
+
+-- READ PROCEDURE: Get Course by ID
+CREATE OR ALTER PROCEDURE GetCourseByID
+    @CourseID INT
+AS
+BEGIN
+    BEGIN TRY 
+    IF NOT EXISTS (SELECT 1 FROM Course WHERE ID = @CourseID)
+        BEGIN
+            RAISERROR('The course does not exist.', 16, 1);
+            RETURN;
+        END 
+    SELECT ID, Name, CreationDate
+    FROM Course
+    WHERE ID = @CourseID AND IsDeleted = 0;
+    END TRY
+    BEGIN CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
+
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState)
+	END CATCH
+END;
+GO
