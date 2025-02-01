@@ -776,6 +776,37 @@ BEGIN
     INNER JOIN Department D on D.ID = S.departmentID
     INNER JOIN Track T ON T.ID = S.trackID
     INNER JOIN Branch B ON B.ID = S.branchID
-    INNER JOIN Student_Course_instructor SCI ON SCI.studentID = S.ID
-    WHERE S.isDeleted = 0 AND SCI.courseID = @courseID;
+    INNER JOIN Course_Student_Instructor CSI ON CSI.studentID = S.ID
+    WHERE S.isDeleted = 0 AND CSI.courseID = @courseID;
+END;
+
+GO
+
+CREATE OR ALTER PROCEDURE GetAllStudentsPerInstructor
+@instructorId INT
+AS
+BEGIN
+     SELECT 
+        S.ID,
+        S.firstName,
+        S.lastName,
+        S.gender,
+        S.SSN,
+        S.enrollmentDate,
+        S.email,
+        S.phone,
+        S.DateOfBirth,
+        S.address,
+        S.trackID,
+        S.branchID,
+        S.departmentID,
+        T.Name AS [TrackName],
+        D.Name AS [DepartmentName],
+        B.Name AS [branchName] 
+    FROM Student S
+    INNER JOIN Department D on D.ID = S.departmentID
+    INNER JOIN Track T ON T.ID = S.trackID
+    INNER JOIN Branch B ON B.ID = S.branchID
+    INNER JOIN Course_Student_Instructor CSI ON CSI.studentID = S.ID
+    WHERE S.isDeleted = 0 AND CSI.instructorID = @instructorId;
 END;
