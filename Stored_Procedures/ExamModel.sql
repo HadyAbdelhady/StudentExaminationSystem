@@ -22,23 +22,6 @@ BEGIN
         RAISERROR('The Instructor ID does not exist. Maybe it has been deleted or invalid.', 16, 1);
         RETURN;
     END
-
-    IF EXISTS (
-        SELECT 1
-        FROM ExamModel
-        WHERE CourseID = @CourseID
-            AND instructorID = @instructorID
-            AND date = @date
-            AND (
-                    (startTime <= @endTime AND endTime >= @startTime)
-                )
-            AND isDeleted = 0
-    )
-    BEGIN
-        RAISERROR('An overlapping exam exists for the same course and instructor.', 16, 1);
-        RETURN;
-    END;
-
         -- Check if the course ID is valid
         IF NOT EXISTS (SELECT 1
     FROM Course
@@ -72,7 +55,7 @@ BEGIN
         SET @examModelID = SCOPE_IDENTITY();
 
         -- Return success message
-        SELECT 'Exam model inserted successfully.' AS Message;
+        SELECT @examModelID;
     END TRY
     BEGIN CATCH
         -- Handle the error
