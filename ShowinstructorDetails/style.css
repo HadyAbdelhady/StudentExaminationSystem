@@ -2,7 +2,7 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #2d1744 100%);
     min-height: 100vh;
     padding: 20px;
-    /* color: #2d1744; */
+    font-family: "lora", serif;
 }
 
 .card {

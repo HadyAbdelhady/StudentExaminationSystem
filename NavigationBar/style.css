@@ -1,4 +1,7 @@
 /* NavBar Styles */
+body{
+    font-family:"lora", serif;
+}
 .navbar {
     background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);

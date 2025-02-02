@@ -1,6 +1,7 @@
 body {
     background: linear-gradient(135deg, #667eea 0%, #2d1744 100%);
     min-height: 100vh;
+    font-family: "lora", serif;
 }
 
 .card-container {
