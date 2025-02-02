@@ -24,7 +24,7 @@
 
  /* Review Exam Button */
  .btn-review {
-   background: linear-gradient(135deg, #a6a7a6, #555454 40%) !important;
+   background: #555454 !important;
    border: none !important;
    padding: 0.8rem 1.5rem !important;
    border-radius: 8px !important;
@@ -58,7 +58,7 @@
 
  /* Button Styles */
  #addExamBtn {
-   background: linear-gradient(135deg, #a6a7a6, #555454 40%);
+   background:  #555454 ;
    border: none;
    padding: 0.8rem 1.5rem;
    border-radius: 8px;
