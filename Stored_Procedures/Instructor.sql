@@ -437,3 +437,45 @@ BEGIN
     END CATCH;
 END;
 GO
+
+GO
+
+--Retrieve All the Current Instructors (that are not deleted) in a specific course
+CREATE OR ALTER PROC GetAllInstructorsInCourse
+@courseID INT
+WITH ENCRYPTION
+AS
+BEGIN
+    BEGIN TRY
+        -- Retrieve all instructors who are not deleted in a specific course
+        SELECT 
+            Inst.ID,
+            Inst.firstName,
+            Inst.lastName,
+            Inst.gender,
+            Inst.SSN,
+            Inst.email,
+            Inst.phone,
+            Inst.enrollmentDate,
+            Inst.DateOfBirth,
+            Inst.address
+        FROM Instructor Inst INNER JOIN  Course_Instructor CI
+        ON CI.instructorID = Inst.ID
+        WHERE isDeleted = 0 AND CI.courseID = @courseID;
+
+        PRINT 'Retrieved all active instructors successfully.';
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(
+            'An error occurred while retrieving instructors. Error: %s',
+            16,
+            1,
+            @ErrorMessage
+        );
+    END CATCH;
+END;
+GO
