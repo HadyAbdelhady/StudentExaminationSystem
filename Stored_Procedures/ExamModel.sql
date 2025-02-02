@@ -285,9 +285,9 @@ END
 EXEC GetAllExamModels;
 GO
 
-EXEC GetExamModelQuestionsWithOptions @examModelId = 1; 
+
 go
-CREATE OR ALTER PROCEDURE GetExamModelQuestionsWithOptions
+CREATE OR ALTER PROCEDURE GetExamModelQuestionsWithOptionsWithAnswer
     @ExamModelID INT
 AS
 BEGIN
@@ -317,6 +317,7 @@ BEGIN
     -- Pivot the options for each question
     SELECT 
         QuestionText,
+        QuestionID,
         MAX(CASE WHEN ChoiceNumber = 1 THEN OptionChoice END) AS OptionOne,
         MAX(CASE WHEN ChoiceNumber = 2 THEN OptionChoice END) AS OptionTwo,
         MAX(CASE WHEN ChoiceNumber = 3 THEN OptionChoice END) AS OptionThree,
@@ -325,8 +326,50 @@ BEGIN
     FROM 
         QuestionOptions
     GROUP BY 
-        QuestionText, ModelAnswer
+        QuestionText, ModelAnswer, QuestionID
     ORDER BY 
         QuestionText;
 END;
 GO
+
+CREATE OR ALTER PROCEDURE GetExamModelQuestionsWithOptionsWithoutAnswer
+    @ExamModelID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Common Table Expression (CTE) to retrieve questions and their options
+    WITH QuestionOptions AS
+    (
+        SELECT 
+            EMQ.examModelID,
+            QB.ID AS QuestionID,
+            QB.questionText AS QuestionText,
+            QB.type AS QuestionType,
+            QC.Choice AS OptionChoice,
+            ROW_NUMBER() OVER (PARTITION BY QB.ID ORDER BY QC.Choice) AS ChoiceNumber
+        FROM 
+            ExamModel_Question EMQ
+        INNER JOIN 
+            QuestionBank QB ON EMQ.questionID = QB.ID
+        LEFT JOIN 
+            QuestionBank_Choice QC ON QB.ID = QC.questionID
+        WHERE 
+            EMQ.examModelID = @ExamModelID
+    )
+
+    -- Pivot the options for each question
+    SELECT 
+        QuestionText,
+        QuestionID,
+        MAX(CASE WHEN ChoiceNumber = 1 THEN OptionChoice END) AS OptionOne,
+        MAX(CASE WHEN ChoiceNumber = 2 THEN OptionChoice END) AS OptionTwo,
+        MAX(CASE WHEN ChoiceNumber = 3 THEN OptionChoice END) AS OptionThree,
+        MAX(CASE WHEN ChoiceNumber = 4 THEN OptionChoice END) AS OptionFour
+    FROM 
+        QuestionOptions
+    GROUP BY 
+        QuestionText, QuestionID
+    ORDER BY 
+        QuestionText;
+END;
