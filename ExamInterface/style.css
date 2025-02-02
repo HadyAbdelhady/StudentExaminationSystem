@@ -141,9 +141,9 @@ input[type="radio"]:checked {
 
 /* Side Panels */
 .side-panel {
-    position: fixed;
+    position: absolute;
     top: 20px;
-    width: 200px;
+    /* width: 200px; */
     padding: 1rem;
     background: white;
     border-radius: 15px;
@@ -152,6 +152,7 @@ input[type="radio"]:checked {
 }
 
 #timerPanel {
+    position: fixed;
     left: 20px;
 }
 
