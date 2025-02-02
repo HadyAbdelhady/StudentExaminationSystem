@@ -49,3 +49,28 @@ textarea{
 label{
     font-weight: 600;
 }
+
+
+/* Footer Styles */
+.footer {
+    /* background-color: rgba(255, 255, 255, 0.95); */
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: #2d1744;
+    font-size: 14px;
+    padding: 20px 0;
+    margin-top: auto; /* Ensures footer sticks to the bottom */
+}
+
+.footer a {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #4c51bf;
+}
+
+.footer .list-inline-item:not(:last-child) {
+    margin-right: 15px;
+}
