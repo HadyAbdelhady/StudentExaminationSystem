@@ -361,6 +361,7 @@ BEGIN
     )
     
     SELECT 
+        q.QuestionID,
         q.QuestionText,
         MAX(CASE WHEN q.ChoiceNum = 1 THEN q.Choice END) AS OptionOne,
         MAX(CASE WHEN q.ChoiceNum = 2 THEN q.Choice END) AS OptionTwo,
@@ -375,3 +376,47 @@ BEGIN
     GROUP BY q.QuestionID, q.QuestionText, q.ModelAnswer, q.QuestionType
     ORDER BY q.QuestionID;
 END;
+
+GO
+
+
+CREATE OR ALTER PROCEDURE GetQuestionDetailsWithOptionsInCourse
+@courseId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    WITH QuestionOptions AS (
+        SELECT 
+            QB.ID AS QuestionID,
+            QB.QuestionText,
+            QB.Type AS QuestionType,
+            QB.CorrectChoice AS ModelAnswer,
+            QC.Choice,
+            ROW_NUMBER() OVER (
+                PARTITION BY QB.ID 
+                ORDER BY QC.Choice
+            ) AS ChoiceNum
+        FROM QuestionBank QB
+        LEFT JOIN QuestionBank_Choice QC 
+            ON QB.ID = QC.QuestionID
+        WHERE QB.isDeleted = 0 AND QB.courseID = @courseId
+    )
+    
+    SELECT 
+        q.QuestionID,
+        q.QuestionText,
+        MAX(CASE WHEN q.ChoiceNum = 1 THEN q.Choice END) AS OptionOne,
+        MAX(CASE WHEN q.ChoiceNum = 2 THEN q.Choice END) AS OptionTwo,
+        CASE WHEN q.QuestionType = 'MultipleChoice' 
+            THEN MAX(CASE WHEN q.ChoiceNum = 3 THEN q.Choice END) 
+            ELSE NULL END AS OptionThree,
+        CASE WHEN q.QuestionType = 'MultipleChoice' 
+            THEN MAX(CASE WHEN q.ChoiceNum = 4 THEN q.Choice END) 
+            ELSE NULL END AS OptionFour,
+        q.ModelAnswer
+    FROM QuestionOptions q
+    GROUP BY q.QuestionID, q.QuestionText, q.ModelAnswer, q.QuestionType
+    ORDER BY q.QuestionID;
+END;
+EXEC GetQuestionDetailsWithOptionsInCourse @courseId = 1;
