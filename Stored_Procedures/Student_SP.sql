@@ -199,52 +199,51 @@ BEGIN
 
     BEGIN TRY
         -- Check if the student exists and is not deleted
-        Declare @oldTrackID INT = 0;
-        SELECT @oldTrackID = (SELECT trackId FROM STUDENT WHERE ID = @StudentID AND isDeleted = 0);
-        if (@oldTrackID = 0)
+        DECLARE @oldTrackID INT;
+        SELECT @oldTrackID = trackId 
+        FROM STUDENT 
+        WHERE ID = @StudentID AND isDeleted = 0;
+
+        IF @oldTrackID IS NULL
         BEGIN
-            RAISERROR('Track with ID %d does not exist or is deleted.', 16, 1, @StudentID);
+            RAISERROR('Student with ID %d does not exist or is deleted.', 16, 1, @StudentID);
             RETURN;
         END;
 
-        -- Check if the track matches the department
+        -- Validate Branch, Department, and Track combination
+        IF NOT EXISTS (
+            SELECT 1
+            FROM Branch_Department_Track bdt
+            WHERE bdt.trackID = @trackID
+                AND bdt.departmentID = @departmentID
+                AND bdt.branchID = @branchID
+                AND bdt.isDeleted = 0
+        )
+        BEGIN
+            RAISERROR('Invalid combination of Branch, Department, or Track. Ensure all IDs are valid and active.', 16, 1);
+            RETURN;
+        END;
+
+        -- Update courses if track has changed
         IF @oldTrackID <> @trackID
         BEGIN
-            RAISERROR('Invalid department or track ... make sure that the track match the department', 16, 1);
-            RETURN;
-        END
-        -- Validation logic for Branch, Department, and Track
-            IF NOT EXISTS (
-                SELECT 1
-                FROM Branch_Department_Track bdt
-                WHERE bdt.trackID = @trackID
-                  AND bdt.departmentID = @departmentID
-                  AND bdt.branchID = @branchID
-                  AND bdt.isDeleted = 0
-            )
-            BEGIN
-                RAISERROR('Invalid combination of Branch, Department, or Track. Ensure all IDs are valid and active.', 16, 1);
-                RETURN;
-            END;
- 
-        IF @oldTrackID NOT IN (SELECT @trackID)
-        BEGIN
+            -- Remove existing courses for the student
             DELETE FROM Course_Student_Instructor
             WHERE studentID = @StudentID;
-            
-            -- Enroll the student in all courses associated with the track
+
+            -- Enroll in courses for the new track
             INSERT INTO Course_Student_Instructor (courseID, studentID, startDate)
             SELECT 
                 tc.courseID,
-                @studentID,
-                GETDATE() 
+                @StudentID,
+                GETDATE()
             FROM 
                 Track_Course tc
             WHERE 
-            tc.trackID = @trackID;
-
+                tc.trackID = @trackID;
         END
-        -- Update the student information
+
+        -- Update student details
         UPDATE Student
         SET 
             firstName = @firstName,
@@ -261,15 +260,11 @@ BEGIN
         WHERE 
             ID = @StudentID;
 
-            
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        -- Rollback the transaction if an error occurs
         IF @@TRANCOUNT > 0
-        BEGIN
             ROLLBACK TRANSACTION;
-        END;
 
         DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
         SELECT 
