@@ -199,10 +199,11 @@ BEGIN
 
     BEGIN TRY
         -- Check if the student exists and is not deleted
-        Declare @oldTrackID INT;
+        Declare @oldTrackID INT = 0;
         SELECT @oldTrackID = (SELECT trackId FROM STUDENT WHERE ID = @StudentID AND isDeleted = 0);
+        if (@oldTrackID = 0)
         BEGIN
-            RAISERROR('Student with ID %d does not exist or is deleted.', 16, 1, @StudentID);
+            RAISERROR('Track with ID %d does not exist or is deleted.', 16, 1, @StudentID);
             RETURN;
         END;
 
