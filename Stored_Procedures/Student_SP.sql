@@ -367,13 +367,19 @@ BEGIN
 
         -- Retrieve the courses the student is enrolled in
         SELECT 
-            c.ID,
-            c.Name,
-            CSI.startDate
+            c.Name as [CourseName],
+            Inst.firstName,
+            Inst.lastName,
+            CSI.startDate,
+            CSI.courseId,
+            CSI.StudentId,
+            CSI.instructorId
         FROM 
             Course_Student_Instructor CSI
         INNER JOIN 
             Course c ON CSI.courseID = c.ID
+        INNER JOIN
+            Instructor Inst ON Inst.Id = CSI.instructorId
         WHERE 
             CSI.studentID = @studentID
             AND c.isDeleted = 0;
@@ -389,8 +395,45 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
-GO
 
+GO
+CREATE OR ALTER PROCEDURE GetCoursesNotEnrolledByStudent
+    @studentID INT
+AS
+BEGIN
+    BEGIN TRY
+        -- Check if the student exists and is not deleted
+        IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @studentID AND isDeleted = 0)
+        BEGIN
+            RAISERROR('Student with ID %d does not exist or is deleted.', 16, 1, @studentID);
+            RETURN;
+        END;
+
+        -- Retrieve courses not enrolled by the student but available in their track
+        SELECT 
+            C.Name AS [CourseName],
+            C.ID AS [CourseId]
+        FROM 
+            Track_Course TC
+            INNER JOIN Student S ON S.trackID = TC.trackID
+            INNER JOIN Course C ON TC.courseID = C.ID
+        WHERE 
+            S.ID = @studentID
+            AND C.isDeleted = 0 
+            AND C.ID NOT IN (
+                SELECT CourseId 
+                FROM Course_Student_Instructor 
+                WHERE studentId = @studentID
+            );
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+        THROW;
+    END CATCH
+END;
+
+
+GO
 CREATE OR ALTER PROCEDURE DeleteCourseFromStudent
     @courseID INT,
     @studentID INT
