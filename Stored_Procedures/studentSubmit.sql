@@ -68,6 +68,7 @@ BEGIN
                 SET @SubmissionID = @existingSubmissionID; -- Return existing submission ID
             END
 
+                SELECT @SubmissionID
             COMMIT TRANSACTION;
             RETURN; -- Exit after handling duplicate
         END
