@@ -1,6 +1,7 @@
 body {
-    background-color: #f0f4f8;
-    font-family: 'lora', serif;
+    background-color: #F0ECE5; /* Light background */
+    font-family: 'Lora', serif;
+    color: #161A30; /* Dark text for contrast */
 }
 
 input[type="radio"] {
@@ -25,13 +26,13 @@ label {
     border: none;
     border-radius: 12px;
     margin-bottom: 1.5rem;
-    background-color: #f8f9fa;
+    background-color: #F8F9FA; /* Light gray background */
     transition: transform 0.2s ease;
 }
 
 .card:hover {
     transform: translateY(-3px);
-    border: 2px solid rgba(76, 82, 191, 0.699);
+    border: 2px solid rgba(49, 48, 77, 0.7); /* Dark blue border on hover */
 }
 
 .card-body {
@@ -39,52 +40,51 @@ label {
 }
 
 h2 {
-    color: #2d3748;
+    color: #31304D; /* Dark blue for headings */
     font-weight: 700;
     margin-bottom: 2rem;
-    border-bottom: 3px solid #4c51bf;
+    border-bottom: 3px solid #4c51bf; /* Accent color for underline */
     padding-bottom: 1rem;
     display: inline-block;
 }
 
 h5 {
-    color: #2d3748;
+    color: #31304D; /* Dark blue for subheadings */
     font-weight: 600;
     margin-bottom: 1rem;
 }
 
 p {
-    color: #4a5568;
+    color: #4A5568; /* Gray for paragraph text */
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
 }
 
-
-
 label {
-    color: #4a5568;
+    color: #4A5568; /* Gray for labels */
     font-size: 1rem;
     cursor: pointer;
     transition: color 0.2s ease;
 }
 
 label:hover {
-    color: #2d3748;
+    color: #31304D; /* Dark blue on hover */
 }
 
 .btn-success {
-    background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+    background: linear-gradient(135deg, #31304D 0%, #161A30 100%); /* Dark blue gradient */
     border: none;
     padding: 0.8rem 2rem;
     font-size: 1.1rem;
     border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+    box-shadow: 0 4px 15px rgba(49, 48, 77, 0.3); /* Dark blue shadow */
     transition: all 0.3s ease;
+    color: #F0ECE5; /* Light text for buttons */
 }
 
 .btn-success:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+    box-shadow: 0 6px 20px rgba(49, 48, 77, 0.4); /* Darker shadow on hover */
 }
 
 /* Custom Radio Button Styling */
@@ -100,50 +100,47 @@ label:hover {
     gap: 0.5rem;
 }
 
-/* Keep your existing radio button styles */
 input[type="radio"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     width: 20px;
     height: 20px;
-    border: 2px solid #cbd5e0;
+    border: 2px solid #B6BBC4; /* Stone gray border */
     border-radius: 50%;
     cursor: pointer;
 }
 
 input[type="radio"]:checked {
-    border-color: #4c51bf;
-    background-color: #4c51bf;
+    border-color: #31304D; /* Dark blue border when checked */
+    background-color: #31304D; /* Dark blue background when checked */
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
 }
 
 /* Answer Options Layout */
-.card-body>div {
+.card-body > div {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
 }
 
-/* Timer Style (you can add this later) */
+/* Timer Style */
 .timer {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: #2d3748;
-    color: white;
+    background: #31304D; /* Dark blue background */
+    color: #F0ECE5; /* Light text */
     padding: 0.8rem 1.5rem;
     border-radius: 30px;
     font-weight: 600;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-
 /* Side Panels */
 .side-panel {
     position: absolute;
     top: 20px;
-    /* width: 200px; */
     padding: 1rem;
     background: white;
     border-radius: 15px;
@@ -169,12 +166,12 @@ input[type="radio"]:checked {
 }
 
 .detail-label {
-    color: #4a5568;
+    color: #4A5568; /* Gray for labels */
     font-weight: 500;
 }
 
 .detail-value {
-    color: #2d3748;
+    color: #31304D; /* Dark blue for values */
     font-weight: 600;
     text-align: right;
 }
@@ -182,7 +179,7 @@ input[type="radio"]:checked {
 #countdown {
     font-size: 2rem;
     font-weight: 700;
-    color: #4c51bf;
+    color: #31304D; /* Dark blue for countdown */
     text-align: center;
     margin: 1rem 0;
 }

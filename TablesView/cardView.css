@@ -1,17 +1,8 @@
-/* .card-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-    min-height: 100vh;
-    padding: 1rem;
-  } */
 
   .card {
     border: none;
     border-radius: 12px;
-    /* background-color: #f8f9fa; */
-    background: linear-gradient(135deg, #d3dbff 0%,  #40449b 100%);
+    background: linear-gradient(135deg, #31304D 0%,  #161A30 100%);
     color: white;
     transition: transform 0.2s ease;
     /* margin: 1rem; */
@@ -28,6 +19,18 @@
 
   .card-body {
     padding: 1.5rem;
+  }
+
+  .card-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    z-index: 1000;
+    margin: 0 !important;
+    display: none;
   }
 
   /* Custom Radio Button Styling */
@@ -49,10 +52,8 @@
   .radio-option.selected.correct {
     border-radius: 0.5rem;
     padding: 0.2rem;
-    border: 2px solid rgba(67, 168, 8, 0.644);
+    border: 3px solid rgba(94, 255, 0, 0.644);
   }
-
-  
 
   /* Keep your existing radio button styles */
   input[type="radio"] {

@@ -1,5 +1,9 @@
+/* #161A30
+#31304D
+#B6BBC4
+#F0ECE5 */
 body {
-    background: linear-gradient(135deg, #667eea 0%, #2d1744 100%);
+    background: #F0ECE5;
     min-height: 100vh;
     padding: 20px;
     font-family: "lora", serif;
@@ -25,12 +29,12 @@ body {
 }
 
 .form-control:focus {
-    border-color: #667eea;
+    border-color: #31304D;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+    background: #161A30;
     border: none;
     padding: 0.8rem 1.5rem;
     transition: all 0.3s ease;
@@ -40,6 +44,7 @@ body {
 
 .btn-primary:hover {
     transform: translateY(-2px);
+    background: #31304D;
     box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
 }
 
@@ -55,7 +60,7 @@ label{
 /* Footer Styles */
 .footer {
     /* background-color: rgba(255, 255, 255, 0.95); */
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #161A30;
     color: #2d1744;
     font-size: 14px;
     padding: 20px 0;
@@ -63,7 +68,7 @@ label{
 }
 
 .footer a {
-    color: #667eea;
+    color: #161A30;
     text-decoration: none;
     transition: color 0.3s ease;
 }

@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(135deg, #667eea 0%, #2d1744 100%);
+    background: #F0ECE5;
     min-height: 100vh;
     padding: 20px;
     font-family: "lora", serif;
@@ -8,25 +8,27 @@ body {
 .card {
     border: none;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: white;
     transition: all 0.3s ease;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     position: relative;
 }
-.card-body.instructor{
+
+.card-body.instructor {
     display: flex;
     max-height: 35vh;
     position: relative;
-    flex-direction: column; 
+    flex-direction: column;
 }
+
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 40px #161A30;
 }
 
 .btn-primary {
-    background: #8e8e91;
-    /* border:solid 1px #667eea; */
+    background: #31304D;
+    border: solid 1px #161A30;
     padding: 0.8rem 1.5rem;
     transition: all 0.3s ease;
     font-weight: 600;
@@ -34,9 +36,14 @@ body {
     position: relative;
     overflow: hidden;
 }
+.form-control:focus {
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    margin-bottom: .5rem;
+}
 
 .search-btn-primary {
-    background:  #4c51bf;
+    background: #31304D;
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -47,11 +54,18 @@ body {
     overflow: hidden;
 }
 
+.search-btn-primary:hover {
+    transform: translateY(-2px);
+    background: #161A30;
+    color: white;
+    box-shadow: 0 4px 15px #31304D;
+}
+
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    background:  #4c51bf;
-    box-shadow: 0 4px 15px #4c51bf;
+    background: #161A30;
+    box-shadow: 0 4px 15px #31304D;
 }
 
 .btn-danger {
@@ -61,11 +75,18 @@ body {
     font-weight: 600;
     font-size: 15px;
     position: relative;
-    overflow: hidden;}
+    overflow: hidden;
+}
 
 .btn-success {
-    background:  #4c51bf;
+    background: #31304D;
     font-size: 15px;
+}
+
+.btn-success:hover {
+    background: #161A30;
+    color: white;
+    box-shadow: 0 4px 15px #31304D;
 }
 
 .course-card {
@@ -74,28 +95,29 @@ body {
 }
 
 .course-card h4 {
-    color: #4c51bf;
+    color: #31304D;
     border-bottom: 2px solid #e2e8f0;
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
 }
 
-.course-assigned{
+.course-assigned {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
 }
 
 .course-assigned .row {
-    width: 100%; 
-    justify-content: center; 
+    width: 100%;
+    justify-content: center;
 }
 
-.available-course button{
+.available-course button {
     width: 100%;
 
 }
+
 .available-courses {
     display: flex;
     max-height: 35vh;
@@ -116,12 +138,12 @@ body {
 
 .available-courses:before {
     top: 0;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.95) 10%, transparent);
+    background: #F0ECE5;
 }
 
 .available-courses:after {
     bottom: 0;
-    background: linear-gradient(to top, rgba(255,255,255,0.95) 10%, transparent);
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 10%, transparent);
 }
 
 .available-course {
@@ -129,19 +151,21 @@ body {
 }
 
 .available-course:hover {
+    color: #161A30;
     transform: translateX(5px);
 }
 
 .student-count {
-    background:  #4c51bf;
+    background: #31304D;
     color: rgb(243, 236, 236);
     padding: 2px 8px;
-    border-radius: 15px;
+    border-radius: 10px;
     font-size: 0.9rem;
 }
 
-h1, h4 {
-    color: white;
+h1,
+h4 {
+    color: #161A30;
     font-weight: 600;
 }
 
@@ -158,14 +182,14 @@ h1, h4 {
 }
 
 .btn-filter {
-    background: rgba(255,255,255,0.2) !important;
+    background: #161A30 !important;
     border-radius: 20px !important;
     padding: 0.5rem 1.2rem !important;
     transition: all 0.2s ease;
 }
 
 .btn-filter.active {
-    background: #667eea !important;
+    background: #161A30 !important;
     color: white !important;
 }
 
@@ -183,7 +207,7 @@ h1, h4 {
 
 .btn-primary:focus,
 .card:focus-within {
-    outline: 3px solid rgba(102, 126, 234, 0.5);
+    outline: 3px solid #161A30;
     outline-offset: 2px;
 }
 
@@ -197,18 +221,15 @@ h1, h4 {
 }
 
 .available-courses::-webkit-scrollbar-thumb {
-    background: #667eea;
+    background: #161A30;
     border-radius: 10px;
 }
 
-@media(max-width:950px) or (max-height:620px)
-{
-    .card-body.instructor{
+@media(max-width:950px) or (max-height:620px) {
+    .card-body.instructor {
         overflow-y: auto;
-    }  
+    }
 }
-
-
 
 .card-body.instructor::-webkit-scrollbar {
     width: 8px;
@@ -218,8 +239,9 @@ h1, h4 {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
+
 .card-body.instructor::-webkit-scrollbar-thumb {
-    background: #667eea;
+    background: #161A30;
     border-radius: 10px;
 }
 
@@ -228,14 +250,15 @@ h1, h4 {
 .footer {
     /* background-color: rgba(255, 255, 255, 0.95); */
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    color: #2d1744;
+    color: #161A30;
     font-size: 14px;
     padding: 20px 0;
-    margin-top: auto; /* Ensures footer sticks to the bottom */
+    margin-top: auto;
+    /* Ensures footer sticks to the bottom */
 }
 
 .footer a {
-    color: #667eea;
+    color: #161A30;
     text-decoration: none;
     transition: color 0.3s ease;
 }

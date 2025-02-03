@@ -1,163 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>insertQuestion</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>insertQuestion</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&display=swap" rel="stylesheet">
 
-    <style></style>
-  </head>
+  <link rel="stylesheet" href="style.css" />
 
-  <body>
-    <div class="card-container">
-      <div class="card">
-        <div class="card-body">
-          <h1 class="card-title text-center">Insert Question</h1>
+  <style></style>
+</head>
 
-          <form class="form-group">
-            <div class="radio-group-tf questionType" style="display: flex;">
+<body>
+  <div class="card-container">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title text-center">Insert Question</h1>
+
+        <form class="form-group">
+          <div class="radio-group-tf questionType" style="display: flex;">
+            <div class="radio-option">
+              <input type="radio" id="tfToggle" class="mr-1" name="questionType" />
+              <label for="tfToggle" class="col-md-4 mb-0 ">True/False</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="mcqToggle" class="mr-1" name="questionType" />
+              <label for="mcqToggle" class="col-md-3 mb-0 text-nowrap">MCQ</label>
+            </div>
+          </div>
+
+          <label for="question">Question</label>
+          <textarea class="form-control" id="question" name="question" required></textarea>
+
+          <!-- Multiple Choice Answers -->
+
+          <div class="radio-group" id="multipleChoice">
+            <div class="radio-column">
               <div class="radio-option">
-                <input
-                  type="radio"
-                  id="tfToggle"
-                  class="mr-1"
-                  name="questionType"
-                />
-               <label for="tfToggle" class="col-md-3 mb-0 "
-                  >True/False</label
-                >
+                <input type="radio" id="correctAnswer1" name="correctAnswer" />
+                <textarea class="form-control answer-input" id="a1" name="a1" placeholder="Answer 1"
+                  required></textarea>
               </div>
               <div class="radio-option">
-                <input
-                  type="radio"
-                  id="mcqToggle"
-                  class="mr-1"
-                  name="questionType"
-                />
-                <label for="mcqToggle" class="col-md-3 mb-0 text-nowrap"
-                  >MCQ</label
-                >
+                <input type="radio" id="correctAnswer2" name="correctAnswer" />
+                <textarea class="form-control answer-input" id="a2" name="a2" placeholder="Answer 2"
+                  required></textarea>
               </div>
             </div>
 
-            <label for="question">Question</label>
-            <textarea
-              class="form-control"
-              id="question"
-              name="question"
-              required
-            ></textarea>
-
-            <!-- Multiple Choice Answers -->
-
-            <div class="radio-group" id="multipleChoice">
-              <div class="radio-column">
-                <div class="radio-option">
-                  <input
-                    type="radio"
-                    id="correctAnswer1"
-                    name="correctAnswer"
-                  />
-                  <textarea
-                    class="form-control answer-input"
-                    id="a1"
-                    name="a1"
-                    placeholder="Answer 1"
-                    required
-                  ></textarea>
-                </div>
-                <div class="radio-option">
-                  <input
-                    type="radio"
-                    id="correctAnswer2"
-                    name="correctAnswer"
-                  />
-                  <textarea
-                    class="form-control answer-input"
-                    id="a2"
-                    name="a2"
-                    placeholder="Answer 2"
-                    required
-                  ></textarea>
-                </div>
-              </div>
-
-              <div class="radio-column">
-                <div class="radio-option">
-                  <input
-                    type="radio"
-                    id="correctAnswer3"
-                    name="correctAnswer"
-                  />
-                  <textarea
-                    class="form-control answer-input"
-                    id="a3"
-                    name="a3"
-                    placeholder="Answer 3"
-                    required
-                  ></textarea>
-                </div>
-                <div class="radio-option">
-                  <input
-                    type="radio"
-                    id="correctAnswer4"
-                    name="correctAnswer"
-                  />
-                  <textarea
-                    class="form-control answer-input"
-                    id="a4"
-                    name="a4"
-                    placeholder="Answer 4"
-                    required
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-            <!-- True/False Answers -->
-            <div class="radio-group-tf" id="trueFalse">
+            <div class="radio-column">
               <div class="radio-option">
-                <input type="radio" id="trueAnswer" name="correctAnswer" />
-                <label for="trueAnswer">True</label>
+                <input type="radio" id="correctAnswer3" name="correctAnswer" />
+                <textarea class="form-control answer-input" id="a3" name="a3" placeholder="Answer 3"
+                  required></textarea>
               </div>
               <div class="radio-option">
-                <input type="radio" id="falseAnswer" name="correctAnswer" />
-                <label for="falseAnswer">False</label>
+                <input type="radio" id="correctAnswer4" name="correctAnswer" />
+                <textarea class="form-control answer-input" id="a4" name="a4" placeholder="Answer 4"
+                  required></textarea>
               </div>
             </div>
+          </div>
+          <!-- True/False Answers -->
+          <div class="radio-group-tf" id="trueFalse">
+            <div class="radio-option">
+              <input type="radio" id="trueAnswer" name="correctAnswer" />
+              <label for="trueAnswer">True</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="falseAnswer" name="correctAnswer" />
+              <label for="falseAnswer">False</label>
+            </div>
+          </div>
 
-            <button type="submit" class="btn">Submit Question</button>
-          </form>
+          <button type="submit" class="btn">Submit Question</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer mt-auto py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0">&copy; 2023 Elmanshar. All rights reserved. Support Contact : Zero Etnashr.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <ul class="list-inline mb-0">
+            <li class="list-inline-item"><a href="#" class="text-decoration-none">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#" class="text-decoration-none">Terms of Service</a></li>
+            <li class="list-inline-item"><a href="#" class="text-decoration-none">Contact Us</a></li>
+          </ul>
         </div>
       </div>
     </div>
-
-    <footer class="footer mt-auto py-4">
-      <div class="container">
-          <div class="row">
-              <div class="col-md-6 text-center text-md-start" style="color: aliceblue;">
-                  <p class="mb-0">&copy; 2023 Elmanshar. All rights reserved. Support Contact : Zero Etnashr.</p>
-              </div>
-              <div class="col-md-6 text-center text-md-end">
-                  <ul class="list-inline mb-0">
-                      <li class="list-inline-item"><a href="#" class="text-decoration-none">Privacy Policy</a></li>
-                      <li class="list-inline-item"><a href="#" class="text-decoration-none">Terms of Service</a></li>
-                      <li class="list-inline-item"><a href="#" class="text-decoration-none">Contact Us</a></li>
-                  </ul>
-              </div>
-          </div>
-      </div>
   </footer>
 
 
-    <script src="script.js"></script>
-  </body>
+  <script src="script.js"></script>
+</body>
+
 </html>

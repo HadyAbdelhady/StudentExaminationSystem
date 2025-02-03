@@ -1,5 +1,6 @@
+
 body {
-    background: linear-gradient(135deg, #667eea 0%, #2d1744 100%);
+    background: #F0ECE5;
     min-height: 100vh;
     padding: 20px;
     font-family: "lora", serif;
@@ -8,7 +9,7 @@ body {
 .card {
     border: none;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color:white;
     transition: all 0.3s ease;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
@@ -19,17 +20,17 @@ body {
 }
 
 .form-control {
-    border: 2px solid #e2e8f0;
+    border: 2px solid #F0ECE5;
     transition: all 0.3s ease;
 }
 
 .form-control:focus {
-    border-color: #667eea;
+    border-color: #31304D;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+    background: #161A30;
     border: none;
     padding: 0.8rem 1.5rem;
     transition: all 0.3s ease;
@@ -39,7 +40,8 @@ body {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+    background: #31304D;
+    box-shadow: #31304D;
 }
 
 label{
@@ -49,7 +51,6 @@ label{
 
 /* Footer Styles */
 .footer {
-    /* background-color: rgba(255, 255, 255, 0.95); */
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     color: #2d1744;
     font-size: 14px;
@@ -58,7 +59,7 @@ label{
 }
 
 .footer a {
-    color: #667eea;
+    color: #31304D;
     text-decoration: none;
     transition: color 0.3s ease;
 }

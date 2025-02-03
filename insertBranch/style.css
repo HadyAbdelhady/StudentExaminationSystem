@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(135deg, #667eea 0%, #2d1744 100%);
+    background: #F0ECE5;
     min-height: 100vh;
     padding: 20px;
     font-family: "lora", serif;
@@ -19,17 +19,17 @@ body {
 }
 
 .form-control {
-    border: 2px solid #e2e8f0;
+    /* border: 2px solid #161A30; */
     transition: all 0.3s ease;
 }
 
 .form-control:focus {
-    border-color: #667eea;
+    border-color: #31304D;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+    background: linear-gradient(135deg, #161A30 0%, #31304D 100%);
     border: none;
     padding: 0.8rem 1.5rem;
     transition: all 0.3s ease;
@@ -39,7 +39,7 @@ body {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+    box-shadow: 0 4px 15px #31304D;
 }
 
 label{
@@ -62,7 +62,7 @@ textarea{
 }
 
 .footer a {
-    color: #667eea;
+    color: #31304D;
     text-decoration: none;
     transition: color 0.3s ease;
 }
