@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Examination_System.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Examination_System.Data;
 
-public partial class StudentExaminationSystemContext : DbContext
+public partial class StudentExaminationSystemContext : IdentityDbContext<ApplicationUser>
 {
     public StudentExaminationSystemContext()
     {
@@ -56,6 +57,8 @@ public partial class StudentExaminationSystemContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder); // Required for Identity configurations
+
         modelBuilder.Entity<Branch>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Branch__3214EC27006B4EAE");

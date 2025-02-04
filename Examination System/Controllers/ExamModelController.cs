@@ -24,8 +24,8 @@ namespace Examination_System.Controllers
                 return View("Index", examModels);
             } 
             
-                var examModelData = _context.Database.SqlQuery<GetExamModel>($"GetExamModel @examModelId = {id};").ToList()[0];
-                var examModelQuestions = _context.Database.SqlQuery<GetQuestionsWithOptions>($"GetExamModelQuestionsWithOptions @examModelId = {id};").ToList();
+                var examModelData = _context.Database.SqlQuery<GetExamModel>($"EXEC GetExamModel @examModelId = {id};").ToList()[0];
+                var examModelQuestions = _context.Database.SqlQuery<GetQuestionsWithOptions>($"EXEC GetExamModelQuestionsWithOptionsWithAnswer @examModelId = {id};").ToList();
                 var examModelDetails = new ExamModelDetailsViewModel();
                 examModelDetails.examModelQuestions = examModelQuestions;
                 examModelDetails.examModelData = examModelData;

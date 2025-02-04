@@ -2,6 +2,7 @@
 using Examination_System.DTOs;
 using Examination_System.Models;
 using Examination_System.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,9 @@ namespace Examination_System.Controllers
         {
             _context = context;
         }
+
+        //OFF
+        [Authorize(Roles =  "Admin, Instructor")]
         public IActionResult Index(int? id)
         {
             var StudentSubmits = _context.Database.SqlQuery<StudentSubmitViewModel>($"EXEC getAllStudentSubmitions;").ToList();
@@ -31,6 +35,8 @@ namespace Examination_System.Controllers
             ViewBag.Grade = examResult.Grade;
             return View("Details", submitionDetails);
         }
+
+
 
         [Route("StudentSubmit/Insert/{id}/{studentId}")]
         public IActionResult Insert(int id, int studentId = 10)
@@ -117,6 +123,7 @@ namespace Examination_System.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Instructor")]
         public IActionResult StudentCourse(int courseId, int studentId)
         {
             var StudentSubmits = _context.Database.SqlQuery<StudentSubmitViewModel>($"EXEC getStudentSubmitionPerStudentInCourse @studentId = {studentId}, @courseId = {courseId};").ToList();

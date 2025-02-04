@@ -2,7 +2,7 @@
 {
     public class GetExamModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public DateOnly Date { get; set; }
 

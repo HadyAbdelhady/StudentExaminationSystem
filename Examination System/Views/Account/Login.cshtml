@@ -1,0 +1,153 @@
+﻿@model Lec1_P2.ViewModel.LoginUserViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+@section Style {
+    <style>
+
+
+        body {
+            background: #31304D;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "lora", serif;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .user-type-tab {
+            top: 0;
+            right: 0;
+            border-radius: 0 15px 0 15px;
+        }
+
+        .auth-type-tab {
+            bottom: 0;
+            left: 0;
+            border-radius: 15px 0 15px 0;
+        }
+
+
+
+        /* Form Elements */
+        .login-label {
+            font-weight: 700;
+            color: #31304D;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: 700;
+            color: #31304D;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.675rem 1rem;
+			color: black !important;
+            background-color: #31304D;
+            border: 2px solid #B6BBC4;
+            background: #aeafaf7e;
+        }
+
+        .login-btn {
+            background: #161A30;
+            border: none;
+            padding: 12px 0;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+        }
+
+            .login-btn:hover {
+                background: #31304D;
+            }
+
+        .password-confirm {
+            display: none;
+        }
+
+        .signup-mode .password-confirm {
+            display: flex !important;
+        }
+    </style>
+}
+
+<div class="row card-container justify-content-center">
+    <div class="text-white text-center mb-4 col-md-8 col-lg-10 col-xl-12">
+        <h1 class="brand-title" style="color:  #161A30;">Welcome to Elmanshar</h1>
+        <p class="brand-subtitle" style="color:  #161A30;">Online Examination System</p>
+    </div>
+    <div class="login-card col-lg-4 col-md-6">
+
+        <!-- Login Label -->
+        <div class="login-label">Login</div>
+        <!-- Login Form -->
+        <form asp-action="SaveLogin">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <!-- Username -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" id="username" placeholder="Enter your Email" required>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" class="form-control" id="password" placeholder="Enter Password" required>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Confirm Password (hidden by default) -->
+            <div class="row mb-4 password-confirm">
+                <div class="col-12">
+                    <label asp-for="Password" class="form-label">Confirm Password</label>
+                    <input asp-for="Password" class="form-control" id="confirm-password">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="row">
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn login-btn text-white w-100 rounded-pill">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </form>
+        <a asp-action="Register">Register</a>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

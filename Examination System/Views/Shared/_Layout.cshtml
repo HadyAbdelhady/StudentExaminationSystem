@@ -23,13 +23,15 @@
 
 
 </head>
-<body>
+
+@if(User.Identity.IsAuthenticated)
+{
     <header>
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent">
+                data-bs-target="#navbarSupportedContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -37,50 +39,74 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Home</a>
                         </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Instructor")){
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Branch" >Branches</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Department">Departments </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Course">Courses </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="StudentProfile" asp-route-id="@User.FindFirst("StudentId").Value">Profile  </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Courses" asp-controller="StudentProfile" asp-route-id="@User.FindFirst("StudentId").Value">Courses </a>
+                            </li>
+                        }
+
+
+
+                        @if(User.IsInRole("Instructor")){
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Instructor" asp-route-id="@User.FindFirst("InstructorId").Value" >Your Details</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Admin")){
+                            <a class="nav-link" asp-action="Index" asp-controller="Instructor" asp-route-id=" ">Instructors</a>
+                        }
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="Index" asp-controller="Branch" >Branches</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-action="Index" asp-controller="Department">Departments </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown">
-                                Courses
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Computer Science</a></li>
-                                <li><a class="dropdown-item" href="#">Mathematics</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">View All Courses</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-action="Index" asp-controller="Instructor" asp-route-id="null" asp-route-courseId="null">Instructors</a>
+                            <a class="nav-link" asp-action="Signout" asp-controller="Account">Sign out </a>
                         </li>
                     </ul>
                     <form class="d-flex align-items-center" id="searchForm">
                         <input class="form-control me-2" type="search" id="searchInput" placeholder="Search here...">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
+
                 </div>
             </div>
         </nav>
         <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h5 class="text-white mb-0">Exam Portal</h5>
+        @if (User.IsInRole("Admin") || User.IsInRole("Instructor"))
+        {
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h5 class="text-white mb-0">Exam Portal</h5>
+                </div>
+
+                <div class="sidebar-menu">
+                    <a href="#" class="sidebar-item">Dashboard</a>
+                    <a href="#" class="sidebar-item">My Exams</a>
+                    <a href="#" class="sidebar-item">Results</a>
+                    <a href="#" class="sidebar-item">Study Materials</a>
+                    <a href="#" class="sidebar-item">Settings</a>
+                    <a href="#" class="sidebar-item">Help Center</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="AssignRole" asp-controller="Role" class="sidebar-item">Assign Role</a>
+                    }
+                </div>
             </div>
-            <div class="sidebar-menu">
-                <a href="#" class="sidebar-item">Dashboard</a>
-                <a href="#" class="sidebar-item">My Exams</a>
-                <a href="#" class="sidebar-item">Results</a>
-                <a href="#" class="sidebar-item">Study Materials</a>
-                <a href="#" class="sidebar-item">Settings</a>
-                <a href="#" class="sidebar-item">Help Center</a>
-            </div>
-        </div>
+        }
     </header>
 
     <div class="main-container">
@@ -116,6 +142,16 @@
         </div>
     </footer>
 
+}
+else
+{
+    <div class="main-container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+}
+<body>
     <script src="~/js/layout.js"> </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

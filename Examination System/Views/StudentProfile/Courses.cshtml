@@ -19,7 +19,7 @@
                                     {
                                         <div class="d-flex justify-content-between gap-2">
                                             <button type="button" class="btn btn-primary flex-grow-1 col-sm-2">
-                                                <a>Take @exam.Id</a>
+                                                <a asp-action="Insert" asp-controller="StudentSubmit" asp-route-id="@course.Id" asp-route-studentId="@User.FindFirst("StudentId").Value" >Take </a>
                                             </button>
                                             <span class="text-center flex-grow-1 col-sm-4" style="font-size: .9rem;">Instructor Name : @exam.Instructor.FirstName @exam.Instructor.LastName <br> [@exam.Date] From : @exam.StartTime  To : @exam.EndTime</span>
                                         </div>

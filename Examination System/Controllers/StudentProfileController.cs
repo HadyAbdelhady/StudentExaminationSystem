@@ -1,11 +1,13 @@
 ﻿using Examination_System.Data;
 using Examination_System.Models;
 using Examination_System.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Examination_System.Controllers
 {
+    [Authorize(Roles = "Student , Admin")]
     public class StudentProfileController : Controller
     {
         private readonly StudentExaminationSystemContext _context;
