@@ -274,8 +274,7 @@ CREATE OR ALTER PROCEDURE GetStudentAnswersPerExamWithReview
     @examModelID INT
 AS
 BEGIN
-
-	IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @studentID)
+    IF NOT EXISTS (SELECT 1 FROM Student WHERE ID = @studentID)
     BEGIN
         RAISERROR('Student with ID %d not found.', 16, 1, @studentID);
         RETURN;
@@ -289,11 +288,11 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 
-            FROM StudentSubmit_Answer ssa
-            INNER JOIN StudentSubmit SS 
-                ON ssa.StudentSubmitID = SS.ID
-            WHERE SS.studentID = @studentID AND SS.examModelID = @examModelID
-        )
+        FROM StudentSubmit_Answer ssa
+        INNER JOIN StudentSubmit SS 
+            ON ssa.StudentSubmitID = SS.ID
+        WHERE SS.studentID = @studentID AND SS.examModelID = @examModelID
+    )
     BEGIN
         RAISERROR('No answers found for student with ID %d and exam model with ID %d.', 16, 1, @studentID, @examModelID);
         RETURN;
@@ -305,6 +304,10 @@ BEGIN
         ssa.studentAnswer,
         qb.correctChoice,
         EMQ.mark,
+        MAX(CASE WHEN qbcRow.rn = 1 THEN qbcRow.Choice END) AS optionone,
+        MAX(CASE WHEN qbcRow.rn = 2 THEN qbcRow.Choice END) AS optiontwo,
+        MAX(CASE WHEN qbcRow.rn = 3 THEN qbcRow.Choice END) AS optionthree,
+        MAX(CASE WHEN qbcRow.rn = 4 THEN qbcRow.Choice END) AS optionfour,
         CASE 
             WHEN ssa.studentAnswer = qb.correctChoice THEN 'Correct'
             ELSE 'Incorrect'
@@ -315,9 +318,84 @@ BEGIN
         StudentSubmit SS ON ssa.StudentSubmitID = SS.ID
     INNER JOIN 
         QuestionBank qb ON ssa.questionID = qb.ID
-    INNER JOIN ExamModel_Question EMQ
-        ON QB.ID = EMQ.questionID
+    INNER JOIN 
+        ExamModel_Question EMQ ON qb.ID = EMQ.questionID
+    INNER JOIN 
+        (SELECT questionID, Choice, ROW_NUMBER() OVER (PARTITION BY questionID ORDER BY Choice) AS rn FROM QuestionBank_Choice WHERE isDeleted = 0) qbcRow
+        ON qbcRow.questionID = qb.ID
     WHERE 
         SS.studentID = @studentID 
-        AND SS.examModelID = @examModelID;
+        AND SS.examModelID = @examModelID
+    GROUP BY 
+        ssa.questionID, qb.questionText, ssa.studentAnswer, qb.correctChoice, EMQ.mark;
+END;
+
+
+GO
+
+CREATE OR ALTER PROCEDURE getAllStudentSubmitions 
+AS 
+BEGIN
+    SELECT 
+        SS.ID AS[studentSubmitID],
+        SS.studentID,
+        St.firstName + ' ' +St.lastName as [StudentName],
+        SS.submitDate,
+        C.Name AS [CourseName],
+        EM.ID AS [ExamModelID],
+        EM.instructorID,
+        Inst.firstName + ' '    + Inst.lastName As [InstructorName]
+    FROM StudentSubmit SS 
+        INNER JOIN ExamModel EM ON EM.ID = SS.examModelId 
+        INNER JOIN Course C ON C.ID = EM.CourseID
+        INNER JOIN Instructor Inst ON Inst.ID = EM.instructorID
+        INNER JOIN Student St on SS.studentID = St.ID
+    WHERE SS.isDeleted = 0;
+END;
+
+GO
+
+CREATE OR ALTER PROCEDURE getAllStudentSubmitionsPerExam 
+@examModelId int
+AS 
+BEGIN
+    SELECT 
+        SS.ID AS[studentSubmitID],
+        SS.studentID,
+        St.firstName + ' ' +St.lastName as [StudentName],
+        SS.submitDate,
+        C.Name AS [CourseName],
+        EM.ID AS [ExamModelID],
+        EM.instructorID,
+        Inst.firstName + ' ' + Inst.lastName As [InstructorName]
+    FROM StudentSubmit SS 
+        INNER JOIN ExamModel EM ON EM.ID = SS.examModelId 
+        INNER JOIN Course C ON C.ID = EM.CourseID
+        INNER JOIN Instructor Inst ON Inst.ID = EM.instructorID
+        INNER JOIN Student St on SS.studentID = St.ID
+    WHERE SS.isDeleted = 0 AND EM.ID = @examModelId;
+END;
+
+GO
+
+CREATE OR ALTER PROCEDURE getStudentSubmitionPerStudentInCourse
+@studentID INT, 
+@courseId INT
+AS 
+BEGIN
+    SELECT 
+        SS.ID AS[studentSubmitID],
+        SS.studentID,
+        St.firstName + ' ' +St.lastName as [StudentName],
+        SS.submitDate,
+        C.Name AS [CourseName],
+        EM.ID AS [ExamModelID],
+        EM.instructorID,
+        Inst.firstName + ' '    + Inst.lastName As [InstructorName]
+    FROM StudentSubmit SS 
+        INNER JOIN ExamModel EM ON EM.ID = SS.examModelId 
+        INNER JOIN Course C ON C.ID = EM.CourseID
+        INNER JOIN Instructor Inst ON Inst.ID = EM.instructorID
+        INNER JOIN Student St on SS.studentID = St.ID
+    WHERE SS.isDeleted = 0 AND SS.studentID = @studentID AND EM.CourseID = @courseId;
 END;
