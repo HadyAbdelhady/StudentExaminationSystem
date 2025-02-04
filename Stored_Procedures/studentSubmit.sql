@@ -29,6 +29,29 @@ BEGIN
 END
 GO
 
+GO
+
+CREATE OR ALTER PROC HELPER_calcTotalExamMark
+    @examModelID INT
+WITH
+    ENCRYPTION
+AS
+BEGIN
+    DECLARE @totalMark INT;
+    SET @totalMark = 0;
+
+    -- Sum all marks of questions in the given ExamModel
+    SELECT @totalMark = ISNULL(SUM(Mark), 0)
+    FROM ExamModel_Question
+    WHERE examModelID = @examModelID;
+    
+    -- Return the total mark
+    SELECT @totalMark AS [TotalMark];
+END
+
+GO
+
+
 -- Insert Submition 
 CREATE OR ALTER PROC insertStudentSubmission
     @stdID INT,
