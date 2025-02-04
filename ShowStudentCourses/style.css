@@ -12,6 +12,8 @@ body {
     transition: all 0.3s ease;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     position: relative;
+
+    /* width: 100%; */
 }
 
 /* .card-body.instructor {
@@ -54,10 +56,25 @@ body {
 }
 
 .course-card {
-    width: 500px;
+    width: 100%;
+    /* min-width: 500px; */
     margin-bottom: 1.5rem;
+    max-height: 275px;
+    overflow-y: auto;
+}
+.course-card::-webkit-scrollbar {
+    width: 8px;
 }
 
+.course-card::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.course-card::-webkit-scrollbar-thumb {
+    background: #161A30;
+    border-radius: 10px;
+}
 .course-assigned {
     display: flex;
     justify-content: center;
@@ -74,6 +91,7 @@ body {
     color: #2d1744 !important;
     font-weight: 700 !important;
 }
+
 
 
 /* Footer Styles */
@@ -99,4 +117,19 @@ body {
 
 .footer .list-inline-item:not(:last-child) {
     margin-right: 15px;
+}
+
+@media(max-width:1200px){
+    /* .row {
+
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    } */
+
+    .card{
+
+        min-height: auto;
+        /* min-width: auto; */
+    }
 }
