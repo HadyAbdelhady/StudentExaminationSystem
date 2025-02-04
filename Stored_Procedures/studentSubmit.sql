@@ -6,13 +6,13 @@
 -- helper procedure to get the grade of the student in a certain exam
 CREATE OR ALTER PROC HELPER_calcStudentGrade
     @studentID INT,
-    @examModelID INT,
-    @calculatedGrade DECIMAL(5,2) OUTPUT
+    @examModelID INT
 WITH
     ENCRYPTION
 AS
 BEGIN
-    SET @calculatedGrade = 0.0;
+    Declare @calculatedGrade INT;
+    SET @calculatedGrade  = 0;
 
     -- Calculate the total grade by summing the marks for correct answers
     -- Filter by studentID and examModelID
@@ -24,6 +24,8 @@ BEGIN
     WHERE EMQ.correctChoice = SA.studentAnswer
         AND SS.studentID = @studentID
         AND EMQ.examModelID = @examModelID;
+    
+    SELECT @calculatedGrade AS [Grade];
 END
 GO
 
@@ -398,4 +400,29 @@ BEGIN
         INNER JOIN Instructor Inst ON Inst.ID = EM.instructorID
         INNER JOIN Student St on SS.studentID = St.ID
     WHERE SS.isDeleted = 0 AND SS.studentID = @studentID AND EM.CourseID = @courseId;
+END;
+
+GO;
+
+
+CREATE Or ALTER PROCEDURE GetStudentExamMarks 
+    @StudentID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SELECT 
+        s.StudentID AS [StudentId],
+        s.ID AS [StudentSubmitId],
+        s.examModelID,
+        SUM(CASE 
+            WHEN sa.studentAnswer = q.correctChoice THEN q.mark 
+            ELSE 0 
+        END) AS TotalMarks
+    FROM StudentSubmit s
+    JOIN StudentSubmit_Answer sa ON s.ID = sa.StudentSubmitID
+    JOIN ExamModel_Question q 
+        ON sa.examModelID = q.examModelID AND sa.questionID = q.questionID
+    WHERE s.StudentID = @StudentID AND sa.isDeleted = 0
+    GROUP BY s.ID, s.examModelID, s.StudentID ;
 END;
