@@ -1,0 +1,416 @@
+﻿@model StudentDetailsViewModel
+
+<div class="container mt-5">
+    <h1 class="display-4 mb-4">@Model?.Student?.FirstName @Model?.Student?.LastName</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body instructor">
+                    <h4 class="card-title">Student Information</h4>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> <span id="name">@Model?.Student?.FirstName @Model?.Student?.LastName</span></p>
+                            <p><strong>SSN:</strong> <span id="ssn">@Model?.Student?.Ssn</span></p>
+                            <p>
+                                <strong>Email:</strong>
+                                <span id="email">@Model?.Student?.Email</span>
+                            </p>
+                            <p>
+                                <strong>Address:</strong>
+                                <span id="address">@Model?.Student?.Address</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Phone:</strong>
+                                <span id="phone">@Model?.Student?.Phone</span>
+                            </p>
+                            <p>
+                                <strong>Date Of Birth:</strong>
+                                <span id="dateOfBirth">@Model?.Student?.DateOfBirth</span>
+                            </p>
+                            <p><strong>Gender:</strong> <span id="gender">@if (@Model?.Student?.Gender == "M")
+                                    {
+                                        <span>Male</span>
+                                    }
+                                    else
+                                    {
+                                          <span>Female</span>
+                                    }</span></p>
+                            <p>
+                                <strong>Enrollment Date:</strong>
+                                <span id="enrollmentDate">@Model?.Student?.EnrollmentDate</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card available-courses">
+                <div class="card-body">
+                    @if (Model?.AvilableCourses?.Count > 1)
+                    {
+                        <h4 class="card-title mb-4">Available Courses</h4>
+                    }
+                    <!-- Available Courses List -->
+                    @foreach (var course in @Model.AvilableCourses)
+                    {
+                        <div class="available-courses-list">
+                            <div class="card available-course mb-3">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-3">@course.CourseName</h4>
+
+                                    <form method="post" asp-action="AddCourse">
+                                        <input type="hidden" name="studentId" value="@Model.Student.Id" />
+                                        <input type="hidden" name="courseId" value="@course.CourseId" />
+
+                                        <div class="mb-3">
+                                            <label for="instructorId-@course.CourseId" class="form-label">Select Instructor:</label>
+                                            <select class="form-select" name="instructorId" id="instructorId-@course.CourseId" required>
+                                                <option value="" disabled selected>-- Select Instructor --</option>
+                                                @foreach (var instructor in @Model?.AvilableInstructors)
+                                                {
+                                                    <option value="@instructor.Id">@instructor.FirstName @instructor.LastName</option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success align-items-center">
+                                            <i class="fas fa-plus"></i> Assign Course
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                    @if(Model.AvilableCourses.Count < 1){
+                        <!-- Empty State (hidden by default) -->
+                    <div class="empty-state" >
+                        <div class="empty-icon">📚</div>
+                        <h5>No Courses Available</h5>
+                        <p>Add new courses to get started</p>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4 col-12">
+            <div class="card-body course-assigned">
+                <h4 class="card-title mb-4">Assigned Courses</h4>
+                <div class="row g-3">
+
+                    <!-- Course Cards -->
+                    @foreach(var CSI in @Model?.CourseStudentInstructorDetails!){
+                        <div class="card course-card col-md-4 mx-2">
+                            <div class="card-body">
+                                <h4 class="card-title">@CSI.CourseName</h4>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="card-subtitle text-body-secondary" style="font-weight: 700">
+                                        <a class="links" asp-controller="Instructor" asp-action="Index" asp-route-id="@CSI.InstructorId"><span class="student-count">@CSI.firstName @CSI.lastName</span></a>
+                                    </h6>
+                                </div>
+                                <div class="d-flex flex-column gap-3">
+                                    <div class="d-flex justify-content-between gap-2">
+                                        <a type="button" asp-action="RemoveCourse" asp-route-courseId="@CSI.courseId" asp-route-studentId="@Model?.Student?.Id" class="btn btn-danger flex-grow-1 col-sm-4">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </a>
+                                        <button type="button" class="btn btn-primary flex-grow-1 col-sm-4">
+                                            <i class="fas fa-users"></i> Topics
+                                        </button>
+                                    </div>
+                                    <div class="d-flex justify-content-between gap-2">
+                                        <a type="button" class="btn btn-primary flex-grow-1 col-sm-4" asp-controller="QuestionBank" asp-action="Index" asp-route-courseId="@CSI.courseId">
+                                            <i class="fas fa-question-circle"></i> Questions
+                                        </a>
+                                        <a type="button" class="btn btn-primary flex-grow-1 col-sm-4" asp-controller="StudentSubmit" asp-action="StudentCourse" asp-route-studentId="@CSI.StudentId" asp-route-courseId="@CSI.courseId">
+                                            <i class="fas fa-file-alt"></i> Exams Submitied
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    card {
+        border: none;
+        border-radius: 15px;
+        background-color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        position: relative;
+    }
+
+    .card-body.instructor {
+        display: flex;
+        max-height: 35vh;
+        position: relative;
+        flex-direction: column;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px #161A30;
+    }
+
+    .btn-primary {
+        background: #31304D;
+        border: solid 1px #161A30;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 15px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .form-control:focus {
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+        margin-bottom: .5rem;
+    }
+
+    .search-btn-primary {
+        background: #31304D;
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .search-btn-primary:hover {
+            transform: translateY(-2px);
+            background: #161A30;
+            color: white;
+            box-shadow: 0 4px 15px #31304D;
+        }
+
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        background: #161A30;
+        box-shadow: 0 4px 15px #31304D;
+    }
+
+    .btn-danger {
+        border: none;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 15px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-success {
+        background: #31304D;
+        font-size: 15px;
+    }
+
+        .btn-success:hover {
+            background: #161A30;
+            color: white;
+            box-shadow: 0 4px 15px #31304D;
+        }
+
+    .course-card {
+        width: 500px;
+        margin-bottom: 1.5rem;
+    }
+
+        .course-card h4 {
+            color: #31304D;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+    .course-assigned {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+        .course-assigned .row {
+            width: 100%;
+            justify-content: center;
+        }
+
+    .available-course button {
+        width: 100%;
+    }
+
+    .available-courses {
+        display: flex;
+        max-height: 35vh;
+        overflow-y: auto;
+        position: relative;
+        flex-direction: column;
+    }
+
+        .available-courses:before,
+        .available-courses:after {
+            content: "";
+            position: sticky;
+            height: 30px;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .available-courses:before {
+            top: 0;
+            background: #F0ECE5;
+        }
+
+        .available-courses:after {
+            bottom: 0;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 10%, transparent);
+        }
+
+    .available-course {
+        transition: transform 0.2s ease;
+    }
+
+        .available-course:hover {
+            color: #161A30;
+            transform: translateX(5px);
+        }
+
+    .student-count {
+        background: #31304D;
+        color: rgb(243, 236, 236);
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+    }
+
+    h1,
+    h4 {
+        color: #161A30;
+        font-weight: 600;
+    }
+
+    .card-title {
+        color: #2d1744 !important;
+        font-weight: 700 !important;
+    }
+
+    .course-filters {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-filter {
+        background: #161A30 !important;
+        border-radius: 20px !important;
+        padding: 0.5rem 1.2rem !important;
+        transition: all 0.2s ease;
+    }
+
+        .btn-filter.active {
+            background: #161A30 !important;
+            color: white !important;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        opacity: 0.7;
+        color: #4a5568;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-primary:focus,
+    .card:focus-within {
+        outline: 3px solid #161A30;
+        outline-offset: 2px;
+    }
+
+    .available-courses::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .available-courses::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .available-courses::-webkit-scrollbar-thumb {
+        background: #161A30;
+        border-radius: 10px;
+    }
+
+    @@media(max - width:950px) or (max-height:620px) {
+        .card-body.instructor
+
+    {
+        overflow-y: auto;
+    }
+
+    }
+
+    .links {
+        text-decoration: none;
+    }
+    .card-body.instructor::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .card-body.instructor::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .card-body.instructor::-webkit-scrollbar-thumb {
+        background: #161A30;
+        border-radius: 10px;
+    }
+
+
+    /* Footer Styles */
+    .footer {
+        /* background-color: rgba(255, 255, 255, 0.95); */
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        color: #161A30;
+        font-size: 14px;
+        padding: 20px 0;
+        margin-top: auto;
+        /* Ensures footer sticks to the bottom */
+    }
+
+        .footer a {
+            color: #161A30;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .footer a:hover {
+                color: #4c51bf;
+            }
+
+        .footer .list-inline-item:not(:last-child) {
+            margin-right: 15px;
+        }
+</style>

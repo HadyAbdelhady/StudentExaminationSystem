@@ -1,68 +1,6 @@
-﻿@model IEnumerable<GetAllBranches>
+﻿@model List<GetAllStudents>
 
-@{
-    ViewData["Title"] = "Branch Index";
-}
-
-
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Branches</h2>
-
-    <!-- Add New Exam Button -->
-    <div class="mb-3 text-end">
-        <a asp-action="Create" class="btn btn-primary" id="addExamBtn">
-            Add New Branch
-        </a>
-    </div>
-
-    <!-- Exam Manager Table -->
-    <table id="examManagerTable" class="table table-striped table-bordered text-center">
-        <thead>
-            <tr>
-                <th class="text-center">ID</th>
-                <th class="text-center">Name</th>
-                <th class="text-center">Location</th>
-                <th class="text-center">Phone</th>
-                <th class="text-center">Date of Establishment</th>
-                <th class="text-center">Manager</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var branch in Model)
-            {
-                <tr>
-                    <td>@branch.Id</td>
-                <td>@branch.Name</td>
-                <td>@branch.Location</td>
-                <td>@branch.Phone</td>
-                <td>@branch.EstablishmentDate?.ToString("yyyy-MM-dd")</td>
-                    <td><a class="link-offset-2 link-underline link-underline-opacity-0" asp-controller="Instructor" asp-action="Index" asp-route-id="@branch.ManagerId">@branch.ManagerName</a></td>
-                <td>
-                    <a id="toggle-view" class="btn btn-success btn-sm" asp-action="Details" asp-route-id="@branch.Id">
-                        Details
-                    </a>
-                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@branch.Id">Edit</a>
-                        <!--<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@branch.Id">Delete</a>-->
-                        <form asp-action="ConfirmDelete" method="post" onsubmit="return confirm('Are you sure you want to delete this Branch?');"
-                              style=" display:inline;">
-                            <input type="hidden" name="id" value="@branch.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-
-
-
-<!--*****************************************************************-->
-
-
-@section Style{
+@section Style {
 
     <style>
         /* Base Styles */
@@ -271,20 +209,17 @@
 
         /* Responsive Design */
         @@media (max-width: 768px) {
-            .container
+            .container {
+                padding: 1rem;
+            }
 
-        {
-            padding: 1rem;
-        }
+            #examManagerTable_wrapper {
+                border-radius: 8px;
+            }
 
-        #examManagerTable_wrapper {
-            border-radius: 8px;
-        }
-
-        .dataTables_filter input {
-            width: 100%;
-        }
-
+            .dataTables_filter input {
+                width: 100%;
+            }
         }
 
         table.dataTable thead .sorting::after,
@@ -293,12 +228,54 @@
             margin: auto;
         }
 
-
     </style>
 }
 
 
+<div id="body-content">
+    <div class="container mt-2">
+        @if(ViewBag?.Message != null)
+        {
+            <h2 class="text-center mb-4">@ViewBag?.Message</h2>
+        }else {
+            <h2 class="text-center mb-4">Students</h2>
+        }
 
+        <!-- Add New Exam Button -->
+        <div class="mb-3 text-end">
+            <a asp-action="Create" asp-controller="Student" class="btn btn-primary" id="addExamBtn">
+                Add Student
+            </a>
+        </div>
+
+        <!-- Exam Manager Table -->
+        <table id="examManagerTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                   
+                    <th>name</th>
+                    <th>Email</th>
+                    <th>Enrollment Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @Model)
+                {
+                    <tr>
+                        <td>@(item?.FirstName + " " + item?.LastName)</td>
+                        <td>@item?.Email</td>
+                        <td>@item?.EnrollmentDate.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Index" asp-controller="Student" asp-route-Id="@item?.Id" id="toggle-view" class="btn btn-success btn-sm toggle-view">View</a>
+                        <a asp-action="Update" asp-controller="Student" asp-route-Id="@item?.Id" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-controller="Student" asp-route-Id="@item?.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
 @section Scripts{
     <script >
@@ -315,5 +292,4 @@
             });
         
     </script>
-
 }

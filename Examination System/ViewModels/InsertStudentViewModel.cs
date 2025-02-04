@@ -1,6 +1,8 @@
-﻿namespace Examination_System.DTOs
+﻿using Examination_System.DTOs;
+
+namespace Examination_System.ViewModels
 {
-    public class GetAllInstructors
+    public class InsertStudentViewModel
     {
         public int Id { get; set; }
 
@@ -22,5 +24,12 @@
 
         public string Address { get; set; } = null!;
 
+        public int TrackId { get; set; }
+
+        public int BranchId { get; set; }
+
+        public int DepartmentId { get; set; }
+
+        public List<GetAllAvilableTracks>? BranchDepartmentTracks { get; set;  }
     }
 }

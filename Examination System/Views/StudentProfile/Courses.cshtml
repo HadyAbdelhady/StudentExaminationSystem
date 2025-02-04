@@ -1,0 +1,153 @@
+﻿@model StudentExamsSubmitsViewModel 
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="card-body course-assigned">
+            <h4 class="card-title mb-4" style="font-size: 2.5rem">Assigned Courses</h4>
+            <div class="row g-3">
+                <!-- Course Cards -->
+                @foreach(var course in Model.Courses)
+                {
+                    <div class="card course-card col-md-4 mx-2">
+                        <div class="card-body">
+                            <h4 class="card-title d-flex justify-content-center">@course.Name</h4>
+                            <div class="d-flex justify-content-between align-items-center mb-3"></div>
+                            <div class="d-flex flex-column gap-3">
+                                @foreach(var exam in Model.Exams.DistinctBy(ex => ex.Id))
+                                {
+                                    if(exam.CourseId == course.Id)
+                                    {
+                                        <div class="d-flex justify-content-between gap-2">
+                                            <button type="button" class="btn btn-primary flex-grow-1 col-sm-2">
+                                                <a>Take @exam.Id</a>
+                                            </button>
+                                            <span class="text-center flex-grow-1 col-sm-4" style="font-size: .9rem;">Instructor Name : @exam.Instructor.FirstName @exam.Instructor.LastName <br> [@exam.Date] From : @exam.StartTime  To : @exam.EndTime</span>
+                                        </div>
+                                    }
+                                }
+                                @foreach(var submit in Model.Submits.DistinctBy(submit => submit.Key.ExamModelId))
+                                {
+                                    if(@submit.Key.ExamModel.Id == course.Id)
+                                    {
+                                        <div class="d-flex justify-content-between gap-2">
+                                            <button type="button" class="btn btn-danger flex-grow-1 col-sm-2">
+                                                <a asp-controller="StudentSubmit" asp-action="Details" asp-route-examModelId="@submit.Key.ExamModel.Id" asp-route-studentId = "@submit.Key.StudentId"> <i class="fas fa-question-circle"></i> @submit.Value.Item1/@submit.Value.Item2 </a>
+                                            </button>
+                                            <span class="text-center flex-grow-1 col-sm-4" style="font-size: .9rem;">Instructor Name : @submit.Key.ExamModel.Instructor.FirstName  @submit.Key.ExamModel.Instructor.FirstName <br> Submit Date : @submit.Key.SubmitDate</span>
+                                        </div>
+                                    }
+                                }
+                                
+
+                                
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+        background-color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        position: relative;
+    }
+
+        /* .card-body.instructor {
+        display: flex;
+        max-height: 35vh;
+        position: relative;
+        flex-direction: column;
+    } */
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px #161A30;
+        }
+
+    .btn-primary {
+        background: #31304D;
+        border: solid 1px #161A30;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 15px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: #161A30;
+            box-shadow: 0 4px 15px #31304D;
+        }
+
+    .btn-danger {
+        border: none;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 15px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .course-card {
+        width: 500px;
+        margin-bottom: 1.5rem;
+    }
+
+    .course-assigned {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .available-courses:before {
+        top: 0;
+        background: #F0ECE5;
+    }
+
+    .card-title {
+        color: #2d1744 !important;
+        font-weight: 700 !important;
+    }
+
+
+    /* Footer Styles */
+    .footer {
+        /* background-color: rgba(255, 255, 255, 0.95); */
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        color: #161A30;
+        font-size: 14px;
+        padding: 20px 0;
+        margin-top: auto;
+        /* Ensures footer sticks to the bottom */
+    }
+
+        .footer a {
+            color: #161A30;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .footer a:hover {
+                color: #4c51bf;
+            }
+
+        .footer .list-inline-item:not(:last-child) {
+            margin-right: 15px;
+        }
+</style>

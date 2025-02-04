@@ -1,6 +1,8 @@
-﻿namespace Examination_System.DTOs
+﻿using Examination_System.Models;
+
+namespace Examination_System.DTOs
 {
-    public class GetAllInstructors
+    public class GetAllStudents
     {
         public int Id { get; set; }
 
@@ -22,5 +24,13 @@
 
         public string Address { get; set; } = null!;
 
+        public int TrackId { get; set; }
+
+        public int BranchId { get; set; }
+
+        public int DepartmentId { get; set; }
+        public string BranchName { get; set; }
+        public string TrackName { get; set; }
+        public string DepartmentName { get; set; }
     }
 }

@@ -329,7 +329,7 @@
                                             <a asp-action="RemoveCourse" asp-controller="Instructor" asp-route-Id="@Model.Id" asp-route-CourseId="@course.CourseId" class="btn btn-danger flex-grow-1 col-sm-4">
                                                 <i class="fas fa-trash"></i> Remove
                                             </a>
-                                            <a asp-action="Index" asp-controller="Student" asp-route-Id="@Model.Id" asp-route-CourseId="@course.CourseId" class="btn btn-primary flex-grow-1 col-sm-4">
+                                            <a asp-action="CourseInstructor" asp-controller="Student" asp-route-instructorId="@Model.Id" asp-route-CourseId="@course.CourseId" class="btn btn-primary flex-grow-1 col-sm-4">
                                                 <i class="fas fa-users"></i> Students
                                             </a>
                                         </div>

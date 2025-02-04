@@ -1,0 +1,159 @@
+﻿@model InsertStudentViewModel
+@{
+    var BranchDepartmentTracks = ViewBag.BranchDepartmentTracks as GetAllAvilableTracks;
+}
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+        background-color: rgba(255, 255, 255, 0.95);
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+    .form-control {
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+        margin-bottom: .5rem;
+        color: #000 !important;
+    }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+        border: none;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-size: 19px;
+        font-weight: 600;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+        }
+
+    textarea {
+        resize: none;
+        overflow: auto
+    }
+
+    label {
+        font-weight: 600;
+    }
+</style>
+
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h1 class="card-title text-center mb-4">Add New Student</h1>
+                    <form asp-action="SaveCreate" asp-controller="Student" method="post">
+                        <div class="form-group">
+                            <!--First Name-->
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" class=" form-control" placeholder="First name" required></input>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" class="form-control" placeholder="Last name" required></input>
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" type="tel" class="form-control" placeholder="Someone@example.com" required>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Gender"></label>
+                            <select asp-for="Gender" class="form-control" required>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Ssn">Social Security Number</label>
+                            <input asp-for="Ssn"  class="form-control" rows="2" placeholder="30101010101010" required></input>
+                            <span asp-validation-for="Ssn" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Phone"></label>
+                            <input asp-for="Phone" type="tel" class="form-control" placeholder="+20 114 567 8900" required>
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="DateOfBirth" class="control-label"></label>
+                            <input asp-for="DateOfBirth" class="form-control" type="date" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="EnrollmentDate" class="control-label"></label>
+                            <input asp-for="EnrollmentDate" class="form-control" type="date" />
+                            <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Address"></label>
+                            <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter street address" required></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label> Track Name</label>
+                            <select asp-for="TrackId" class="form-select" aria-label="Enter student track">
+                                @foreach (var track in Model.BranchDepartmentTracks.DistinctBy(x => x.TrackId))
+                                {
+                                    <option value="@track.TrackId">@track.TrackName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group my-2">
+                            <label> Department Name</label>
+                            <select asp-for="DepartmentId" class="form-select" aria-label="Enter student Department">
+                                @foreach (var department in Model.BranchDepartmentTracks.DistinctBy(x => x.DepartmentId))
+                                {
+                                    <option value="@department.DepartmentId">@department.DepartmentName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label> Branch Name</label>
+                            <select asp-for="BranchId" class="form-select" aria-label="Enter student Branch">
+                                @foreach (var branch in Model.BranchDepartmentTracks.DistinctBy(x => x.BranchId))
+                                {
+                                    <option value="@branch.BranchId">@branch.BranchName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group m-auto mt-4">
+                            <div>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">
+                                Add Student
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

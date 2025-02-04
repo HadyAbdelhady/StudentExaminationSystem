@@ -1,0 +1,129 @@
+﻿@model ExamModelDetailsViewModel
+
+<style>
+
+    .exam-header {
+        position: fixed;
+        width:100%;
+        left:0;
+        right:0;
+        top: 80px; /* Position below navbar */
+        width: 100%;
+        background: #f8f9fa;
+        z-index: 999; /* Below navbar if it's 1000+ */
+        padding: 20px;
+        width:80%;
+        left:10%;: 2px solid #dee2e6;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .questions-container {
+        overflow-y: auto;
+        padding: 20px;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        overflow-y: auto;
+        padding: 20px;
+        /* Hides scrollbar completely but still allows scrolling */
+        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        scrollbar-width: none; /* Firefox */
+    }
+    /* Add box-sizing to include padding in height calculation */
+    .exam-header {
+        box-sizing: border-box;
+        /* Other existing styles remain the same */
+    }
+    .metadata-label {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+</style>
+
+
+   <div class="container-fluid position-relative">
+    <div class="exam-header">
+        <div class="container">
+            <div class="row mb-2">
+                <div class="col-md-4">
+                    <span class="metadata-label">Exam ID:</span> @Model?.examModelData?.Id
+                </div>
+                <div class="col-md-4">
+                    <span class="metadata-label">Date:</span> @Model?.examModelData?.Date.ToString("dd/MM/yyyy")
+                </div>
+                <div class="col-md-4">
+                    <span class="metadata-label">Duration:</span> 60 minutes
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-4">
+                    <span class="metadata-label">Start Time:</span> @Model?.examModelData?.StartTime
+                </div>
+                <div class="col-md-4">
+                    <span class="metadata-label">End Time:</span> @Model?.examModelData?.EndTime
+                </div>
+                <div class="col-md-4">
+                    <span class="metadata-label">Course ID:</span> @Model?.examModelData?.CourseId
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="metadata-label">Instructor:</span> @Model?.examModelData?.firstName @Model?.examModelData?.lastName
+                </div>
+                <div class="col-md-6">
+                    <span class="metadata-label">Course Name:</span> @Model?.examModelData?.courseName
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="questions-container">
+        <div class="container">
+            @foreach (var question in Model?.examModelQuestions ?? new List<GetQuestionsWithOptions>())
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">@question.QuestionText</h5>
+                        <div class="list-group">
+                            <button class="list-group-item list-group-item-action @(question.OptionOne == question.ModelAnswer ? "list-group-item-success" : "")">
+                                a) @question.OptionOne
+                            </button>
+                            <button class="list-group-item list-group-item-action @(question.OptionTwo == question.ModelAnswer ? "list-group-item-success" : "")">
+                                b) @question.OptionTwo
+                            </button>
+                            @if (question.OptionThree != null)
+                            {
+                                <button class="list-group-item list-group-item-action @(question.OptionThree == question.ModelAnswer ? "list-group-item-success" : "")">
+                                    c) @question.OptionThree
+                                </button>
+                            }
+                            @if (question.OptionFour != null)
+                            {
+                                <button class="list-group-item list-group-item-action @(question.OptionFour == question.ModelAnswer ? "list-group-item-success" : "")">
+                                    d) @question.OptionFour
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+   </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const header = document.querySelector('.exam-header');
+        const container = document.querySelector('.questions-container');
+        if (header && container) {
+            // Get header's top position from CSS (80px)
+            const headerTop = parseInt(getComputedStyle(header).top, 10);
+            // Calculate total space needed (header top + header height)
+            const totalOffset = headerTop + header.offsetHeight;
+            // Apply margin and height
+            container.style.marginTop = `${totalOffset}px`;
+            container.style.height = `calc(100vh - ${totalOffset}px)`;
+        }
+    });
+</script>

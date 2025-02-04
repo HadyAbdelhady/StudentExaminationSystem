@@ -115,7 +115,7 @@ namespace Examination_System.Controllers
                     new SqlParameter("@Phone", branchDto.Phone),
                     new SqlParameter("@EstablishmentDate", branchDto.EstablishmentDate),
                     new SqlParameter("@ManagerID", branchDto.ManagerId));
-
+                    
                 return RedirectToAction(nameof(Index));
             }
             return View(branchDto);
