@@ -1,0 +1,227 @@
+﻿@model (GetDepartmentData Department, List<GetTracksPerBranch> Tracks)
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<style>
+    .heading {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="display-4 mb-4">Department Details</h1>
+    <div class="row">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">Department Information</h4>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                    <p><strong>Department Name:</strong> <span id="department-name"> @Model.Department.Name</span></p>
+                    <p><strong>Established:</strong> <span id="Date">@Model.Department.CreationDate</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-4">
+        <a type="button" class="btn btn-primary" asp-action="Index" >Back to List</a>
+        <a type="button" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Department.Id" >Edit</a>
+        </div>
+
+        <div class="card dep-table mb-4">
+            <div class="card-body">
+                <div class="heading">
+
+                    <h4 class="card-title" style="display:inline-block">Department Track</h4>
+                    <a class="btn btn-info btn-sm  mb-2" style="color:white" asp-controller="Track" asp-action="Create" asp-route-departmentId="@Model.Department.Id"> <i class="fas fa-plus me-2"></i> Insert Track</a>
+
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        @if (Model.Tracks.Any())
+                        {
+                            <table class="table table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Track ID</th>
+                                        <th>Track Name</th>
+                                        <th>Creation Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        @foreach (var track in Model.Tracks)
+                                    {
+                                        <tr>
+                                            <td>@track.Id</td>
+                                            <td>@track.Name</td>
+                                            <td>@track.CreationDate</td>
+                                            <td>
+                                                    <a class="btn btn-info btn-sm  mb-2" style="color:white" asp-controller="Track" asp-action="Details" asp-route-id="@track.Id">Details</a>
+                                                    <a class="btn btn-info btn-sm  mb-2" style="color:white" asp-controller="Track" asp-action="Edit" asp-route-id="@track.Id" >Edit</a>
+                                                <!--<a class="btn btn-info btn-sm  mb-2" style="color:white" asp-controller="Track" asp-action="Delete" >Delete</a>-->
+                                                <form method="post" asp-controller="Track" asp-action="Delete"
+                                                      onsubmit="return confirm('Are you sure you want to delete this Track?');"
+                                                      style="display:inline;">
+                                                    <input type="hidden" name="departmentId" value="@Model.Department.Id" />
+                                                    <input type="hidden" name="trackId" value="@track.Id" />
+                                                    <button type="submit" class="btn btn-info btn-sm mb-2">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                       
+                                </tbody>
+                            </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info" role="alert">
+                            No tracks found for this department.
+                        </div>
+                    }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    body {
+        background: #F0ECE5;
+        min-height: 100vh;
+        /*padding: 20px;*/
+        color: #161A30; /* Dark text for contrast */
+        font-family: "Lora", serif;
+    }
+
+    .card {
+        border: none;
+        border-radius: 15px;
+        background-color: rgba(255, 255, 255, 0.98); /* Pure white with slight transparency */
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(22, 26, 48, 0.1);
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(22, 26, 48, 0.2);
+        }
+
+    .btn-primary {
+        background: #31304D;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 15px;
+        color: #F0ECE5; /* Light text for buttons */
+    }
+
+        .btn-primary:hover {
+            background: #161A30;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(49, 48, 77, 0.3);
+        }
+
+    .btn-danger {
+        background: #B6BBC4;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 15px;
+        color: #161A30; /* Dark text for contrast */
+    }
+
+        .btn-danger:hover {
+            background: #9fa4ad;
+            transform: translateY(-2px);
+        }
+
+    .btn-info {
+        background: #31304D;
+        border: none;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 14px;
+        color: #F0ECE5; /* Light text for buttons */
+    }
+
+        .btn-info:hover {
+            background: #161A30;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(49, 48, 77, 0.3);
+        }
+
+    h1, h4 {
+        color: #31304D; /* Dark blue for headings */
+        font-weight: 600;
+    }
+
+    .card-title {
+        color: #161A30 !important; /* Darkest blue for card titles */
+        font-weight: 700 !important;
+    }
+
+    .table {
+        background-color: rgba(255, 255, 255, 0.98); /* Pure white with slight transparency */
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .table thead th {
+            background-color: #31304D; /* Dark blue for table headers */
+            color: #F0ECE5; /* Light text for headers */
+            font-weight: 600;
+        }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(182, 187, 196, 0.1); /* Light stone gray for striped rows */
+    }
+
+    .table-bordered {
+        border: 1px solid #B6BBC4; /* Stone gray for borders */
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #B6BBC4; /* Stone gray for borders */
+        }
+
+    .track-row {
+        background-color: rgba(182, 187, 196, 0.05); /* Light stone gray for track rows */
+    }
+
+    .footer {
+        border-top: 1px solid #161A30;
+        color: #161A30;
+        font-size: 14px;
+        padding: 20px 0;
+        margin-top: auto;
+    }
+
+        .footer a {
+            color: #161A30; /* Stone gray for links */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .footer a:hover {
+                color: #7472be;
+            }
+
+    /* Keep existing media queries */
+    @@media(max - width:415px) {
+        .dep-table
+
+    {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    }
+</style>

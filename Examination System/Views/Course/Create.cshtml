@@ -1,0 +1,173 @@
+﻿@model (int TrackId, List<GetCoursesInTrack> Courses)
+
+@{
+    ViewData["Title"] = "Insert Course into Track";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card mb-4">
+                <div class="card-body p-4">
+                    <h1 class="card-title text-center mb-4">Insert Course Into Track</h1>
+                    <form asp-action="Create" method="post">
+                        <input type="hidden" name="trackId" value="@Model.TrackId" />
+
+                        <div class="form-group">
+                            <label for="courseInput" class="control-label">Select or Add Course</label>
+                            <!-- Input field for typing a new course or selecting an existing one -->
+                            <input list="coursesList" id="courseInput" name="courseName" class="form-control" placeholder="Type or select a course" />
+                            <datalist id="coursesList">
+                                @foreach (var course in Model.Courses)
+                                {
+                                    <option value="@course.Name" data-course-id="@course.Id"></option>
+                                }
+                            </datalist>
+                            <span class="text-danger" data-valmsg-for="courseName" data-valmsg-replace="true"></span>
+                        </div>
+
+                        <!-- Hidden field to store the selected course ID -->
+                        <input type="hidden" id="selectedCourseId" name="selectedCourseId" />
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary btn-block">Insert Course</button>
+                            <a asp-controller="Track" asp-action="Details" asp-route-id="@Model.TrackId" class="btn btn-secondary">Back to Track Details</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('courseInput').addEventListener('input', function () {
+            const input = this.value;
+            const datalist = document.getElementById('coursesList');
+            const options = datalist.getElementsByTagName('option');
+
+            let selectedCourseId = '';
+
+            // Check if the input matches an existing course
+            for (let option of options) {
+                if (option.value === input) {
+                    selectedCourseId = option.getAttribute('data-course-id');
+                    break;
+                }
+            }
+
+            // Set the selected course ID in the hidden field
+            document.getElementById('selectedCourseId').value = selectedCourseId;
+        });
+    </script>
+}
+
+
+<style>
+    /* Styling the input field and datalist dropdown */
+    input[list="coursesList"] {
+        border: 2px solid #F0ECE5;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+        input[list="coursesList"]:focus {
+            border-color: #31304D;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+    /* Adjust datalist options to match the form */
+    datalist option {
+        background-color: #F0ECE5; /* Match background */
+        color: #31304D; /* Dark color for options */
+    }
+
+        /* Hover effect for input and dropdown list */
+        input[list="coursesList"]:hover, datalist option:hover {
+            background-color: rgba(49, 48, 77, 0.1);
+            color: #161A30; /* Darker color on hover */
+        }
+
+
+
+    body {
+        background: #F0ECE5;
+        min-height: 100vh;
+        /* padding: 20px;*/
+        font-family: "lora", serif;
+    }
+
+    .card {
+        margin-top: 50px;
+        border: none;
+        border-radius: 15px;
+        background-color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+    .form-control {
+        border: 2px solid #F0ECE5;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #31304D;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+    .btn-primary {
+        background: #161A30;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 19px;
+    }
+
+    .btn-secondary {
+        padding: 0.8rem 1.5rem;
+    }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-2px);
+            background: #31304D;
+            box-shadow: #31304D;
+        }
+
+    label {
+        font-weight: 600;
+    }
+
+
+    /* Footer Styles */
+    .footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        color: #2d1744;
+        font-size: 14px;
+        padding: 20px 0;
+        margin-top: auto; /* Ensures footer sticks to the bottom */
+    }
+
+        .footer a {
+            color: #31304D;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .footer a:hover {
+                color: #4c51bf;
+            }
+
+        .footer .list-inline-item:not(:last-child) {
+            margin-right: 15px;
+        }
+
+</style>
+
