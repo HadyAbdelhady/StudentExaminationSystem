@@ -5,157 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Examination_System</title>
     <script type="importmap"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Examination_System.styles.css" asp-append-version="true" />
+    <link href="~/css/layout.css" rel="stylesheet" />
     <style>
-
-        /* NavBar Styles */
-
-        .navbar {
-            background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 0.8rem 1rem;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.9) !important;
-            margin: 0 1rem;
-            padding: 0.5rem 1rem !important;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #2dd4bf;
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .nav-link.active {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .dropdown-menu {
-            background: rgba(45, 23, 68, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            margin-top: 0.5rem;
-        }
-
-        .dropdown-item {
-            color: rgba(255, 255, 255, 0.8);
-            transition: all 0.2s ease;
-        }
-
-        .dropdown-item:hover {
-            background: #4c51bf;
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .form-control {
-            background: rgba(230, 221, 221, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white !important;
-            transition: all 0.3s ease;
-        }
-
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.7) !important;
-            opacity: 1;
-        }
-
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.25);
-        }
-
-        .btn-outline-success {
-            color: #2dd4bf;
-            border-color: #2dd4bf;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline-success:hover {
-            background: #2dd4bf;
-            color: #2d1744;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(45, 212, 191, 0.3);
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            position: fixed;
-            left: -250px;
-            top: 0;
-            width: 250px;
-            height: 100vh;
-            background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar.active {
-            left: 0;
-        }
-
-        .sidebar-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar-menu {
-            padding: 1rem;
-        }
-
-        .sidebar-item {
-            padding: 0.75rem 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .sidebar-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            margin-right: 1rem;
-            cursor: pointer;
-        }
-
-        /* Adjust main content when sidebar is open */
-        .main-content {
-            transition: margin-left 0.3s ease;
-            margin-left: 0;
-        }
-
-        .sidebar.active+.main-content {
-            margin-left: 250px;
-        }
+        @await RenderSectionAsync("Style", required: false)
     </style>
+
 
 
 
@@ -172,13 +35,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="Index" asp-controller="Instructor">Instructors</a>
+                            <a class="nav-link" asp-action="Index" asp-controller="Branch" >Branches</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Profile</a>
+                            <a class="nav-link" asp-action="Index" asp-controller="Department">Departments </a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown">
@@ -194,14 +57,12 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Documentation </a>
+                            <a class="nav-link" asp-action="Index" asp-controller="Instructor" asp-route-id="null" asp-route-courseId="null">Instructors</a>
                         </li>
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2 " type="search" placeholder="Search courses...">
-                        <button class="btn btn-outline-success" type="submit">
-                            <i class="fas fa-search"></i> Search
-                        </button>
+                    <form class="d-flex align-items-center" id="searchForm">
+                        <input class="form-control me-2" type="search" id="searchInput" placeholder="Search here...">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </div>
             </div>
@@ -221,36 +82,45 @@
             </div>
         </div>
     </header>
-    <div class="main-content"> 
-		 <div class="container"> 
-			@RenderBody() 
-		</div> 
+
+    <div class="main-container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <!--- Footer ----->
+    <footer class="footer mt-auto py-4">
         <div class="container">
-            &copy; 2025 - Examination_System - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">
+                        &copy; @DateTime.Now.Year Elmanshar. All rights reserved. Support Contact : Zero
+                        Etnashr.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="#" class="text-decoration-none">Privacy Policy</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="text-decoration-none">Terms of Service</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="text-decoration-none">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('active');
-        }
-
-        // Close sidebar when clicking outside
-        document.addEventListener('click', function (event) {
-            const sidebar = document.querySelector('.sidebar');
-            const sidebarToggle = document.querySelector('.sidebar-toggle');
-
-            if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target)) {
-                sidebar.classList.remove('active');
-            }
-        });
-    </script>
+    <script src="~/js/layout.js"> </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
