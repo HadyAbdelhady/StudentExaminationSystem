@@ -51,9 +51,10 @@ GO
 CREATE OR ALTER PROCEDURE GetAllBranches
 AS
 BEGIN
-    SELECT ID, Name, Location, Phone, EstablishmentDate, ManagerID
-    FROM Branch
-    WHERE IsDeleted = 0;
+    SELECT B.ID, B.Name, B.Location, B.Phone, B.EstablishmentDate, B.ManagerID, Inst.firstName +' '+ Inst.lastName AS [ManagerName]
+    FROM Branch B
+    INNER JOIN Instructor Inst on Inst.Id = B.managerId
+    WHERE B.IsDeleted = 0;
 END;
 GO
 
@@ -79,9 +80,10 @@ BEGIN
             RAISERROR('The branch does not exist.', 16, 1);
             RETURN;
         END 
-    SELECT ID, Name, Location, Phone, EstablishmentDate, ManagerID
-    FROM Branch
-    WHERE ID = @BranchID AND IsDeleted = 0;
+    SELECT B.ID, B.Name, B.Location, B.Phone, B.EstablishmentDate, B.ManagerID, Inst.firstName +' '+ Inst.lastName AS [ManagerName]
+    FROM Branch B
+    INNER JOIN Instructor Inst on Inst.Id = B.managerId
+    WHERE B.ID = @BranchID AND B.IsDeleted = 0;
     END TRY
     BEGIN CATCH
 		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
