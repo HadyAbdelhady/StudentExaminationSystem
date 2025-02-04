@@ -154,7 +154,7 @@ input[type="radio"]:checked {
         width:48%;
     }
 }
-@media(max-width:620px){
+@media(max-width:630px){
     .questionType{
         flex-direction: column;
         gap:2rem;

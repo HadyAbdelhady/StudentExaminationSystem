@@ -1,0 +1,73 @@
+
+body {
+    background: #F0ECE5;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: "lora", serif;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    background-color:white;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.form-control {
+    border: 2px solid #F0ECE5;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #31304D;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.btn-primary {
+    background: #161A30;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 19px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    background: #31304D;
+    box-shadow: #31304D;
+}
+
+label{
+    font-weight: 600;
+}
+
+
+/* Footer Styles */
+.footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: #2d1744;
+    font-size: 14px;
+    padding: 20px 0;
+    margin-top: auto; /* Ensures footer sticks to the bottom */
+}
+
+.footer a {
+    color: #31304D;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #4c51bf;
+}
+
+.footer .list-inline-item:not(:last-child) {
+    margin-right: 15px;
+}

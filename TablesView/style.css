@@ -19,7 +19,9 @@ h2 {
   font-weight: 700;
   padding-bottom: 1rem;
   margin-bottom: 2rem;
-  border-bottom: 3px solid #4c51bf; /* Accent color for underline */
+  /* border-bottom: 3px solid #4c51bf; */
+  border-bottom: 3px solid #63408b; /* Accent color for underline */
+
 }
 
 /* Review Exam Button */

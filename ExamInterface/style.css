@@ -43,7 +43,8 @@ h2 {
     color: #31304D; /* Dark blue for headings */
     font-weight: 700;
     margin-bottom: 2rem;
-    border-bottom: 3px solid #4c51bf; /* Accent color for underline */
+    /* border-bottom: 3px solid #4c51bf; */
+    border-bottom: 3px solid #63408b; /* Accent color for underline */
     padding-bottom: 1rem;
     display: inline-block;
 }
