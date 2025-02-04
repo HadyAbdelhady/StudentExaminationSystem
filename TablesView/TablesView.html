@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="cardView.css" />
 
 </head>
+
 <body>
   <div id="body-content">
     <div class="container mt-5">
@@ -58,7 +59,7 @@
               <button class="btn btn-warning btn-sm">Edit</button>
               <button class="btn btn-danger btn-sm">Delete</button>
             </td>
-            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" class="check-box" /></td>
           </tr>
           <tr>
             <td>2</td>
@@ -140,38 +141,6 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
   <script src="script.js"></script>
-  <script>
-    document.querySelectorAll(".toggle-view").forEach((button, index) => {
-      button.addEventListener("click", function (event) {
-        event.stopPropagation(); // Prevents click from immediately hiding the card
-        const answerRow = document.querySelectorAll(".card-container")[index];
-        const bodyContent = document.getElementById("body-content");
-
-        if (
-          answerRow.style.display === "none" ||
-          answerRow.style.display === ""
-        ) {
-          answerRow.style.display = "block"; // Show the card
-          bodyContent.style.filter = "blur(5px)"; // Apply blur to background
-        } else {
-          answerRow.style.display = "none"; // Hide the card
-          bodyContent.style.filter = "none"; // Remove blur effect
-        }
-      });
-    });
-
-    // Hide the card and remove blur on click outside
-    document.addEventListener("click", function (event) {
-      document.querySelectorAll(".card-container").forEach((card) => {
-        if (!card.contains(event.target)) {
-          card.style.display = "none";
-          document.getElementById("body-content").style.filter = "none";
-        }
-      });
-    });
-  </script>
-
-  <script></script>
 </body>
 
 </html>
