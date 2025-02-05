@@ -86,25 +86,120 @@
             </div>
         </nav>
         <!-- Sidebar -->
-        @if (User.IsInRole("Admin") || User.IsInRole("Instructor"))
+        @if (User.IsInRole("Admin"))
         {
-            <div class="sidebar">
-                <div class="sidebar-header">
-                    <h5 class="text-white mb-0">Exam Portal</h5>
-                </div>
+            <style>
+                body {
+                    background-color: #F0ECE5;
+                    color: #161A30;
+                    font-family: Arial, sans-serif;
+                }
 
-                <div class="sidebar-menu">
-                    <a href="#" class="sidebar-item">Dashboard</a>
-                    <a href="#" class="sidebar-item">My Exams</a>
-                    <a href="#" class="sidebar-item">Results</a>
-                    <a href="#" class="sidebar-item">Study Materials</a>
-                    <a href="#" class="sidebar-item">Settings</a>
-                    <a href="#" class="sidebar-item">Help Center</a>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a asp-action="AssignRole" asp-controller="Role" class="sidebar-item">Assign Role</a>
+                .welcome-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 80vh;
+                    text-align: center;
+                }
+
+                .welcome-box {
+                    background-color: #31304D;
+                    color: #F0ECE5;
+                    padding: 30px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }
+
+                .welcome-title {
+                    font-size: 2.5rem;
+                    font-weight: bold;
+                }
+
+                .welcome-subtext {
+                    font-size: 1.2rem;
+                    color: #B6BBC4;
+                }
+
+                .sidebar {
+                    width: 250px;
+                    background-color: #161A30;
+                    padding: 15px;
+                    color: white;
+                }
+
+                .sidebar-header {
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    margin-bottom: 20px;
+                }
+
+                .sidebar-item {
+                    display: block;
+                    padding: 10px;
+                    color: white;
+                    text-decoration: none;
+                    margin-bottom: 10px;
+                    background-color: #31304D;
+                    border-radius: 5px;
+                }
+
+                    .sidebar-item:hover {
+                        background-color: #B6BBC4;
+                        color: #161A30;
                     }
-                </div>
+
+                .input-group {
+                    margin-bottom: 15px;
+                    color : #fff !importnat;
+                }
+            </style>
+            <div class="sidebar">
+                <div class="sidebar-header">Exam Portal</div>
+
+                <form method="get">
+                    <div class="input-group mb-3">
+                        <input type="number" name="id" class="form-control" placeholder="Student ID" aria-label="Student ID">
+                        <button type="submit" asp-controller="Documentation" asp-action="GetStudentCourseGrades" class="btn btn-outline-secondary">Get Grades</button>
+                    </div>
+                </form>
+
+                <form asp-controller="Documentation" method="get">
+                    <div class="input-group mb-3">
+                        <input type="number" name="examModelId" class="form-control" placeholder="Exam ID" aria-label="Exam ID">
+                        <input type="number" name="studentId" class="form-control" placeholder="Student ID" aria-label="Student ID">
+                        <button type="submit" asp-action="GetStudentExamReview" class="btn btn-outline-secondary">Review Exam</button>
+                    </div>
+                </form>
+
+                <form asp-controller="Documentation" method="get">
+                    <div class="input-group mb-3">
+                        <input type="number" name="id" class="form-control" placeholder="Exam ID" aria-label="Exam ID">
+                        <button type="submit" asp-action="GetAllExamModelQuestions" class="btn btn-outline-secondary">Get Questions</button>
+                    </div>
+                </form>
+
+                <form asp-controller="Documentation" method="get">
+                    <div class="input-group mb-3">
+                        <input type="number" name="id" class="form-control" placeholder="Instructor ID" aria-label="Instructor ID">
+                        <button type="submit" asp-action="GetCoursesPerInstructor" class="btn btn-outline-secondary">Get Courses</button>
+                    </div>
+                </form>
+
+                <form asp-controller="Documentation" method="get">
+                    <div class="input-group mb-3">
+                        <input type="number" name="id" class="form-control" placeholder="Topic ID" aria-label="Topic ID">
+                        <button type="submit" asp-action="GetAllTopics" class="btn btn-outline-secondary">Get Topics</button>
+                    </div>
+                </form>
+
+                <form asp-controller="Documentation" method="get">
+                    <div class="input-group mb-3">
+                        <input type="number" name="id" class="form-control" placeholder="Branch ID" aria-label="Branch ID">
+                        <button type="submit" asp-controller="Documentation" asp-action="GetAllStudentsInBranch" class="btn btn-outline-secondary">Get Students</button>
+                    </div>
+                </form>
             </div>
         }
     </header>

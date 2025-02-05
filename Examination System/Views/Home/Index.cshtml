@@ -2,6 +2,44 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome, @User.FindFirst("FirstName")?.Value!</h1>
+<style>
+    body {
+        background-color: #F0ECE5;
+        color: #161A30;
+        font-family: Arial, sans-serif;
+    }
+
+    .welcome-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 80vh;
+        text-align: center;
+    }
+
+    .welcome-box {
+        background-color: #31304D;
+        color: #F0ECE5;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+    .welcome-subtext {
+        font-size: 1.2rem;
+        color: #B6BBC4;
+    }
+</style>
+
+<div class="welcome-container">
+    <div class="welcome-box">
+        <h1 class="welcome-title">Welcome, @User.FindFirst("FirstName")?.Value!</h1>
+        <p class="welcome-subtext">Your student examination portal</p>
+    </div>
 </div>
