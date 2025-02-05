@@ -19,7 +19,7 @@
                                     {
                                         <div class="d-flex justify-content-between gap-2">
                                             <button type="button" class="btn btn-primary flex-grow-1 col-sm-2">
-                                                <a asp-action="Insert" asp-controller="StudentSubmit" asp-route-id="@exam.Id" asp-route-studentId="@User.FindFirst("StudentId").Value" >Take </a>
+                                                <a asp-action="Insert" asp-controller="StudentSubmit" asp-route-id="@exam.Id" asp-route-studentId="@User.FindFirst("StudentId").Value" style="text-decoration:none; color:white;">Take </a>
                                             </button>
                                             <span class="text-center flex-grow-1 col-sm-4" style="font-size: .9rem;">Instructor Name : @exam.Instructor.FirstName @exam.Instructor.LastName <br> [@exam.Date] From : @exam.StartTime  To : @exam.EndTime</span>
                                         </div>
@@ -31,7 +31,7 @@
                                     {
                                         <div class="d-flex justify-content-between gap-2">
                                             <button type="button" class="btn btn-danger flex-grow-1 col-sm-2">
-                                                <a asp-controller="StudentSubmit" asp-action="Details" asp-route-examModelId="@submit.Key.ExamModel.Id" asp-route-studentId = "@submit.Key.StudentId"> <i class="fas fa-question-circle"></i> @submit.Value.Item1/@submit.Value.Item2 </a>
+                                                <a asp-controller="StudentSubmit" asp-action="Details" asp-route-examModelId="@submit.Key.ExamModel.Id" asp-route-studentId="@submit.Key.StudentId" style="text-decoration:none; color:white;"> <i class="fas fa-question-circle"></i> @submit.Value.Item1/@submit.Value.Item2 </a>
                                             </button>
                                             <span class="text-center flex-grow-1 col-sm-4" style="font-size: .9rem;">Instructor Name : @submit.Key.ExamModel.Instructor.FirstName  @submit.Key.ExamModel.Instructor.FirstName <br> Submit Date : @submit.Key.SubmitDate</span>
                                         </div>
