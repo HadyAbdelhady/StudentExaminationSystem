@@ -1,82 +1,86 @@
-
 # Student Examination System - Database
 
-This repository contains the database schema and related scripts for a **Student Examination System**. The system is designed to manage and track various entities involved in an academic examination process, including departments, courses, students, instructors, exams, and submissions.
+This repository contains the database schema and related scripts for a **Student Examination System**. The system is designed to manage and track various entities involved in an academic examination process, including branches, departments, tracks, courses, students, instructors, exams, and submissions.
 
 ## Initial Schema Overview
 
 The database schema consists of the following main entities and relationships:
 
 ### Core Entities:
-1. **Department**  
-   - Tracks academic departments, each with a unique ID, name, and manager.
-   - Fields: `ID`, `Name`, `ManagerID`
+1. **Branch**  
+   - Represents different institutional branches.  
+   - Fields: `ID`, `Name`, `Location`, `phone`, `establishmentDate`, `ManagerID`, `isDeleted`
 
-2. **Track**  
-   - Represents different academic tracks under departments.
-   - Fields: `ID`, `Name`, `departmentID`
+2. **Department**  
+   - Tracks academic departments.  
+   - Fields: `ID`, `Name`, `creationDate`, `isDeleted`
 
-3. **Instructor**  
-   - Manages instructor details such as personal information and contact.
-   - Fields: `ID`, `firstName`, `lastName`, `gender`, `SSN`, `enrollmentDate`, `email`, `phone`, `DateOfBirth`, `address`
+3. **Track**  
+   - Represents different academic tracks under departments.  
+   - Fields: `ID`, `Name`, `departmentID`, `creationDate`, `isDeleted`
 
-4. **Student**  
-   - Captures student details and their association with tracks and departments.
-   - Fields: `ID`, `firstName`, `lastName`, `gender`, `SSN`, `enrollmentDate`, `email`, `phone`, `DateOfBirth`, `address`, `trackID`, `departmentID`
+4. **Branch_Department_Track**  
+   - Links branches, departments, and tracks.  
+   - Fields: `branchID`, `trackID`, `departmentID`, `creationDate`, `departmentManagerID`, `trackManagerID`, `DepartementManagerJoinDate`, `TrackManagerJoinDate`, `isDeleted`
 
-5. **Course**  
-   - Stores details about the courses offered in the system.
-   - Fields: `ID`, `Name`
+5. **Instructor**  
+   - Manages instructor details.  
+   - Fields: `ID`, `firstName`, `lastName`, `gender`, `SSN`, `enrollmentDate`, `email`, `phone`, `DateOfBirth`, `address`, `isDeleted`
 
-6. **QuestionBank**  
-   - Maintains a collection of questions for exams, including type, correct choice, and marks.
-   - Fields: `ID`, `type`, `correctChoice`, `mark`, `instructorID`, `courseID`, `lastEditDate`
+6. **Student**  
+   - Captures student details and their association with tracks, departments, and branches.  
+   - Fields: `ID`, `firstName`, `lastName`, `gender`, `SSN`, `enrollmentDate`, `email`, `phone`, `DateOfBirth`, `address`, `trackID`, `branchID`, `departmentID`, `isDeleted`
 
-7. **ExamModel**  
-   - Defines exams, including scheduling and marking details.
-   - Fields: `ID`, `date`, `startTime`, `endTime`, `TotalMark`, `CourseID`, `instructorID`, `creationDate`
+7. **Course**  
+   - Stores details about the courses offered.  
+   - Fields: `ID`, `Name`, `creationDate`, `isDeleted`
 
-8. **StudentSubmit**  
-   - Tracks student exam submissions and grades.
-   - Fields: `ID`, `grade`, `studentID`, `examModelID`
+8. **QuestionBank**  
+   - Maintains a collection of questions for exams.  
+   - Fields: `ID`, `type`, `correctChoice`, `instructorID`, `courseID`, `insertionDate`, `questionText`, `isDeleted`
+
+9. **ExamModel**  
+   - Defines exams, including scheduling details.  
+   - Fields: `ID`, `date`, `startTime`, `endTime`, `CourseID`, `instructorID`, `creationDate`, `isDeleted`
+
+10. **StudentSubmit**  
+    - Tracks student exam submissions.  
+    - Fields: `ID`, `studentID`, `examModelID`, `submitDate`, `isDeleted`
 
 ### Relationships and Many-to-Many Mapping:
-1. **ExamModel_StudentSubmit_Student**  
-   - Tracks student submissions for specific exams.
-   - Fields: `examModelID`, `studentSubmitID`, `studentID`, `submitDate`
 
-2. **Department_Instructor**  
-   - Associates instructors with departments.
-   - Fields: `departmentID`, `instructorID`, `joinDate`
+1. **Course_Topic**  
+   - Lists topics under a course.  
+   - Fields: `courseID`, `topic`, `creationDate`, `isDeleted`
 
-3. **Track_Course**  
-   - Links academic tracks to courses.
-   - Fields: `trackID`, `courseID`
+2. **Course_Field**  
+   - Tracks fields related to a course.  
+   - Fields: `courseID`, `field`, `creationDate`, `isDeleted`
 
-4. **Course_Topic**  
-   - Lists topics under a course.
-   - Fields: `courseID`, `topic`
+3. **QuestionBank_Choice**  
+   - Stores choices for questions in the question bank.  
+   - Fields: `questionID`, `Choice`, `isDeleted`
 
-5. **Course_Field**  
-   - Tracks fields related to a course.
-   - Fields: `courseID`, `field`
+4. **ExamModel_Question**  
+   - Links questions to specific exams.  
+   - Fields: `examModelID`, `questionID`, `mark`, `correctChoice`
 
-6. **Course_Instructor**  
-   - Maps instructors to courses they teach.
+5. **StudentSubmit_Answer**  
+   - Captures student answers for questions.  
+   - Fields: `StudentSubmitID`, `examModelID`, `questionID`, `studentAnswer`, `isDeleted`
+
+6. **Course_Student_Instructor**  
+   - Tracks courses with students and their assigned instructors.  
+   - Fields: `courseID`, `studentID`, `instructorID`, `startDate`
+
+7. **Course_Instructor**  
+   - Maps instructors to courses they teach.  
    - Fields: `courseID`, `instructorID`
 
-7. **Course_Student**  
-   - Links students to their enrolled courses.
-   - Fields: `courseID`, `studentID`, `startDate`
+8. **Track_Course**  
+   - Links academic tracks to courses.  
+   - Fields: `trackID`, `courseID`
 
-8. **QuestionBank_Choice**  
-   - Stores choices for questions in the question bank.
-   - Fields: `questionID`, `Choice`
-
-9. **StudentSubmit_Answer**  
-   - Captures student answers for questions.
-   - Fields: `StudentSubmitID`, `studentAnswer`
-
-10. **ExamModel_Question**  
-    - Links questions to specific exams.
-    - Fields: `examModelID`, `questionID`, `correctChoice`
+9. **Department_Instructor**  
+   - Associates instructors with departments.  
+   - Fields: `departmentID`, `instructorID`, `joinDate`
