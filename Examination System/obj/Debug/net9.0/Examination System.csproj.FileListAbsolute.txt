@@ -1,0 +1,222 @@
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\appsettings.Development.json
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\appsettings.json
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Examination System.staticwebassets.runtime.json
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Examination System.staticwebassets.endpoints.json
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Examination System.exe
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Examination System.deps.json
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Examination System.runtimeconfig.json
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Examination System.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Examination System.pdb
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Azure.Core.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Azure.Identity.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Humanizer.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.Build.Locator.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.CodeAnalysis.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.CodeAnalysis.CSharp.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.CodeAnalysis.Workspaces.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.CodeAnalysis.Workspaces.MSBuild.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.Data.SqlClient.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.Extensions.DependencyModel.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.Identity.Client.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.Identity.Client.Extensions.Msal.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\Mono.TextTemplating.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.ClientModel.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.CodeDom.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Composition.AttributedModel.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Composition.Convention.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Composition.Hosting.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Composition.Runtime.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Composition.TypedParts.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Drawing.Common.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Memory.Data.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Runtime.Caching.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Security.Permissions.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\System.Windows.Extensions.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\fr\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\it\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ja\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ko\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pl\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pt-BR\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ru\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\fr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\it\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ja\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ko\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pl\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\ru\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\DB Project\StudentExaminationSystem\Examination System\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.csproj.AssemblyReference.cache
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.GeneratedMSBuildEditorConfig.editorconfig
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.AssemblyInfoInputs.cache
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.AssemblyInfo.cs
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.csproj.CoreCompileInputs.cache
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.MvcApplicationPartsAssemblyInfo.cache
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.RazorAssemblyInfo.cache
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.RazorAssemblyInfo.cs
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.sourcelink.json
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\scopedcss\bundle\Examination System.styles.css
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\scopedcss\projectbundle\Examination System.bundle.scp.css
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\3e8tcfk34o-b9sayid5wm.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\h2ykt1pkhu-61n19gt1b8.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\kseou6e9dk-xtxxf3hu2r.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\4zbzq4qbg8-bqjiyaj88i.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\no7br0hl9o-c2jlpeoesf.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\64fqlzsx37-erw9l3u2r3.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\j1z60dmrti-aexeepp0ev.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\i9n1mijezz-d7shbmvgxk.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\trueyiw7yl-ausgxo2sd3.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\w76ptrv3k6-k8d9w2qqmf.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\cw4lck7ofb-cosvhxvwiu.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\0ig330gy8h-ub07r2b239.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\nto32ricsa-fvhpjtyr6v.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\b228oe3b9x-b7pk76d08c.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\iznov8loyf-fsbi9cje9m.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\zbsctwys03-rzd6atqjts.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\j71hd7sjxh-ee0r1s7dh0.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\5i61luvd1q-dxx9fxp4il.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\jc6cq3bq3q-jd9uben2k1.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\orygckfcko-khv3u5hwcm.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\93ikpur927-r4e9w2rdcm.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\54dfg1r8bq-lcd1t2u6c8.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\7rinl8z5r5-c2oey78nd0.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\l9am7kb2hl-tdbxkamptv.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\qxdowqifj4-j5mq2jizvt.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\knrhgafy0t-06098lyss8.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\2p9ztn6k7c-nvvlpmu67g.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\kepe1x8vtf-s35ty4nyc5.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\v1vsikaujl-pj5nd1wqec.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\r0wjp8m90o-46ein0sx1k.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\p0pn4n10vu-v0zj4ognzu.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\dnyrftx2a2-37tfw0ft22.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\9j18jpo8iv-hrwsygsryq.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\q14s95hnsz-pk9g2wxc8p.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\kxvqobdzfm-ft3s53vfgj.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\bbfdz3i78w-6cfz1n2cew.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\jytjgchw4l-6pdc2jztkx.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\9m9buu59vm-493y06b0oq.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\5xacogkdy3-iovd86k7lj.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\7qf96vmvb5-vr1egmr9el.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\1j9mjz72lc-kbrnm935zg.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\slatr5rh73-jj8uyg4cgr.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\5y1xgydvuw-y7v9cxd14o.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\0e02c1pnt2-notf2xhcfb.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\a5m70k8hfg-h1s4sie4z3.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\iyv300cd1d-63fj8s7r0e.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\djm17rry8y-0j3bgjxly4.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\pj7rb7gc8a-47otxtyo56.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\mheftidyfv-4v8eqarkd7.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\kt2ym3c0cp-356vix0kms.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\2qj35zre6i-83jwlth58m.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\87yisgn4t6-mrlpezrjn3.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\vc732ax41v-lzl9nlhx6b.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\z7jhw1kmqd-ag7o75518u.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\c37rr2f1to-x0q3zqp4vz.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\qn1lol1d9m-0i3buxo5is.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\z3iwkxr259-o1o13a6vjx.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\oev6bo8780-ttgo8qnofa.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\o9fjney6un-2z0ns9nrw6.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\zywd2rw0uv-muycvpuwrr.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\shqfezv6gi-87fc7y1x7t.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\z7wyidg29n-mlv21k5csn.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\9ebdh0mgu0-q5amenfnwx.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\compressed\87pcmrzehl-q5amenfnwx.gz
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets.build.json
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets.development.json
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets\msbuild.Examination System.Microsoft.AspNetCore.StaticWebAssets.props
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets\msbuild.Examination System.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets\msbuild.build.Examination System.props
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Examination System.props
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Examination System.props
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets.pack.json
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examinat.E6666740.Up2Date
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.dll
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\refint\Examination System.dll
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.pdb
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\Examination System.genruntimeconfig.cache
+D:\DB Project\StudentExaminationSystem\Examination System\obj\Debug\net9.0\ref\Examination System.dll

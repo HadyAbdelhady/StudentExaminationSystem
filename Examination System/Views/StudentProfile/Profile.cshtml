@@ -1,0 +1,60 @@
+﻿@model Student
+
+
+<div class="container mt-2">
+    <div class="row justify-content-center">
+        <div class="d-flex justify-content-center mb-4">
+            <div class="person-container d-flex align-items-center justify-content-center"
+            style="width: 200px; height: 200px; border-radius: 50%; overflow: hidden; background-color: #f0f0f0;">
+                <img src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png"
+                class="img-fluid" alt="..." style="max-width: 500px; max-height: 100%;">
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-body student">
+                    <h4 class="card-title text-center">Welcome @Model.FirstName !</h4>
+                    <div class="row mt-5 text-center">
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> <span id="name">@Model.FirstName @Model.LastName</span></p>
+                            <p><strong>SSN:</strong> <span id="ssn">@Model.Ssn</span></p>
+                            <p>
+                                <strong>Email:</strong>
+                                <span id="email">@Model.Email</span>
+                            </p>
+                            <p>
+                                <strong>Address:</strong>
+                                <span id="address">@Model.Address</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Phone:</strong>
+                                <span id="phone">@Model.Phone</span>
+                            </p>
+                            <p>
+                                <strong>Date Of Birth:</strong>
+                                <span id="dateOfBirth">@Model?.DateOfBirth</span>
+                            </p>
+                            <p><strong>Gender: </strong>
+                                @if (@Model.Gender == "M")
+                                    {
+                                    <span id="gender">Male</span>
+                                    }else 
+                                    {
+                                    <span id="gender">Female</span>
+                                    }
+                            </p>
+                            <p>
+                                <strong>Enrollment Date:</strong>
+                                <span id="enrollmentDate">@Model.EnrollmentDate</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

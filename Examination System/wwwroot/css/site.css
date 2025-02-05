@@ -1,0 +1,53 @@
+*{
+    margin : 0;
+    padding : 0;
+    box-sizing : border-box;
+}
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+  color:#808080;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+.form-control {
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    color: black !important;
+    margin-bottom: .5rem;
+}
+
+    .form-control:focus {
+        border-color: #31304D;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+    }
+
+    .form-control::placeholder {
+        color: rgba(142, 134, 134, 0.7) !important;
+        opacity: 1;
+    }

@@ -1,0 +1,165 @@
+﻿@model ExamModelViewModel
+
+<form asp-action="SaveCreate" asp-controller="ExamModel" method="post">
+    <!-- Hidden field for Id -->
+    <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
+
+    <div class="container-fluid mt-4">
+        <div class="row g-4">
+            <!-- Left Column - Exam Details -->
+            <div class="col-lg-4">
+                <div class="card p-3 mb-4">
+                    <h3 class="mb-4">Exam Details</h3>
+
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label asp-for="Date" class="form-label"></label>
+                        <input asp-for="Date" class="form-control" type="date" />
+                        <span asp-validation-for="Date" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Time Row -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="StartTime" class="form-label"></label>
+                            <input asp-for="StartTime" class="form-control" type="time" />
+                            <span asp-validation-for="StartTime" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EndTime" class="form-label"></label>
+                            <input asp-for="EndTime" class="form-control" type="time" />
+                            <span asp-validation-for="EndTime" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <input hidden value="@Model.InstructorId" asp-for="InstructorId"/>
+                    
+                </div>
+            </div>
+
+            <!-- Right Column - Questions -->
+            <div class="col-lg-8">
+                <div class="card p-3">
+                    <h3 class="mb-4">Select Questions</h3>
+                    <div class="row g-3" id="questionContainer">
+                        @foreach (var question in Model.questions)
+                        {
+                            <div class="col-12">
+                                <div class="card question-card">
+                                    <div class="card-body">
+                                        <div class="row align-items-start">
+                                            <!-- Checkbox Column -->
+                                            <div class="col-1">
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           name="questionIdList" value="@question.QuestionId"
+                                                           id="q@question.QuestionId">
+                                                </div>
+                                            </div>
+                                            <!-- Question Content -->
+                                            <div class="col-11">
+                                                <h5 class="card-title">@question.QuestionText</h5>
+                                                <div class="row g-2">
+                                                    <div class="list-group">
+                                                        <div class="list-group-item list-group-item-action @(question.OptionOne == question.ModelAnswer ? "list-group-item-success" : "")">
+                                                            a) @question.OptionOne
+                                                        </div>
+                                                        <div class="list-group-item list-group-item-action @(question.OptionTwo == question.ModelAnswer ? "list-group-item-success" : "")">
+                                                            b) @question.OptionTwo
+                                                        </div>
+                                                        @if (question.OptionThree != null)
+                                                        {
+                                                            <div class="list-group-item list-group-item-action @(question.OptionThree == question.ModelAnswer ? "list-group-item-success" : "")">
+                                                                c) @question.OptionThree
+                                                            </div>
+                                                        }
+                                                        @if (question.OptionFour != null)
+                                                        {
+                                                            <div class="list-group-item list-group-item-action @(question.OptionFour == question.ModelAnswer ? "list-group-item-success" : "")">
+                                                                d) @question.OptionFour
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5 py-3">Create Exam</button>
+        </div>
+    </div>
+</form>
+
+<style>
+    .question-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid rgba(0,0,0,0.125);
+    }
+
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+    .form-check-input {
+        width: 1.2em;
+        height: 1.2em;
+        margin-top: 0.25em;
+    }
+
+    /* Ensure input text is black */
+    .form-control {
+        color: black !important;
+    }
+
+    /* Ensure options are rounded */
+    .list-group-item {
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        padding: 0.75rem 1.25rem;
+    }
+
+    /* Custom scrollbar for question container */
+    #questionContainer {
+        overflow-y: auto;
+        max-height: 80vh;
+        position: sticky;
+        top: 20px;
+        scrollbar-width: thin;
+        scrollbar-color: #4a5568 #e2e8f0;
+        padding-right: 0.5rem;
+    }
+
+        #questionContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #questionContainer::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 4px;
+        }
+
+        #questionContainer::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 4px;
+            border: 2px solid #e2e8f0;
+        }
+
+    .form-control::placeholder {
+        color: #a0aec0 !important;
+        opacity: 1;
+    }
+
+    /* Dark theme for select dropdown */
+    .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    }
+</style>

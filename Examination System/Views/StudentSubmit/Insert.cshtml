@@ -1,0 +1,176 @@
+﻿@model InsertStudentSubmitViewModel
+
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+
+        <!-- Timer Panel (Left) -->
+        <div class="col-lg-3 col-md-4">
+            <div class="side-panel" id="timerPanel">
+                <h5>Remaining Time</h5>
+                <div id="countdown"><i class="bi bi-alarm-fill"></i><span>00:00:00</span></div>
+            </div>
+        </div>
+
+        <!-- Exam Panel (Center) -->
+        <div class="col-lg-6 col-md-8">
+            <div id="examContainer">
+                <h2 class="text-center mb-4">General Knowledge Exam</h2>
+                <div class="questions-container">
+                    <form id="examForm" asp-controller="StudentSubmit" asp-action="SaveInsert" method="post">
+                        <input type="hidden" asp-for="ExamModelId" />
+                        <input type="hidden" asp-for="StudentId" />
+
+                        @for (int i = 0; i < Model?.Questions?.Count; i++)
+                        {
+                            var question = Model.Questions[i];
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5>Question @(i + 1):</h5>
+                                    <p>@question.QuestionText</p>
+
+                                    <!-- Store Question ID -->
+                                    <input type="hidden" asp-for="Questions" name="Questions[@i]" value="@question.QuestionId" />
+
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" id="q@(i)a1" name="StudentAnswers[@i]" value="@question.OptionOne" required>
+                                            <label for="q@(i)a1">@question.OptionOne</label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" id="q@(i)a2" name="StudentAnswers[@i]" value="@question.OptionTwo" required>
+                                            <label for="q@(i)a2">@question.OptionTwo</label>
+                                        </div>
+                                        @if (@question.OptionThree != null)
+                                        {
+                                            <div class="radio-option">
+                                                <input type="radio" id="q@(i)a3" name="StudentAnswers[@i]" value="@question.OptionThree" required>
+                                                <label for="q@(i)a3">@question.OptionThree</label>
+                                            </div>
+                                        }
+                                        @if (@question.OptionFour != null)
+                                        {
+                                            <div class="radio-option">
+                                                <input type="radio" id="q@(i)a4" name="StudentAnswers[@i]" value="@question.OptionFour" required>
+                                                <label for="q@(i)a4">@question.OptionFour</label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="text-center mt-4 mb-2">
+                            <button type="submit" class="btn btn-success">Submit Exam</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Panel (Right) -->
+        <div class="col-lg-3 d-none d-lg-block">
+            <div class="side-panel" id="infoPanel">
+                <h5 class="mb-3">Exam Information</h5>
+                <div class="exam-detail">
+                    <span class="detail-label">Exam Name:</span>
+                    <span class="detail-value">General Knowledge Exam</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">Instructor:</span>
+                    <span class="detail-value">Dr. John Smith</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">Start Date:</span>
+                    <span class="detail-value">2023-08-01 09:00</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">End Date:</span>
+                    <span class="detail-value">2023-08-01 11:00</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">Total Marks:</span>
+                    <span class="detail-value">100</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">Questions:</span>
+                    <span class="detail-value">10</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f0f4f8;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    .side-panel {
+        background: white;
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    #examContainer {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .questions-container {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+        .questions-container::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .questions-container::-webkit-scrollbar-thumb {
+            background: #bbb;
+            border-radius: 10px;
+        }
+
+    .exam-detail {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 992px) {
+        .col-lg-3
+
+    {
+        display: block;
+    }
+
+    }
+
+    @@media (max-width: 768px) {
+        .side-panel
+
+    {
+        position: static;
+        margin-bottom: 1rem;
+    }
+
+    #examContainer {
+        max-width: 100%;
+    }
+
+    .questions-container {
+        max-height: 300px;
+    }
+
+    }
+</style>

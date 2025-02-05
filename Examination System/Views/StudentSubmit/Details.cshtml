@@ -1,0 +1,222 @@
+﻿@model List<StudentSubmitDetailsViewModel>
+@{
+    var examDetails = ViewBag.examDetails as GetExamModel;
+}
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+
+        
+
+        <!-- Exam Panel (Center) -->
+        <div class="col-lg-8 col-md-7">
+            <div id="examContainer">
+                <h2 class="text-center mb-4">@examDetails?.courseName Exam</h2>
+                <div class="questions-container">
+                    @for (int i = 0; i < Model?.Count; i++)
+                    {
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <p><b>@(i + 1)</b>. @Model[i].QuestionText</p>
+
+                                <div class="radio-group">
+
+                                    <!-- Option One -->
+                                    @if(Model[i].OptionOne == Model[i].StudentAnswer)
+                                    {
+                                        @if( Model[i].OptionOne == Model[i].CorrectChoice)
+                                        {
+                                            <div class="radio-option bg-success-subtle ps-2 py-1">
+                                                <label>@Model[i].OptionOne</label>
+                                            </div>
+                                        }else 
+                                        {
+                                            <div class="radio-option bg-danger-subtle ps-2 py-1">
+                                                <label>@Model[i].OptionOne</label>
+                                            </div>
+                                        }
+                                    }else 
+                                    {
+                                        <div class="radio-option ps-2 py-1">
+                                            <label>@Model[i].OptionOne</label>
+                                        </div>
+                                    }
+
+                                    <!--OptionTwo-->
+                                    @if (Model[i].OptionTwo == Model[i].StudentAnswer)
+                                    {
+                                        @if (Model[i].OptionTwo == Model[i].CorrectChoice)
+                                        {
+                                            <div class="radio-option bg-success-subtle ps-2 py-1">
+                                                <label>@Model[i].OptionTwo</label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="radio-option bg-danger-subtle ps-2 py-1">
+                                                <label>@Model[i].OptionTwo</label>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="radio-option ps-2 py-1">
+                                            <label>@Model[i].OptionTwo</label>
+                                        </div>
+                                    }
+
+                                    @if (@Model[i].OptionThree != null)
+                                    {
+                                        @if (Model[i].OptionThree == Model[i].StudentAnswer)
+                                        {
+                                            @if (Model[i].OptionThree == Model[i].CorrectChoice)
+                                            {
+                                                <div class="radio-option bg-success-subtle ps-2 py-1">
+                                                    <label>@Model[i].OptionThree</label>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="radio-option bg-danger-subtle ps-2 py-1">
+                                                    <label>@Model[i].OptionThree</label>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="radio-option ps-2 py-1">
+                                                <label>@Model[i].OptionThree</label>
+                                            </div>
+                                        }
+                                    }
+                                    @if (@Model[i].OptionFour != null)
+                                    {
+                                        @if (Model[i].OptionFour == Model[i].StudentAnswer)
+                                        {
+                                            @if (Model[i].OptionFour == Model[i].CorrectChoice)
+                                            {
+                                                <div class="radio-option bg-success-subtle ps-2 py-1">
+                                                    <label>@Model[i].OptionFour</label>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="radio-option bg-danger-subtle ps-2 py-1">
+                                                    <label>@Model[i].OptionFour</label>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="radio-option ps-2 py-1">
+                                                <label>@Model[i].OptionFour</label>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Panel (Right) -->
+        <div class="col-lg-4 d-none d-lg-block">
+            <div class="side-panel" id="infoPanel">
+                <h5 class="mb-3">Exam Information</h5>
+                <div class="exam-detail">
+                    <span class="detail-label">Exam Name:</span>
+                    <span class="detail-value">@examDetails?.courseName / @examDetails?.CreationDate</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">Instructor:</span>
+                    <span class="detail-value">@examDetails?.firstName @examDetails?.lastName</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">Start Time:</span>
+                    <span class="detail-value">@examDetails?.StartTime</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">End Time:</span>
+                    <span class="detail-value">@examDetails?.EndTime</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">Total Marks:</span>
+                    <span class="detail-value">@ViewBag.Grade</span>
+                </div>
+                <div class="exam-detail">
+                    <span class="detail-label">Questions:</span>
+                    <span class="detail-value">@Model?.Count()</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f0f4f8;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    .side-panel {
+        background: white;
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    #examContainer {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .questions-container {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+        .questions-container::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .questions-container::-webkit-scrollbar-thumb {
+            background: #bbb;
+            border-radius: 10px;
+        }
+
+    .exam-detail {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 992px) {
+        .col-lg-3 {
+            display: block;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .side-panel {
+            position: static;
+            margin-bottom: 1rem;
+        }
+
+        #examContainer {
+            max-width: 100%;
+        }
+
+        .questions-container {
+            max-height: 300px;
+        }
+    }
+</style>

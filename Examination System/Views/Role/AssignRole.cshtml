@@ -1,0 +1,64 @@
+﻿@model Examination_System.DTOs.AssignUserRole
+
+@{
+    ViewData["Title"] = "Assign Role";
+}
+
+<h1 class="text-center my-4">Assign Role</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow rounded">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4">Assign Role to User</h4>
+                    <form asp-action="AssignRole" method="post">
+                        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+
+                        <!-- User Dropdown -->
+                        <div class="form-group mb-3">
+                            <label asp-for="SelectedUser" class="form-label">Select User</label>
+                            <select asp-for="SelectedUser" class="form-select" required>
+                                <option value="">-- Select User --</option>
+                                @foreach (var user in Model.Users)
+                                {
+                                    <option value="@user">@user</option>
+                                }
+                            </select>
+                            <span asp-validation-for="SelectedUser" class="text-danger"></span>
+                        </div>
+
+                        <!-- Role Dropdown -->
+                        <div class="form-group mb-3">
+                            <label asp-for="SelectedRole" class="form-label">Select Role</label>
+                            <select asp-for="SelectedRole" class="form-select" required>
+                                <option value="">-- Select Role --</option>
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <option value="@role">@role</option>
+                                }
+                            </select>
+                            <span asp-validation-for="SelectedRole" class="text-danger"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary rounded-pill">Assign Role</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary">Back to Home</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

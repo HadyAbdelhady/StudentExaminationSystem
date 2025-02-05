@@ -1,0 +1,174 @@
+﻿@model UpdateStudentViewModel
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+        background-color: rgba(255, 255, 255, 0.95);
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+    .form-control {
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+        margin-bottom: .5rem;
+        color: #000 !important;
+    }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #4c51bf 0%, #2d1744 100%);
+        border: none;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-size: 19px;
+        font-weight: 600;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+        }
+
+    textarea {
+        resize: none;
+        overflow: auto
+    }
+
+    label {
+        font-weight: 600;
+    }
+
+    .form-control {
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+        color: black !important;
+        margin-bottom: .5rem;
+    }
+
+        .form-control:focus {
+            border-color: #31304D;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+        .form-control::placeholder {
+            color: rgba(142, 134, 134, 0.7) !important;
+            opacity: 1;
+        }
+</style>
+
+
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h1 class="card-title text-center mb-4">Update Student</h1>
+                    <form asp-action="SaveUpdate" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="form-group">
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" class="form-control" required />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" class="form-control" required />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" type="email" class="form-control" required />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Gender"></label>
+                            <select asp-for="Gender" class="form-control" required>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Ssn">SSN</label>
+                            <input asp-for="Ssn" class="form-control" required />
+                            <span asp-validation-for="Ssn" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Phone"></label>
+                            <input asp-for="Phone" type="tel" class="form-control" required />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="DateOfBirth"></label>
+                            <input asp-for="DateOfBirth" class="form-control" type="date" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+
+                        <!-- Disabled EnrollmentDate for display only -->
+                        <div class="form-group">
+                            <label asp-for="EnrollmentDate"></label>
+                            <input asp-for="EnrollmentDate" class="form-control" type="date" disabled />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Address"></label>
+                            <textarea asp-for="Address" class="form-control" required></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <!-- Dropdowns -->
+                        <div class="form-group">
+                            <label>Track</label>
+                            <select asp-for="TrackId" class="form-select">
+                                @foreach (var item in Model.BranchDepartmentTracks)
+                                {
+                                    <option value="@item.TrackId" selected="@(item.TrackId == Model.TrackId)">@item.TrackName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select asp-for="DepartmentId" class="form-select">
+                                @foreach (var item in Model.BranchDepartmentTracks)
+                                {
+                                    <option value="@item.DepartmentId" selected="@(item.DepartmentId == Model.DepartmentId)">@item.DepartmentName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Branch</label>
+                            <select asp-for="BranchId" class="form-select">
+                                @foreach (var item in Model.BranchDepartmentTracks)
+                                {
+                                    <option value="@item.BranchId" selected="@(item.BranchId == Model.BranchId)">@item.BranchName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary w-100">Update Student</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

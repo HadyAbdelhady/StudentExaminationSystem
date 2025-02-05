@@ -1,0 +1,141 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<body>
+    <div class="error-container">
+        <i class="fas fa-exclamation-triangle error-icon"></i>
+        <div class="error-message" id="errorMessage">Oops! Something went wrong</div>
+
+        <div class="error-details">
+            <p id="errorDetails" class="h4 text-danger text-center">
+                
+                @Model.ErrorMessage
+            </p>
+        </div>
+
+      
+            <p><strong>We're sorry, but an unexpected error occurred. Our team has been notified and we're working to fix it.</strong></p>
+        
+
+        <button class="btn-home" onclick="window.location.href='/'">
+            <i class="fas fa-home"></i> Return to Home
+        </button>
+    </div>
+</body>
+
+
+
+<style>
+       .error-container {
+        max-width: 800px;
+        margin: 4rem auto;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        text-align: center;
+    }
+
+    .error-icon {
+        font-size: 5rem;
+        color: #31304D;
+        margin-bottom: 1.5rem;
+        animation: bounce 1.5s infinite;
+    }
+
+    .error-code {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #161A30;
+        margin-bottom: 1rem;
+    }
+
+    .error-message {
+        font-size: 1.5rem;
+        color: #4A5568;
+        margin-bottom: 2rem;
+    }
+
+    .error-details {
+        background: #F8F9FA;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 2rem 0;
+        text-align: left;
+    }
+
+    .btn-home {
+        background: linear-gradient(135deg, #31304D 0%, #161A30 100%);
+        color: #F0ECE5;
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(49, 48, 77, 0.3);
+        }
+
+    @@keyframes bounce {
+        0%, 100%
+
+    {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    }
+
+    /* Footer Styles */
+    .footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        color: #161A30;
+        /* Dark text for footer */
+        font-size: 14px;
+        padding: 20px 0;
+        margin-top: auto;
+        /* Light off-white with transparency */
+    }
+
+        .footer a {
+            color: #31304D;
+            /* Dark blue for links */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .footer a:hover {
+                color: #161A30;
+                /* Darker blue on hover */
+            }
+
+        .footer .list-inline-item:not(:last-child) {
+            margin-right: 15px;
+        }
+
+    @@media (max-width: 768px) {
+        .error-container
+
+    {
+        margin: 2rem 1rem;
+        padding: 1.5rem;
+    }
+
+    .error-code {
+        font-size: 2rem;
+    }
+
+    .error-message {
+        font-size: 1.2rem;
+    }
+
+    }
+</style>

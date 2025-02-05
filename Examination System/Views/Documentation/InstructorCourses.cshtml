@@ -1,0 +1,32 @@
+﻿@model List<InstructorCourseInfo>
+
+<h1 class="text-center">@ViewBag.Title</h1>
+<table class="table table-striped">
+    <thead >
+        <th>
+            CourseId
+        </th>
+        <th>
+            Course Name
+        </th>
+        <th>
+            Student Count
+        </th>
+    </thead>
+    <tbody>
+        @foreach(var ic in @Model)
+        {
+            <tr>
+                <td>
+                    @ic.CourseId
+                </td>
+                <td>
+                    @ic.CourseName
+                </td>
+                <td>
+                    @ic.StudentCount
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

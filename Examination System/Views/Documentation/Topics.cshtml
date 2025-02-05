@@ -1,0 +1,16 @@
+﻿@model List<CourseTopicViewModel> 
+
+    <h1 class="text-center">@ViewBag.Title</h1>
+<table class="table table-striped">
+    <thead>
+        <th>Topic Name</th>
+    </thead>
+    <tbody>
+        @foreach (var ct in @Model)
+        {
+          <tr>
+              <td>@ct.TopicName</td>
+          </tr>
+        }
+    </tbody>
+</table>

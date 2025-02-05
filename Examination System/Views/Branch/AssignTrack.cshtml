@@ -1,0 +1,137 @@
+﻿@model (GetAllBranches Branch, List<GetDepartmentData> Departments, List<GetTracksPerBranch> Tracks)
+
+@{
+    ViewData["Title"] = "Assign Track to Branch";
+}
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card mb-4">
+                <div class="card-body p-4">
+                    <h1 class="card-title text-center mb-4">Assign Track to @Model.Branch.Name</h1>
+                    <form asp-action="AssignTrack" method="post">
+                        <input type="hidden" name="branchId" value="@Model.Branch.Id" />
+
+                        <div class="form-group">
+                            <label for="trackId">Select Track:</label>
+                            <select class="form-control" name="trackId" required>
+                                <option value="">-- Select a Track --</option>
+                                @foreach (var track in Model.Tracks)
+                                {
+                                    <option value="@track.Id">@track.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="departmentManagerId">Department Manager ID:</label>
+                            <input type="number" class="form-control" name="departmentManagerId" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trackManagerId">Track Manager ID:</label>
+                            <input type="number" class="form-control" name="trackManagerId" required />
+                        </div>
+
+
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary mt-3">Assign Track</button>
+                            <a class="btn btn-secondary mt-3" asp-action="Details" asp-route-id="@Model.Branch.Id">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: #F0ECE5;
+        min-height: 100vh;
+        /*padding: 20px;*/
+        font-family: "lora", serif;
+    }
+
+    .card {
+        margin-top: 50px;
+        border: none;
+        border-radius: 15px;
+        background-color: rgba(255, 255, 255, 0.95);
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+    .form-control {
+        /* border: 2px solid #161A30; */
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #31304D;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #161A30 0%, #31304D 100%);
+        border: none;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 20px;
+    }
+
+    .btn-secondary {
+        padding: 0.8rem 1.5rem;
+    }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px #31304D;
+        }
+
+    label {
+        font-weight: 600;
+    }
+
+    textarea {
+        resize: none;
+        overflow: auto;
+    }
+
+
+
+    /* Footer Styles */
+    .footer {
+        /* background-color: rgba(255, 255, 255, 0.95); */
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        color: #2d1744;
+        font-size: 14px;
+        padding: 20px 0;
+        margin-top: auto; /* Ensures footer sticks to the bottom */
+    }
+
+        .footer a {
+            color: #31304D;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .footer a:hover {
+                color: #4c51bf;
+            }
+
+        .footer .list-inline-item:not(:last-child) {
+            margin-right: 15px;
+        }
+</style>
+
+

@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Examination_System</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Examination_System.styles.css" asp-append-version="true" />
+    <link href="~/css/layout.css" rel="stylesheet" />
+    <style>
+        @await RenderSectionAsync("Style", required: false)
+    </style>
+
+
+
+
+</head>
+
+@if(User.Identity.IsAuthenticated)
+{
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Home</a>
+                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Instructor")){
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Branch" >Branches</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Department">Departments </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Student">Students </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="StudentProfile" asp-route-id="@User.FindFirst("StudentId").Value">Profile  </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Courses" asp-controller="StudentProfile" asp-route-id="@User.FindFirst("StudentId").Value">Courses </a>
+                            </li>
+                        }
+
+
+
+                        @if(User.IsInRole("Instructor")){
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="ChooseCourse" asp-controller="ExamModel" asp-route-id="@User.FindFirst("InstructorId").Value" >Create Exam</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Admin")){
+                            <a class="nav-link" asp-action="Index" asp-controller="Instructor" asp-route-id=" ">Instructors</a>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Signout" asp-controller="Account">Sign out </a>
+                        </li>
+                    </ul>
+                    <form class="d-flex align-items-center" id="searchForm">
+                        <input class="form-control me-2" type="search" id="searchInput" placeholder="Search here...">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+
+                </div>
+            </div>
+        </nav>
+        <!-- Sidebar -->
+        @if (User.IsInRole("Admin") || User.IsInRole("Instructor"))
+        {
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h5 class="text-white mb-0">Exam Portal</h5>
+                </div>
+
+                <div class="sidebar-menu">
+                    <a href="#" class="sidebar-item">Dashboard</a>
+                    <a href="#" class="sidebar-item">My Exams</a>
+                    <a href="#" class="sidebar-item">Results</a>
+                    <a href="#" class="sidebar-item">Study Materials</a>
+                    <a href="#" class="sidebar-item">Settings</a>
+                    <a href="#" class="sidebar-item">Help Center</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="AssignRole" asp-controller="Role" class="sidebar-item">Assign Role</a>
+                    }
+                </div>
+            </div>
+        }
+    </header>
+
+    <div class="main-container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!--- Footer ----->
+    <footer class="footer mt-auto py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">
+                        &copy; @DateTime.Now.Year Elmanshar. All rights reserved. Support Contact : Zero
+                        Etnashr.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="#" class="text-decoration-none">Privacy Policy</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="text-decoration-none">Terms of Service</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="text-decoration-none">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+}
+else
+{
+    <div class="main-container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+}
+<body>
+    <script src="~/js/layout.js"> </script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,113 @@
+﻿@model ExamModelDetailsViewModel
+
+<style>
+    .exam-header {
+        position: sticky;
+        top: 60px; /* Adjusted to reduce space */
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: #f8f9fa;
+        z-index: 999;
+        padding: 10px 20px; /* Reduced padding */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-size: 14px; /* Smaller font */
+    }
+
+    .metadata-label {
+        font-weight: bold;
+    }
+
+    .questions-container {
+        overflow-y: auto;
+        padding: 10px; /* Reduced padding */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .card {
+        margin-bottom: 10px; /* Reduce space between questions */
+        padding: 10px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .card-title {
+        font-size: 14px; /* Smaller question font */
+        margin-bottom: 8px;
+    }
+
+    .list-group-item {
+        padding: 6px 10px; /* Reduced padding */
+        font-size: 13px; /* Smaller text */
+    }
+</style>
+
+<div class="container position-relative">
+    <div class="exam-header">
+        <div class="container">
+            <div class="row mb-1">
+                <div class="col-md-3">
+                    <span class="metadata-label">Date:</span> @Model?.examModelData?.Date.ToString("dd/MM/yyyy")
+                </div>
+                <div class="col-md-3">
+                    <span class="metadata-label">Duration:</span> 60 min
+                </div>
+                <div class="col-md-3">
+                    <span class="metadata-label">Start:</span> @Model?.examModelData?.StartTime
+                </div>
+                <div class="col-md-3">
+                    <span class="metadata-label">End:</span> @Model?.examModelData?.EndTime
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="metadata-label">Course ID:</span> @Model?.examModelData?.CourseId
+                </div>
+                <div class="col-md-4">
+                    <span class="metadata-label">Instructor:</span> @Model?.examModelData?.firstName @Model?.examModelData?.lastName
+                </div>
+                <div class="col-md-4">
+                    <span class="metadata-label">Course:</span> @Model?.examModelData?.courseName
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="questions-container">
+        <div class="container">
+            @foreach (var question in Model?.examModelQuestions ?? new List<GetQuestionsWithOptions>())
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@question.QuestionText</h5>
+                        <div class="list-group">
+                            <button class="list-group-item list-group-item-action @(question.OptionOne == question.ModelAnswer ? "list-group-item-success" : "")">
+                                a) @question.OptionOne
+                            </button>
+                            <button class="list-group-item list-group-item-action @(question.OptionTwo == question.ModelAnswer ? "list-group-item-success" : "")">
+                                b) @question.OptionTwo
+                            </button>
+                            @if (question.OptionThree != null)
+                            {
+                                <button class="list-group-item list-group-item-action @(question.OptionThree == question.ModelAnswer ? "list-group-item-success" : "")">
+                                    c) @question.OptionThree
+                                </button>
+                            }
+                            @if (question.OptionFour != null)
+                            {
+                                <button class="list-group-item list-group-item-action @(question.OptionFour == question.ModelAnswer ? "list-group-item-success" : "")">
+                                    d) @question.OptionFour
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+

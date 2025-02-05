@@ -1,0 +1,27 @@
+﻿@model CourseInstructorViewModel
+@{
+    var Courses = ViewBag.Courses as List<Course>;
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h1 class="mb-4 text-center">Create Exam</h1>
+        <form asp-action="Create" asp-controller="ExamModel">
+            <div class="mb-3">
+                <label for="CourseId" class="form-label">Select Course</label>
+                <select asp-for="CourseId" class="form-select" id="CourseId" required>
+                    <option value="" disabled selected>-- Select a Course --</option>
+                    @foreach (var course in Courses)
+                    {
+                        <option value="@course.Id">@course.Name</option>
+                    }
+                </select>
+            </div>
+            <input asp-for="InstructorId" type="hidden" value="@Model.InstructorId" />
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary px-4">Insert Exam</button>
+            </div>
+        </form>
+    </div>
+</div>

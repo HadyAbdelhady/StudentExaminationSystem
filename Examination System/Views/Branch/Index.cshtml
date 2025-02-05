@@ -1,0 +1,323 @@
+﻿@model IEnumerable<GetAllBranches>
+
+@{
+    ViewData["Title"] = "Branch Index";
+}
+
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Branches</h2>
+
+    @if(User.IsInRole("Admin"))
+    {
+        <!-- Add New Exam Button -->
+        <div class="mb-3 text-end">
+            <a asp-action="Create" class="btn btn-primary" id="addExamBtn">
+                Add New Branch
+            </a>
+        </div>
+    }
+
+    <!-- Exam Manager Table -->
+    <table id="examManagerTable" class="table table-striped table-bordered text-center">
+        <thead>
+            <tr>
+                <th class="text-center">Name</th>
+                <th class="text-center">Location</th>
+                <th class="text-center">Phone</th>
+                <th class="text-center">Date of Establishment</th>
+                <th class="text-center">Manager</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var branch in Model)
+            {
+                <tr>
+                <td>@branch.Name</td>
+                <td>@branch.Location</td>
+                <td>@branch.Phone</td>
+                <td>@branch.EstablishmentDate?.ToString("yyyy-MM-dd")</td>
+                    <td><a class="link-offset-2 link-underline link-underline-opacity-0" asp-controller="Instructor" asp-action="Index" asp-route-id="@branch.ManagerId">@branch.ManagerName</a></td>
+                <td>
+                    <a id="toggle-view" class="btn btn-success btn-sm" asp-action="Details" asp-route-id="@branch.Id">
+                        Details
+                    </a>
+                    @if(User.IsInRole("Admin"))
+                    {
+                            <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@branch.Id">Edit</a>
+                            <!--<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@branch.Id">Delete</a>-->
+                            <form asp-action="ConfirmDelete" method="post" onsubmit="return confirm('Are you sure you want to delete this Branch?');"
+                                  style=" display:inline;">
+                                <input type="hidden" name="id" value="@branch.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<!--*****************************************************************-->
+
+
+@section Style{
+
+    <style>
+        /* Base Styles */
+        body {
+            background-color: #F0ECE5; /* Light off-white background */
+            font-family: "Lora", serif;
+            color: #161A30; /* Dark text for contrast */
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        /* Header Styles */
+        h2 {
+            color: #31304D; /* Dark blue for headings */
+            font-weight: 700;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #4c51bf; /* Accent color for underline */
+        }
+
+        /* Review Exam Button */
+        .btn-review {
+            background: #B6BBC4 !important; /* Stone gray for buttons */
+            border: none !important;
+            padding: 0.8rem 1.5rem !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 15px rgba(182, 187, 196, 0.2) !important;
+            transition: all 0.3s ease !important;
+            color: #161A30 !important; /* Dark text for buttons */
+        }
+
+            .btn-review:hover {
+                transform: translateY(-2px);
+                background: linear-gradient(135deg, #31304D 0%, #161A30 100%) !important; /* Dark blue gradient */
+                color: #F0ECE5 !important; /* Light text on hover */
+            }
+
+        /* Adjust header container */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Modify existing button container */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Button Styles */
+        #addExamBtn {
+            background: #B6BBC4; /* Stone gray for buttons */
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(182, 187, 196, 0.2);
+            transition: all 0.3s ease;
+            color: #161A30; /* Dark text for buttons */
+        }
+
+            #addExamBtn:hover {
+                transform: translateY(-2px);
+                background: linear-gradient(135deg, #31304D 0%, #161A30 100%); /* Dark blue gradient */
+                color: #F0ECE5; /* Light text on hover */
+            }
+
+        /* Table Container */
+        #examManagerTable_wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            overflow: auto;
+        }
+
+        /* Table Styles */
+        #examManagerTable {
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+            #examManagerTable thead {
+                background: #161A30; /* Darkest blue for table header */
+                color: white;
+            }
+
+                #examManagerTable thead th {
+                    border: none;
+                    padding: 1rem;
+                    font-weight: 600;
+                }
+
+            #examManagerTable tbody td {
+                padding: 1rem;
+                vertical-align: middle;
+                border-color: #e9ecef;
+            }
+
+            #examManagerTable tbody tr:nth-child(even) {
+                background-color: #F8F9FA; /* Light gray for even rows */
+            }
+
+        /* Action Buttons */
+        .btn-success {
+            background-color: #31304D !important; /* Dark blue for success buttons */
+            border-color: #31304D !important;
+            color: white !important;
+        }
+
+        .btn-warning {
+            background-color: #B6BBC4 !important; /* Stone gray for warning buttons */
+            border-color: #B6BBC4 !important;
+            color: #161A30 !important; /* Dark text for buttons */
+        }
+
+        .btn-danger {
+            background-color: #DC3545 !important; /* Red for danger buttons */
+            border-color: #DC3545 !important;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-scheduled {
+            background: rgba(49, 48, 77, 0.1); /* Light dark blue for scheduled status */
+            color: #31304D;
+        }
+
+        .status-active {
+            background: rgba(49, 48, 77, 0.1); /* Light dark blue for active status */
+            color: #31304D;
+        }
+
+        .status-completed {
+            background: rgba(220, 53, 69, 0.1); /* Light red for completed status */
+            color: #DC3545;
+        }
+
+        /* Search & Pagination */
+        .dataTables_filter {
+            padding: 0 1rem 1rem;
+        }
+
+            .dataTables_filter input {
+                border: 2px solid #B6BBC4 !important; /* Stone gray border */
+                border-radius: 8px !important;
+                padding: 0.6rem 1rem !important;
+                background: rgba(255, 255, 255, 0.9) !important;
+                transition: all 0.3s ease;
+                width: 25rem;
+                margin: 0.5rem;
+                margin-top: 1rem;
+            }
+
+                .dataTables_filter input:focus {
+                    border-color: #31304D !important; /* Dark blue border on focus */
+                    box-shadow: 0 0 0 3px rgba(49, 48, 77, 0.15) !important;
+                    outline: none;
+                }
+
+        .dataTables_paginate {
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+            .dataTables_paginate .paginate_button {
+                padding: 0.5rem 1rem !important;
+                border-radius: 8px !important;
+                transition: all 0.3s ease !important;
+                margin: 0 2px !important;
+                color: #31304D !important; /* Dark blue for pagination buttons */
+            }
+
+                .dataTables_paginate .paginate_button:hover {
+                    background: #31304D !important; /* Dark blue on hover */
+                    color: white !important;
+                    transform: translateY(-1px);
+                }
+
+                .dataTables_paginate .paginate_button.current {
+                    font-weight: 700;
+                    background: transparent !important;
+                    color: #31304D !important; /* Dark blue for current page */
+                }
+
+                .dataTables_paginate .paginate_button.previous,
+                .dataTables_paginate .paginate_button.next {
+                    background: rgba(49, 48, 77, 0.1) !important; /* Light dark blue for previous/next buttons */
+                    font-weight: 500;
+                }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .container
+
+        {
+            padding: 1rem;
+        }
+
+        #examManagerTable_wrapper {
+            border-radius: 8px;
+        }
+
+        .dataTables_filter input {
+            width: 100%;
+        }
+
+        }
+
+        table.dataTable thead .sorting::after,
+        table.dataTable thead .sorting_asc::after,
+        table.dataTable thead .sorting_desc::after {
+            margin: auto;
+        }
+
+
+    </style>
+}
+
+
+
+
+@section Scripts{
+    <script >
+             $(document).ready(function () {
+                $('#examManagerTable').DataTable({
+                    responsive: true,
+                    pageLength: 5,  // Show only 5 rows per page
+                    lengthChange: false, // Disable the ability to change page length
+                    ordering: false,
+                    searching: true,
+                    info: false,
+                    paging: true // Ensure pagination is enabled
+                });
+            });
+        
+    </script>
+
+}
