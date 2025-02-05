@@ -402,16 +402,15 @@ BEGIN
             ON QB.ID = QC.QuestionID
         WHERE QB.isDeleted = 0 AND QB.courseID = @courseId
     )
-    
     SELECT 
         q.QuestionID,
         q.QuestionText,
         MAX(CASE WHEN q.ChoiceNum = 1 THEN q.Choice END) AS OptionOne,
         MAX(CASE WHEN q.ChoiceNum = 2 THEN q.Choice END) AS OptionTwo,
-        CASE WHEN q.QuestionType = 'MultipleChoice' 
+        CASE WHEN q.QuestionType = 'Multiple Choice' 
             THEN MAX(CASE WHEN q.ChoiceNum = 3 THEN q.Choice END) 
             ELSE NULL END AS OptionThree,
-        CASE WHEN q.QuestionType = 'MultipleChoice' 
+        CASE WHEN q.QuestionType = 'Multiple Choice' 
             THEN MAX(CASE WHEN q.ChoiceNum = 4 THEN q.Choice END) 
             ELSE NULL END AS OptionFour,
         q.ModelAnswer
