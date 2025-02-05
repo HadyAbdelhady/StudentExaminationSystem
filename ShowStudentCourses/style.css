@@ -12,16 +12,7 @@ body {
     transition: all 0.3s ease;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     position: relative;
-
-    /* width: 100%; */
 }
-
-/* .card-body.instructor {
-    display: flex;
-    max-height: 35vh;
-    position: relative;
-    flex-direction: column;
-} */
 
 .card:hover {
     transform: translateY(-5px);
@@ -57,17 +48,18 @@ body {
 
 .course-card {
     width: 100%;
-    /* min-width: 500px; */
     margin-bottom: 1.5rem;
     max-height: 275px;
     overflow-y: auto;
 }
+
 .course-card::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
+    height: 5px;
 }
 
 .course-card::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
+    background: #161A30;
     border-radius: 10px;
 }
 
@@ -75,6 +67,22 @@ body {
     background: #161A30;
     border-radius: 10px;
 }
+
+.card-body::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.card-body::-webkit-scrollbar-track {
+    background: #161A30;
+    border-radius: 10px;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+    background: #161A30;
+    border-radius: 10px;
+}
+
 .course-assigned {
     display: flex;
     justify-content: center;
@@ -91,7 +99,6 @@ body {
     color: #2d1744 !important;
     font-weight: 700 !important;
 }
-
 
 
 /* Footer Styles */
@@ -119,17 +126,18 @@ body {
     margin-right: 15px;
 }
 
-@media(max-width:1200px){
-    /* .row {
-
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-    } */
-
-    .card{
+@media(max-width:1200px) {
+    .card {
 
         min-height: auto;
         /* min-width: auto; */
+    }
+}
+
+@media(max-width:500px) {
+    .card-body {
+        min-width: 500px;
+        overflow-x: auto;
+        overflow-y: auto;
     }
 }
