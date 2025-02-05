@@ -83,7 +83,6 @@ namespace Examination_System.Controllers
         }
 
         // GET: TrackController/Details/5
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int id)
         {
             try

@@ -28,7 +28,10 @@
         </div>
         <div class="mb-4">
             <a class="btn btn-primary" asp-controller="Track" asp-action="Details" asp-route-id="@Model.TrackId">Back to List</a>
-            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Course.Id" asp-route-trackId="@Model.TrackId">Edit</a>
+            @if (User.IsInRole("Admin")){
+                 <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Course.Id" asp-route-trackId="@Model.TrackId">Edit</a>
+
+            }
         </div>
 
         <div class="card dep-table mb-4">

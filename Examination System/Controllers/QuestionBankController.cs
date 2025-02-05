@@ -68,7 +68,7 @@ namespace Examination_System.Controllers
         [HttpGet]
         public IActionResult Create(int? instructorId, int courseId)
         {
-            instructorId = instructorId ?? int.Parse(User.FindFirst("InstructorId").Value);
+            instructorId =  int.Parse(User.FindFirst("InstructorId").Value);
             var model = new InsertQuestion
             {
                 QuestionData = new InsertQuestion.Question

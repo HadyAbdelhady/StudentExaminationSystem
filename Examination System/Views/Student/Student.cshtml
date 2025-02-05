@@ -46,60 +46,62 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card available-courses">
-                <div class="card-body">
-                    @if (Model?.AvilableCourses?.Count > 1)
-                    {
-                        <h4 class="card-title mb-4">Available Courses</h4>
-                    }
-                    <!-- Available Courses List -->
-                    @foreach (var course in @Model.AvilableCourses)
-                    {
-                        <div class="available-courses-list">
-                            <div class="card available-course mb-3">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-3">@course.CourseName</h4>
+        @if (User.IsInRole("Admin")){
 
-                                    <form method="post" asp-action="AddCourse">
-                                        <input type="hidden" name="studentId" value="@Model.Student.Id" />
-                                        <input type="hidden" name="courseId" value="@course.CourseId" />
+            <div class="col-md-4 mb-4">
+                <div class="card available-courses">
+                    <div class="card-body">
+                        @if (Model?.AvilableCourses?.Count > 1)
+                        {
+                            <h4 class="card-title mb-4">Available Courses</h4>
+                        }
+                        <!-- Available Courses List -->
+                        @foreach (var course in @Model.AvilableCourses)
+                        {
+                            <div class="available-courses-list">
+                                <div class="card available-course mb-3">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-3">@course.CourseName</h4>
 
-                                        <div class="mb-3">
-                                            <label for="instructorId-@course.CourseId" class="form-label">Select Instructor:</label>
-                                            <select class="form-select" name="instructorId" id="instructorId-@course.CourseId" required>
-                                                <option value="" disabled selected>-- Select Instructor --</option>
-                                                @foreach (var instructor in @Model?.AvilableInstructors)
-                                                {
-                                                    <option value="@instructor.Id">@instructor.FirstName @instructor.LastName</option>
-                                                }
-                                            </select>
-                                        </div>
+                                        <form method="post" asp-action="AddCourse">
+                                            <input type="hidden" name="studentId" value="@Model.Student.Id" />
+                                            <input type="hidden" name="courseId" value="@course.CourseId" />
 
-                                        @if (User.IsInRole("Admin"))
-                                        {
+                                            <div class="mb-3">
+                                                <label for="instructorId-@course.CourseId" class="form-label">Select Instructor:</label>
+                                                <select class="form-select" name="instructorId" id="instructorId-@course.CourseId" required>
+                                                    <option value="" disabled selected>-- Select Instructor --</option>
+                                                    @foreach (var instructor in @Model?.AvilableInstructors)
+                                                    {
+                                                        <option value="@instructor.Id">@instructor.FirstName @instructor.LastName</option>
+                                                    }
+                                                </select>
+                                            </div>
+
                                             <button type="submit" class="btn btn-success align-items-center">
                                                 <i class="fas fa-plus"></i> Assign Course
                                             </button>
-                                        }
-                                    </form>
+
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
 
 
-                    @if(Model.AvilableCourses.Count < 1){
-                        <!-- Empty State (hidden by default) -->
-                    <div class="empty-state" >
-                        <div class="empty-icon">📚</div>
-                        <h5>No Courses Available</h5>
-                        <p>Add new courses to get started</p>
+                        @if (Model.AvilableCourses.Count < 1)
+                        {
+                            <!-- Empty State (hidden by default) -->
+                            <div class="empty-state">
+                                <div class="empty-icon">📚</div>
+                                <h5>No Courses Available</h5>
+                                <p>Add new courses to get started</p>
+                            </div>
+                        }
                     </div>
-                    }
                 </div>
             </div>
-        </div>
+        }
         <div class="card mb-4 col-12">
             <div class="card-body course-assigned">
                 <h4 class="card-title mb-4">Assigned Courses</h4>
