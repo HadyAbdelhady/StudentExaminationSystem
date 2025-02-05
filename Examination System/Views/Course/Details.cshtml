@@ -36,10 +36,13 @@
                 <div class="heading">
 
                     <h4 class="card-title" style="display:inline-block">Course Topics</h4>
-                    <a class="btn btn-info btn-sm  mb-2" style="color:white" asp-controller="Topic" asp-action="Create" asp-route-trackId="@Model.TrackId" asp-route-courseId="@Model.Course.Id" class="btn btn-primary" style="margin-bottom:10px">
-                        <i class="fas fa-plus me-2"></i>
-                        Insert Topic
-                    </a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-info btn-sm  mb-2" style="color:white" asp-controller="Topic" asp-action="Create" asp-route-trackId="@Model.TrackId" asp-route-courseId="@Model.Course.Id" class="btn btn-primary" style="margin-bottom:10px">
+                            <i class="fas fa-plus me-2"></i>
+                            Insert Topic
+                        </a>
+                    }
 
                 </div>
                 <div class="row mt-3">
@@ -50,7 +53,10 @@
                                 <thead>
                                     <tr>
                                         <th>Topic Name</th>
-                                        <th>Actions</th>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <th>Actions</th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,10 +65,12 @@
 
                                         <tr>
                                             <td>@topic.Topic</td>
+                                                @if (User.IsInRole("Admin"))
+                                                {
                                         <td>
-                                                <a class="btn btn-info btn-sm mb-2" style="color:white" asp-controller="Topic" asp-action="Edit" asp-route-courseId="@Model.Course.Id" asp-route-topic="@topic.Topic" asp-route-trackId="@Model.TrackId">
-                                                    Edit
-                                                </a>
+                                                    <a class="btn btn-info btn-sm mb-2" style="color:white" asp-controller="Topic" asp-action="Edit" asp-route-courseId="@Model.Course.Id" asp-route-topic="@topic.Topic" asp-route-trackId="@Model.TrackId">
+                                                        Edit
+                                                    </a>
                                                 <!--<a class="btn btn-info btn-sm  mb-2" style="color:white" asp-controller="Topic" asp-action="Delete" asp-route-trackId="@Model.TrackId" asp-route-courseId="@Model.Course.Id" asp-route-Topic="@topic.Topic">Delete</a>-->
                                                 <form method="post" asp-controller="Topic" asp-action="Delete"
                                                       onsubmit="return confirm('Are you sure you want to delete this topic?');"
@@ -73,6 +81,7 @@
                                                     <button type="submit" class="btn btn-info btn-sm mb-2">Delete</button>
                                                 </form>
                                         </td>
+                                                }
                                     </tr>
                                     }
                                 </tbody>

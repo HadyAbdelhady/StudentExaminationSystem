@@ -3,11 +3,13 @@ using Examination_System.Data;
 using Examination_System.DTOs;
 using Examination_System.Models;
 using Examination_System.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Examination_System.Controllers
 {
+    [Authorize(Roles = "Admin , Instructor")]
     public class StudentController : Controller
     {
         private readonly StudentExaminationSystemContext _context;
@@ -126,7 +128,8 @@ namespace Examination_System.Controllers
                 return HandleError(ex);
             }
         }
-        
+
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             try
@@ -141,19 +144,40 @@ namespace Examination_System.Controllers
                 return HandleError(ex);
             }
         }
+        
+        [Authorize(Roles = "Admin")]
         public IActionResult SaveCreate(InsertStudentViewModel student)
         {
-            try
-            {
-            _context.Database.SqlQuery<int>(
-                $" InsertStudent @firstName ={student.FirstName}, @lastName={student.LastName}, @gender ={student.Gender} ,@SSN = {student.Ssn}, @enrollmentDate = {student.EnrollmentDate} ,@Email = {student.Email}, @Phone = {student.Phone},@DateOfBirth = {student.DateOfBirth},@address = {student.Address}, @trackID = {student.TrackId}, @branchId = {student.BranchId}, @departmentID = {student.DepartmentId};").ToList();
+            //try
+            //{
+            //_context.Database.SqlQuery<int>(
+            //    $" InsertStudent @firstName ={student.FirstName}, @lastName={student.LastName}, @gender ={student.Gender} ,@SSN = {student.Ssn}, @enrollmentDate = {student.EnrollmentDate} ,@Email = {student.Email}, @Phone = {student.Phone},@DateOfBirth = {student.DateOfBirth},@address = {student.Address}, @trackID = {student.TrackId}, @branchId = {student.BranchId}, @departmentID = {student.DepartmentId};").ToList();
+            //return RedirectToAction(nameof(Index));
+            //}
+            //catch (Exception ex)
+            //{
+            //    return HandleError(ex);
+            //}
+            Student newStudent = new Student();
+            newStudent.FirstName = student.FirstName;
+            newStudent.LastName = student.LastName;
+            newStudent.Email = student.Email;
+            newStudent.Address = student.Address;
+            newStudent.Ssn = student.Ssn;
+            newStudent.BranchId = student.BranchId;
+            newStudent.DepartmentId = student.DepartmentId;
+            newStudent.TrackId = student.TrackId;
+            newStudent.Gender = student.Gender;
+            newStudent.DateOfBirth = student.DateOfBirth;
+            newStudent.EnrollmentDate = student.EnrollmentDate;
+            newStudent.Phone = student.Phone;
+            _context.Students.Add(newStudent);
+
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                return HandleError(ex);
-            }
         }
+        
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(int id)
         {
             try
@@ -201,6 +225,8 @@ namespace Examination_System.Controllers
             }
 
         }
+
+        [Authorize(Roles = "Admin")]
         public IActionResult saveUpdate(UpdateStudentViewModel student)
         {
             try
@@ -214,7 +240,8 @@ namespace Examination_System.Controllers
                 return HandleError(ex);
             }
         }
-        
+
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             try
@@ -227,7 +254,8 @@ namespace Examination_System.Controllers
                 return HandleError(ex);
             }
         }
-        
+
+        [Authorize(Roles = "Admin")]
         public IActionResult AddCourse(int studentId, int courseId, int instructorId)
         {
             try
@@ -243,6 +271,8 @@ namespace Examination_System.Controllers
                 return HandleError(ex);
             }
         }
+        
+        [Authorize(Roles = "Admin")]
         public IActionResult RemoveCourse(int studentId, int courseId)
         {
             try

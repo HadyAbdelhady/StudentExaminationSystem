@@ -1,6 +1,6 @@
 ﻿using Examination_System.Data;
 using Examination_System.DTOs;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Examination_System.Controllers
 {
+    [Authorize (Roles ="Admin , Instructor")]
     public class BranchController : Controller
     {
         private readonly StudentExaminationSystemContext _context;
@@ -53,14 +54,19 @@ namespace Examination_System.Controllers
         }
 
         // GET: BranchController/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
+            var ManagersIds = _context.Branches.Select(x => x.ManagerId).ToList();
+            var managers = _context.Instructors.Where(inst => !ManagersIds.Any(managerId => inst.Id == managerId)).ToList();
+            ViewBag.managers = managers;
             return View();
         }
 
         // POST: BranchController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(GetAllBranches branchDto)
         {
             if (ModelState.IsValid)
@@ -87,6 +93,7 @@ namespace Examination_System.Controllers
         }
 
         // GET: BranchController/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var branches = await _context.Database
@@ -98,12 +105,16 @@ namespace Examination_System.Controllers
             {
                 return NotFound();
             }
+            var ManagersIds = _context.Branches.Select(x => x.ManagerId).ToList();
+            var managers = _context.Instructors.Where(inst => !ManagersIds.Any(managerId => inst.Id == managerId)).ToList();
+            ViewBag.managers = managers;
             return View(branch);
         }
 
         // POST: BranchController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, GetAllBranches branchDto)
         {
             if (ModelState.IsValid)
@@ -122,6 +133,7 @@ namespace Examination_System.Controllers
         }
 
         // GET: BranchController/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var branches = await _context.Database
@@ -140,6 +152,7 @@ namespace Examination_System.Controllers
         // POST: BranchController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ConfirmDelete(int id)
         {
             try { 
@@ -154,7 +167,7 @@ namespace Examination_System.Controllers
             }
         }
 
-       
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignTrack(int branchId)
         {
             var branch = await _context.Branches
@@ -197,6 +210,7 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignTrack(int branchId, int trackId, int departmentManagerId, int trackManagerId)
         {
             try
@@ -228,6 +242,7 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteTrack(int trackId, int branchId)
         {
             var track = _context.BranchDepartmentTracks

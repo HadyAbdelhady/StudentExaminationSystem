@@ -1,7 +1,7 @@
 ﻿using Examination_System.Data;
 using Examination_System.DTOs;
 using Examination_System.Models;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Examination_System.Controllers
 {
+    [Authorize(Roles = "Admin , Instructor")]
     public class CourseController : Controller
     {
         private readonly StudentExaminationSystemContext _context;
@@ -60,6 +61,7 @@ namespace Examination_System.Controllers
         }
 
         // GET: CourseController/Create
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(int trackId)
         {
             // Fetch the list of available courses
@@ -76,6 +78,7 @@ namespace Examination_System.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(int trackId, string courseName, int? selectedCourseId)
         {
             if (trackId == 0)
@@ -182,7 +185,9 @@ namespace Examination_System.Controllers
             var tupleList = (TrackId: trackId, Courses: coursesList);
             return View(tupleList);
         }
+
         // GET: CourseController/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, int trackId)
         {
             try
@@ -215,6 +220,7 @@ namespace Examination_System.Controllers
         // POST: TrackController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id,  GetCoursesInTrack courseDto, int trackId)
         {
             if (id != courseDto.Id)
@@ -248,6 +254,7 @@ namespace Examination_System.Controllers
         }
 
         // GET: CourseController/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmation(int id, int trackId)
         {
             // Pass the course id and track id to the view
@@ -258,6 +265,7 @@ namespace Examination_System.Controllers
         // POST: CourseController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id, int trackId)
         {
             try

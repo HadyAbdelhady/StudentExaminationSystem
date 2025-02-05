@@ -1,9 +1,11 @@
 ﻿@model Examination_System.DTOs.InsertQuestion
 
+@* @{ *@
+@*     ViewData["Title"] = "Create Question"; *@
+@* } *@
 @{
-    ViewData["Title"] = "Create Question";
+    var Instructor = ViewBag.Instructor as Instructor;
 }
-
 @section Style {
     <style>
 
@@ -281,8 +283,13 @@
                 <span asp-validation-for="QuestionData.CorrectChoice" class="text-danger"></span>
 
                 <!-- Hidden fields for InstructorId and CourseId -->
-                <input type="hidden" asp-for="QuestionData.InstructorId" value="@Model.QuestionData.InstructorId" />
-                <input type="hidden" asp-for="QuestionData.CourseId" value="@Model.QuestionData.CourseId" />
+                <input type="hidden" asp-for="QuestionData.InstructorId" value="@Instructor.Id" />
+                <select asp-for="QuestionData.CourseId" class="form-select" aria-label="Enter Manger Of the Branch">
+                    @foreach (var course in Instructor.Courses)
+                    {
+                        <option value="@course.Id">@course.Name</option>
+                    }
+                </select>
 
                 <!-- Hidden fields for Choices (True/False) -->
                 <input type="hidden" id="trueChoice" name="Choices[0].Choice" value="True" />

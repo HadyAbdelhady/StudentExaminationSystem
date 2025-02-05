@@ -77,12 +77,12 @@
 .form-control {
     background: rgba(230, 221, 221, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white !important;
+    color: white;
     transition: all 0.3s ease;
 }
 
 .form-control::placeholder {
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: rgba(255, 255, 255, 0.7) ;
     opacity: 1;
 }
 
@@ -167,8 +167,7 @@
 
 
 .footer {
-    background: #161A30;
-    color: #F0ECE5 !important;
+    color: #161A30 !important;
     text-align: center;
     display: flex;
     justify-content: center;

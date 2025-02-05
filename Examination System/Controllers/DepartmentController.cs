@@ -1,6 +1,6 @@
 ﻿using Examination_System.Data;
 using Examination_System.DTOs;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Examination_System.Controllers
 {
+    [Authorize(Roles = "Admin , Instructor")]
     public class DepartmentController : Controller
     {
         private readonly StudentExaminationSystemContext _context;
@@ -50,6 +51,7 @@ namespace Examination_System.Controllers
         }
 
         // GET: DepartmentController/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -58,6 +60,7 @@ namespace Examination_System.Controllers
         // POST: DepartmentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(GetDepartmentData departmentDto)
         {
             if (ModelState.IsValid)
@@ -85,6 +88,7 @@ namespace Examination_System.Controllers
         }
 
         // GET: DepartmentController/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var departments = await _context.Database
@@ -102,6 +106,7 @@ namespace Examination_System.Controllers
         // POST: DepartmentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, GetDepartmentData departmentDto)
         {
             if (ModelState.IsValid)
@@ -124,6 +129,7 @@ namespace Examination_System.Controllers
         }
 
         // GET: DepartmentController/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var department = await _context.Database
@@ -140,6 +146,7 @@ namespace Examination_System.Controllers
         // POST: DepartmentController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try

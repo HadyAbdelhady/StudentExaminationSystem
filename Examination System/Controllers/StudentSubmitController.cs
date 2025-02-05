@@ -11,6 +11,7 @@ using System.Data;
 
 namespace Examination_System.Controllers
 {
+    [Authorize(Roles = "Admin, Instructor, Student")]
     public class StudentSubmitController : Controller
     {
         private readonly StudentExaminationSystemContext _context;
@@ -20,7 +21,7 @@ namespace Examination_System.Controllers
         }
 
         //OFF
-        [Authorize(Roles =  "Admin, Instructor")]
+        
         public IActionResult Index(int? id)
         {
             var StudentSubmits = _context.Database.SqlQuery<StudentSubmitViewModel>($"EXEC getAllStudentSubmitions;").ToList();
@@ -29,6 +30,7 @@ namespace Examination_System.Controllers
 
         public IActionResult Details(int studentId , int ExamModelId)
         {
+
             var submitionDetails = _context.Database.SqlQuery<StudentSubmitDetailsViewModel>($"Exec GetStudentAnswersPerExamWithReview @examModelId = {ExamModelId}, @studentId = {studentId}").ToList();
             ViewBag.examDetails = _context.Database.SqlQuery<GetExamModel>($"GetExamModel @examModelId = {ExamModelId};").ToList()[0];
             var examResult = _context.Database.SqlQuery <ExamResult>($"EXEC HELPER_calcStudentGrade @studentId={studentId}, @examModelID = {ExamModelId}").ToList()[0];
@@ -37,7 +39,7 @@ namespace Examination_System.Controllers
         }
 
 
-
+        [Authorize(Roles = "Student")]
         [Route("StudentSubmit/Insert/{id}/{studentId}")]
         public IActionResult Insert(int id, int studentId = 10)
         {
@@ -64,13 +66,18 @@ namespace Examination_System.Controllers
 
             return View("Insert", insertStudentSubmitViewModel);
         }
-        
-        public IActionResult SaveInsert(int ExamModelId, int StudentId, List<int> Questions, List<string> StudentAnswers)
+
+        [Authorize(Roles = "Student")]
+        [HttpPost]
+        public async Task<IActionResult> SaveInsert(int ExamModelId, int StudentId, List<int> Questions, List<string> StudentAnswers)
         {
+
             if (Questions == null || StudentAnswers == null || Questions.Count != StudentAnswers.Count)
             {
                 return BadRequest("Invalid data received. Questions and answers must be provided and have the same count.");
             }
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
@@ -80,48 +87,45 @@ namespace Examination_System.Controllers
                     StudentId = StudentId,
                     ExamModelId = ExamModelId,
                     SubmitDate = DateTime.UtcNow,
-                    //IsDeleted = false // Assuming new submissions are active
+                    IsDeleted = false
                 };
 
-                _context.StudentSubmits.Add(studentSubmission);
-                _context.SaveChanges(); // Save to generate the ID
+                await _context.StudentSubmits.AddAsync(studentSubmission);
+                await _context.SaveChangesAsync(); // Save to generate the ID
 
+                // Get the generated StudentSubmitId
                 int studentSubmitId = studentSubmission.Id;
 
                 // Insert Student Answers
-                var studentAnswersList = new List<StudentSubmitAnswer>();
-
-                for (int i = 0; i < Questions.Count; i++)
+                var studentAnswersList = Questions.Select((q, i) => new StudentSubmitAnswer
                 {
-                    studentAnswersList.Add(new StudentSubmitAnswer
-                    {
-                        StudentSubmitId = studentSubmitId,
-                        ExamModelId = ExamModelId,
-                        QuestionId = Questions[i],
-                        StudentAnswer = string.IsNullOrEmpty(StudentAnswers[i]) ? "" : StudentAnswers[i],
-                        IsDeleted = false
-                    });
-                }
+                    StudentSubmitId = studentSubmitId,
+                    ExamModelId = ExamModelId,
+                    QuestionId = q,
+                    StudentAnswer = StudentAnswers[i] ?? "", // Ensure non-null value
+                    IsDeleted = false
+                }).ToList();
 
-                _context.StudentSubmitAnswers.AddRange(studentAnswersList);
-                _context.SaveChanges();
+                await _context.StudentSubmitAnswers.AddRangeAsync(studentAnswersList);
+                await _context.SaveChangesAsync();
 
-         
+                // Commit transaction
+                await transaction.CommitAsync();
 
-       
-
-                return RedirectToAction("Index", "Student", new { id = StudentId });
+                return RedirectToAction("Courses", "StudentProfile", new { id = StudentId });
             }
             catch (Exception ex)
             {
-                
+                // Rollback in case of an error
+                await transaction.RollbackAsync();
 
-                // Log the error (consider using a logging framework like Serilog or NLog)
+                // Log the error (Consider using a logging framework like Serilog or NLog)
                 Console.WriteLine($"Error: {ex.Message}");
 
                 return StatusCode(500, "An error occurred while saving the student submission.");
             }
         }
+
 
         [Authorize(Roles = "Admin, Instructor")]
         public IActionResult StudentCourse(int courseId, int studentId)

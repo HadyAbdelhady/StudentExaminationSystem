@@ -1,8 +1,8 @@
 ﻿@model List<Examination_System.ViewModels.QuestionBankViewModel>
 
-@{
-    ViewData["Title"] = "Questions";
-}
+@* @{ *@
+@*     ViewData["Title"] = "Questions"; *@
+@* } *@
 
 @section Style {
 
@@ -316,14 +316,14 @@
 <div id="body-content">
     <div class="container mt-2">
         <h2 class="text-center mb-4">
-     @Model[0].QuestionData.CourseName Questions
+     @Model[0]?.QuestionData?.CourseName Questions
         </h2>
 
         <!-- Add New Exam Button -->
         <div class="mb-3 text-end">
             <a asp-action="Create" asp-controller="QuestionBank"
-               asp-route-instructorId="@ViewBag.InstructorId"
-               asp-route-courseId="@ViewBag.CourseId" class="btn btn-primary" id="addExamBtn">
+               asp-route-instructorId="@ViewBag?.InstructorId"
+               asp-route-courseId="@ViewBag?.CourseId" class="btn btn-primary" id="addExamBtn">
                 Add New Question
             </a>
             <a asp-action="Index" asp-controller="QuestionBank" class="btn btn-review" id="reviewExamBtn">All Questions</a>
@@ -344,20 +344,23 @@
                 @foreach (var question in Model)
                 {
                     <tr>
-                        <td>@question.QuestionData.QuestionText</td>
-                        <td>@question.QuestionData.InstructorName</td>
-                        <td>@question.QuestionData.CourseName</td>
-                        <td>@question.QuestionData.Type</td>
+                        <td>@question?.QuestionData?.QuestionText</td>
+                        <td>@question?.QuestionData?.InstructorName</td>
+                        <td>@question?.QuestionData?.CourseName</td>
+                        <td>@question?.QuestionData?.Type</td>
                         <td>
                             <button class="btn btn-success btn-sm toggle-view"
                                     data-bs-toggle="modal"
                                     data-bs-target="#questionModal"
-                                    data-question-text="@question.QuestionData.QuestionText"
-                                    data-choices="@string.Join("|", question.Choices.Select(c => c.Choice))"
+                                    data-question-text="@question?.QuestionData.QuestionText"
+                                    data-choices="@string.Join("|", question?.Choices?.Select(c => c.Choice))"
                                     data-correct-choice="@question.QuestionData.CorrectChoice">
                                 View
                             </button>
-                            <a asp-action="Delete" asp-controller="QuestionBank" asp-route-questionId="@question.QuestionData.Id" class="btn btn-danger btn-sm">Delete</a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Delete" asp-controller="QuestionBank" asp-route-questionId="@question.QuestionData.Id" class="btn btn-danger btn-sm">Delete</a>
+                            }
                         </td>
                     </tr>
                 }

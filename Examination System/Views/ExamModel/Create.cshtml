@@ -31,17 +31,8 @@
                             <span asp-validation-for="EndTime" class="text-danger small"></span>
                         </div>
                     </div>
-
-                    <!-- Instructor Selection -->
-                    <div class="mb-3">
-                        <label class="form-label">Select Instructor</label>
-                        <select asp-for="InstructorId" class="form-select">
-                            @foreach (var instructor in Model.instructors)
-                            {
-                                <option value="@instructor.Id">@instructor.FirstName @instructor.LastName</option>
-                            }
-                        </select>
-                    </div>
+                    <input hidden value="@Model.InstructorId" asp-for="InstructorId"/>
+                    
                 </div>
             </div>
 

@@ -1,52 +1,35 @@
-﻿@model StudentExamsSubmitsViewModel 
-
+﻿@model StudentExamsSubmitsViewModel
 <div class="container mt-5">
     <div class="row">
         <div class="card-body course-assigned">
             <h4 class="card-title mb-4" style="font-size: 2.5rem">Assigned Courses</h4>
             <div class="row g-3">
                 <!-- Course Cards -->
-                @foreach(var course in Model.Courses)
+                @foreach (var course in Model.Courses)
                 {
                     <div class="card course-card col-md-4 mx-2">
                         <div class="card-body">
                             <h4 class="card-title d-flex justify-content-center">@course.Name</h4>
                             <div class="d-flex justify-content-between align-items-center mb-3"></div>
                             <div class="d-flex flex-column gap-3">
-                                @foreach(var exam in Model.Exams.DistinctBy(ex => ex.Id))
-                                {
-                                    if(exam.CourseId == course.Id)
-                                    {
-                                        <div class="d-flex justify-content-between gap-2">
-                                            <button type="button" class="btn btn-primary flex-grow-1 col-sm-2">
-                                                <a asp-action="Insert" asp-controller="StudentSubmit" asp-route-id="@exam.Id" asp-route-studentId="@User.FindFirst("StudentId").Value" >Take </a>
-                                            </button>
-                                            <span class="text-center flex-grow-1 col-sm-4" style="font-size: .9rem;">Instructor Name : @exam.Instructor.FirstName @exam.Instructor.LastName <br> [@exam.Date] From : @exam.StartTime  To : @exam.EndTime</span>
-                                        </div>
-                                    }
-                                }
-                                @foreach(var submit in Model.Submits.DistinctBy(submit => submit.Key.ExamModelId))
+                                @foreach (var submit in Model.Submits.DistinctBy(submit => submit.Key.ExamModelId))
                                 {
                                     if (@submit.Key.ExamModel.CourseId == course.Id)
                                     {
                                         <div class="d-flex justify-content-between gap-2">
                                             <button type="button" class="btn btn-danger flex-grow-1 col-sm-2">
-                                                <a asp-controller="StudentSubmit" asp-action="Details" asp-route-examModelId="@submit.Key.ExamModel.Id" asp-route-studentId = "@submit.Key.StudentId"> <i class="fas fa-question-circle"></i> @submit.Value.Item1/@submit.Value.Item2 </a>
+                                                <a asp-controller="StudentSubmit" asp-action="Details" asp-route-examModelId="@submit.Key.ExamModel.Id" asp-route-studentId="@submit.Key.StudentId"> <i class="fas fa-question-circle"></i> @submit.Value.Item1/@submit.Value.Item2 </a>
                                             </button>
                                             <span class="text-center flex-grow-1 col-sm-4" style="font-size: .9rem;">Instructor Name : @submit.Key.ExamModel.Instructor.FirstName  @submit.Key.ExamModel.Instructor.FirstName <br> Submit Date : @submit.Key.SubmitDate</span>
                                         </div>
                                     }
                                 }
-                                
-
-                                
-
                             </div>
                         </div>
                     </div>
                 }
-                
-               
+
+
             </div>
         </div>
     </div>
@@ -65,11 +48,11 @@
     }
 
         /* .card-body.instructor {
-        display: flex;
-        max-height: 35vh;
-        position: relative;
-        flex-direction: column;
-    } */
+            display: flex;
+            max-height: 35vh;
+            position: relative;
+            flex-direction: column;
+        } */
 
         .card:hover {
             transform: translateY(-5px);
@@ -149,5 +132,8 @@
 
         .footer .list-inline-item:not(:last-child) {
             margin-right: 15px;
+        }
+        a{
+            color:#fff !important;
         }
 </style>

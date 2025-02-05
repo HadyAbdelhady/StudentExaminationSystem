@@ -1,7 +1,7 @@
 ﻿using Examination_System.Data;
 using Examination_System.DTOs;
 using Examination_System.Models;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -11,6 +11,7 @@ using System.Data;
 
 namespace Examination_System.Controllers
 {
+    [Authorize(Roles = "Admin , Instructor")]
     public class TrackController : Controller
     {
         private readonly StudentExaminationSystemContext _context;
@@ -29,6 +30,7 @@ namespace Examination_System.Controllers
 
         // GET: TrackController/Create
         // GET: Track/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(int departmentId)
         {
             var trackDto = new GetTracksPerBranch { DepartmentId = departmentId };
@@ -38,6 +40,7 @@ namespace Examination_System.Controllers
         // POST: Track/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(GetTracksPerBranch trackDto)
         {
             if (ModelState.IsValid)
@@ -78,8 +81,9 @@ namespace Examination_System.Controllers
             // If the model state is invalid, return to the create view with validation errors
             return View(trackDto);
         }
-       
+
         // GET: TrackController/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int id)
         {
             try
@@ -111,6 +115,7 @@ namespace Examination_System.Controllers
         }
 
         // GET: TrackController/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -142,6 +147,7 @@ namespace Examination_System.Controllers
         // POST: TrackController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, GetTracksPerBranch trackDto)
         {
             if (id != trackDto.Id)
@@ -175,6 +181,7 @@ namespace Examination_System.Controllers
         }
 
         // GET: TrackController/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -202,6 +209,7 @@ namespace Examination_System.Controllers
         // POST: TrackController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int departmentId, int trackId)
         {
             try

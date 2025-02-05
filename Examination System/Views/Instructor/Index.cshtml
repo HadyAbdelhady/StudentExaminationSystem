@@ -243,12 +243,15 @@
     <div class="container mt-2">
         <h2 class="text-center mb-4">Instructors</h2>
 
-        <!-- Add New Exam Button -->
-        <div class="mb-3 text-end">
-            <a asp-action="Create" asp-controller="Instructor" class="btn btn-primary" id="addExamBtn">
-                Add Instructor
-            </a>
-        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <!-- Add New Exam Button -->
+            <div class="mb-3 text-end">
+                <a asp-action="Create" asp-controller="Instructor" class="btn btn-primary" id="addExamBtn">
+                    Add Instructor
+                </a>
+            </div>
+        }
 
         <!-- Exam Manager Table -->
         <table id="examManagerTable" class="table table-striped table-bordered">
@@ -270,8 +273,11 @@
                         <td>@item?.EnrollmentDate.ToShortDateString()</td>
                     <td>
                         <a asp-action="Index" asp-controller="Instructor" asp-route-Id="@item?.Id" id="toggle-view" class="btn btn-success btn-sm toggle-view">View</a>
-                        <a asp-action="Update" asp-controller="Instructor" asp-route-Id="@item?.Id" class="btn btn-warning btn-sm">Edit</a>
-                        <a asp-action="Delete" asp-controller="Instructor" asp-route-Id="@item?.Id" class="btn btn-danger btn-sm">Delete</a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Update" asp-controller="Instructor" asp-route-Id="@item?.Id" class="btn btn-warning btn-sm">Edit</a>
+                                <a asp-action="Delete" asp-controller="Instructor" asp-route-Id="@item?.Id" class="btn btn-danger btn-sm">Delete</a>
+                            }
                     </td>
                 </tr>
                 }

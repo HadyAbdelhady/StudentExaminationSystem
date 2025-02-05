@@ -3,6 +3,7 @@ using Examination_System.Data;
 using Examination_System.DTOs;
 using Examination_System.Models;
 using Examination_System.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace Examination_System.Controllers
 {
+    [Authorize(Roles = "Instructor , Admin")]
     public class InstructorController : Controller
     {
 
@@ -69,12 +71,14 @@ namespace Examination_System.Controllers
 
             return View(GetAllInstracturs);
         }
-
+        
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(int id)
         {
             Instructor instructor = _context.Instructors.FirstOrDefault(i => i.Id == id);
             return View("Update",instructor);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult SaveUpdate(Instructor instructors)
         {
             if (ModelState.IsValid)
@@ -118,7 +122,7 @@ namespace Examination_System.Controllers
 
         }
 
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -127,6 +131,7 @@ namespace Examination_System.Controllers
         // POST: Instructor/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(Instructor instructors)
         {
             if (ModelState.IsValid)
@@ -167,7 +172,7 @@ namespace Examination_System.Controllers
             return View("Create", instructors);
         }
 
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             try
@@ -194,6 +199,7 @@ namespace Examination_System.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult AssignToCourse(  int Id,int courseId)
         {
            
@@ -236,7 +242,7 @@ namespace Examination_System.Controllers
                 }
 
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult RemoveCourse(int Id, int courseId)
         {
             try

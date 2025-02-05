@@ -1,7 +1,7 @@
 ﻿using Examination_System.Data;
 using Examination_System.DTOs;
 using Examination_System.Models;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -11,6 +11,7 @@ using System.Data;
 
 namespace Examination_System.Controllers
 {
+    [Authorize(Roles = "Admin , Instructor")]
     public class TopicController : Controller
     {
         private readonly StudentExaminationSystemContext _context;
@@ -32,8 +33,9 @@ namespace Examination_System.Controllers
             return View();
         }
 
-        
+
         // GET: TopicController/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(int courseId, int trackId)
         {
             // Pass the CourseId and TrackId to the view to ensure they're included in the form submission
@@ -45,6 +47,7 @@ namespace Examination_System.Controllers
         // POST: TopicController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(CourseTopicDTO courseTopicDto, int trackId)
         {
             ModelState.Remove("OldTopic");
@@ -80,6 +83,7 @@ namespace Examination_System.Controllers
 
 
         // GET: Topic/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int courseId, string topic, int trackId)
         {
             var courseTopic = await _context.CourseTopics
@@ -104,6 +108,7 @@ namespace Examination_System.Controllers
         // POST: TopicController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int courseId, string oldTopic, CourseTopicDTO dto, int trackId)
         {
             if (courseId != dto.CourseId)
@@ -154,6 +159,7 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int topicId, int courseId, string topicName, int trackId)
         {
             try

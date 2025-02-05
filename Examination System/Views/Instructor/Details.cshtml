@@ -279,24 +279,29 @@
                 <div class="card-body">
                     <h4 class="card-title mb-4">Available Courses</h4>
 
-                    <!-- Available Courses List -->
-                    <div class="available-courses-list">
-                        @foreach (var course in Model.AvailableCourses)
-                        {
-                            <div class="card available-course mb-3">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-3">@course.Name</h4>
-                                    <form asp-action="AssignToCourse" asp-controller="Instructor" method="post">
-                                        <input type="hidden" name="Id" value="@Model.Id" />
-                                        <input type="hidden" name="courseId" value="@course.Id" />
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fas fa-plus"></i> Assign Course
-                                        </button>
-                                    </form>
+                    
+                        <!-- Available Courses List -->
+                        <div class="available-courses-list">
+                            @foreach (var course in Model.AvailableCourses)
+                            {
+                                <div class="card available-course mb-3">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-3">@course.Name</h4>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <form asp-action="AssignToCourse" asp-controller="Instructor" method="post">
+                                            <input type="hidden" name="Id" value="@Model.Id" />
+                                            <input type="hidden" name="courseId" value="@course.Id" />
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-plus"></i> Assign Course
+                                            </button>
+                                        </form>
+                                    }
+                                    </div>
                                 </div>
-                            </div>
-                        }
-                    </div>
+                            }
+                        </div>
+                    
 
                     <!-- Empty State (hidden by default) -->
                     <div class="empty-state" style="display: none">
@@ -326,15 +331,18 @@
                                     </div>
                                     <div class="d-flex flex-column gap-3">
                                         <div class="d-flex justify-content-between gap-2">
-                                            <a asp-action="RemoveCourse" asp-controller="Instructor" asp-route-Id="@Model.Id" asp-route-CourseId="@course.CourseId" class="btn btn-danger flex-grow-1 col-sm-4">
-                                                <i class="fas fa-trash"></i> Remove
-                                            </a>
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <a asp-action="RemoveCourse" asp-controller="Instructor" asp-route-Id="@Model.Id" asp-route-CourseId="@course.CourseId" class="btn btn-danger flex-grow-1 col-sm-4">
+                                                    <i class="fas fa-trash"></i> Remove
+                                                </a>
+                                            }
                                             <a asp-action="CourseInstructor" asp-controller="Student" asp-route-instructorId="@Model.Id" asp-route-CourseId="@course.CourseId" class="btn btn-primary flex-grow-1 col-sm-4">
                                                 <i class="fas fa-users"></i> Students
                                             </a>
                                         </div>
                                         <div class="d-flex justify-content-between gap-2">
-                                            <a asp-action="Index" asp-controller="QuestionBank" asp-route-Id="@Model.Id" asp-route-CourseId="@course.CourseId" class="btn btn-primary flex-grow-1 col-sm-4">
+                                            <a asp-action="Index" asp-controller="QuestionBank" asp-route-id="@Model.Id" asp-route-CourseId="@course.CourseId" class="btn btn-primary flex-grow-1 col-sm-4">
                                                 <i class="fas fa-question-circle"></i> Questions
                                             </a>
                                             <a asp-action="Index" asp-controller="ExamModel" asp-route-Id="@Model.Id" asp-route-CourseId="@course.CourseId" class="btn btn-primary flex-grow-1 col-sm-4">

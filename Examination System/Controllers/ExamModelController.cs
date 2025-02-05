@@ -2,6 +2,7 @@
 using Examination_System.DTOs;
 using Examination_System.Models;
 using Examination_System.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using System.Text;
 
 namespace Examination_System.Controllers
 {
+    [Authorize(Roles = "Admin, Instructor")]
     public class ExamModelController : Controller
     {
         private readonly StudentExaminationSystemContext _context;
@@ -33,24 +35,27 @@ namespace Examination_System.Controllers
                 return View("Details", examModelDetails);
             
         }
-        
-        public IActionResult Create(int id)
+
+        [Authorize (Roles = "Instructor")]
+        public IActionResult Create(int CourseId, int InstructorId)
         {
             ExamModelViewModel examModelViewModel = new ExamModelViewModel();
 
             examModelViewModel.instructors = _context.Database.SqlQueryRaw<GetAllInstructors>
-                ("EXEC GetAllInstructorsInCourse @courseId", new SqlParameter("@courseId", id))
+                ("EXEC GetAllInstructorsInCourse @courseId", new SqlParameter("@courseId", CourseId))
                 .ToList();
 
             examModelViewModel.questions = _context.Database.SqlQuery<GetQuestionsWithOptions>
-                ($"EXEC GetQuestionDetailsWithOptionsInCourse @courseId = {id}").ToList();
+                ($"EXEC GetQuestionDetailsWithOptionsInCourse @courseId = {CourseId}").ToList();
 
 
-            examModelViewModel.CourseId = id;
+            examModelViewModel.CourseId = CourseId;
+            examModelViewModel.InstructorId = InstructorId;
 
             return View("Create", examModelViewModel);
         }
 
+        [Authorize(Roles = "Instructor")]
         public IActionResult SaveCreate(ExamModelViewModel examModelViewModel)
         {
             var examModelIdParam = new SqlParameter
@@ -90,6 +95,14 @@ namespace Examination_System.Controllers
             return RedirectToAction("Index", new { id = examModelId });
         }
 
+        [Authorize(Roles = "Instructor")]
+        public IActionResult ChooseCourse()
+        {
+            var id = int.Parse(User.FindFirst("InstructorId")?.Value);
+            var courses = _context.Courses.Where(c => c.CourseStudentInstructors.Any(CSI => CSI.InstructorId == id)).ToList();
+            ViewBag.Courses = courses;
+            return View("ChooseCourse",new CourseInstructorViewModel() { InstructorId = id});
+        }
 
     }
 }

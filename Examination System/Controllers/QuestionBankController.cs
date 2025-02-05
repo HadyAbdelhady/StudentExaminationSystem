@@ -54,21 +54,31 @@ namespace Examination_System.Controllers
             ViewBag.InstructorId = id;
             ViewBag.CourseId = CourseId;
 
-            return View(questions);
+            if (questions.Count() > 0)
+            {
+                return View(questions);
+            }else
+            {
+                
+                return RedirectToAction("Index");
+                
+            }
         }
 
         [HttpGet]
-        public IActionResult Create(int instructorId, int courseId)
+        public IActionResult Create(int? instructorId, int courseId)
         {
+            instructorId = instructorId ?? int.Parse(User.FindFirst("InstructorId").Value);
             var model = new InsertQuestion
             {
                 QuestionData = new InsertQuestion.Question
                 {
-                    InstructorId = instructorId,
+                    InstructorId = 0,
                     CourseId = courseId
                 }
             };
 
+            ViewBag.Instructor = _context.Instructors.Where(inst => inst.Id == instructorId).Include(inst => inst.Courses).First();
             return View(model);
         }
 

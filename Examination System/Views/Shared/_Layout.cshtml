@@ -49,7 +49,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-action="Index" asp-controller="Course">Courses </a>
+                                <a class="nav-link" asp-action="Index" asp-controller="Student">Students </a>
                             </li>
                         }
                         @if (User.IsInRole("Student"))
@@ -67,7 +67,7 @@
                         @if(User.IsInRole("Instructor")){
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-action="Index" asp-controller="Instructor" asp-route-id="@User.FindFirst("InstructorId").Value" >Your Details</a>
+                                <a class="nav-link" asp-action="ChooseCourse" asp-controller="ExamModel" asp-route-id="@User.FindFirst("InstructorId").Value" >Create Exam</a>
                             </li>
                         }
                         else if (User.IsInRole("Admin")){

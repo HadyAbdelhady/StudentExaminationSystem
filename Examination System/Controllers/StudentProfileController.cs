@@ -27,6 +27,7 @@ namespace Examination_System.Controllers
         }
         public IActionResult Courses(int id)
         {
+            id = int.Parse(User.FindFirst("StudentId").Value);
             // Get all the courses assigned to the student
             var courses = _context.Courses
                                   .Where(course => course.CourseStudentInstructors

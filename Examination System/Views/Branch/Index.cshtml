@@ -8,18 +8,20 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Branches</h2>
 
-    <!-- Add New Exam Button -->
-    <div class="mb-3 text-end">
-        <a asp-action="Create" class="btn btn-primary" id="addExamBtn">
-            Add New Branch
-        </a>
-    </div>
+    @if(User.IsInRole("Admin"))
+    {
+        <!-- Add New Exam Button -->
+        <div class="mb-3 text-end">
+            <a asp-action="Create" class="btn btn-primary" id="addExamBtn">
+                Add New Branch
+            </a>
+        </div>
+    }
 
     <!-- Exam Manager Table -->
     <table id="examManagerTable" class="table table-striped table-bordered text-center">
         <thead>
             <tr>
-                <th class="text-center">ID</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">Location</th>
                 <th class="text-center">Phone</th>
@@ -32,7 +34,6 @@
             @foreach (var branch in Model)
             {
                 <tr>
-                    <td>@branch.Id</td>
                 <td>@branch.Name</td>
                 <td>@branch.Location</td>
                 <td>@branch.Phone</td>
@@ -42,13 +43,16 @@
                     <a id="toggle-view" class="btn btn-success btn-sm" asp-action="Details" asp-route-id="@branch.Id">
                         Details
                     </a>
-                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@branch.Id">Edit</a>
-                        <!--<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@branch.Id">Delete</a>-->
-                        <form asp-action="ConfirmDelete" method="post" onsubmit="return confirm('Are you sure you want to delete this Branch?');"
-                              style=" display:inline;">
-                            <input type="hidden" name="id" value="@branch.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
+                    @if(User.IsInRole("Admin"))
+                    {
+                            <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@branch.Id">Edit</a>
+                            <!--<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@branch.Id">Delete</a>-->
+                            <form asp-action="ConfirmDelete" method="post" onsubmit="return confirm('Are you sure you want to delete this Branch?');"
+                                  style=" display:inline;">
+                                <input type="hidden" name="id" value="@branch.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                    }
                 </td>
             </tr>
             }
