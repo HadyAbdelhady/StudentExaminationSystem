@@ -425,7 +425,7 @@ BEGIN
     WHERE SS.isDeleted = 0 AND SS.studentID = @studentID AND EM.CourseID = @courseId;
 END;
 
-GO;
+GO
 
 
 CREATE Or ALTER PROCEDURE GetStudentExamMarks 
