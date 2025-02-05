@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam Manager</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+  <div id="body-content">
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Branches</h2>
+
+      <!-- Add New Exam Button -->
+      <div class="mb-3 text-end">
+        <button class="btn btn-primary" id="addExamBtn">
+          Add New Branch
+        </button>
+      </div>
+
+      <!-- Exam Manager Table -->
+      <table id="examManagerTable" class="table table-striped table-bordered text-center">
+        <thead>
+          <tr>
+            <th class="text-center">ID</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Location</th>
+            <th class="text-center">Phone</th>
+            <th class="text-center">Date of Establishment</th>
+            <th class="text-center">Manager ID</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Coshi</td>
+            <td>Mansoura</td>
+            <td>01153650901</td>
+            <td>2021-03-15</td>
+            <td>1</td>
+            <td>
+              <button id="toggle-view" class="btn btn-success btn-sm">
+                Details
+              </button>
+              <button class="btn btn-warning btn-sm">Edit</button>
+              <button class="btn btn-danger btn-sm">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Nono</td>
+            <td>home</td>
+            <td>67092980</td>
+            <td>2001-02-09</td>
+            <td>2</td>
+            <td>
+              <button class="btn btn-success btn-sm">Details</button>
+              <button class="btn btn-warning btn-sm">Edit</button>
+              <button class="btn btn-danger btn-sm">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- footer.html -->
+    <footer class="footer mt-auto py-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 text-center text-md-start" style="color: rgb(20, 20, 20)">
+            <p class="mb-0">
+              &copy; 2023 Elmanshar. All rights reserved. Support Contact :
+              Zero Etnashr.
+            </p>
+          </div>
+          <div class="col-md-6 text-center text-md-end">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item">
+                <a href="#" class="text-decoration-none">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" class="text-decoration-none">Terms of Service</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" class="text-decoration-none">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+  <script src="script.js"></script>
+  <script>
+    document.querySelectorAll(".toggle-view").forEach((button, index) => {
+      button.addEventListener("click", function (event) {
+        event.stopPropagation(); // Prevents click from immediately hiding the card
+        const answerRow = document.querySelectorAll(".card-container")[index];
+        const bodyContent = document.getElementById("body-content");
+
+        if (
+          answerRow.style.display === "none" ||
+          answerRow.style.display === ""
+        ) {
+          answerRow.style.display = "block"; // Show the card
+          bodyContent.style.filter = "blur(5px)"; // Apply blur to background
+        } else {
+          answerRow.style.display = "none"; // Hide the card
+          bodyContent.style.filter = "none"; // Remove blur effect
+        }
+      });
+    });
+
+    // Hide the card and remove blur on click outside
+    document.addEventListener("click", function (event) {
+      document.querySelectorAll(".card-container").forEach((card) => {
+        if (!card.contains(event.target)) {
+          card.style.display = "none";
+          document.getElementById("body-content").style.filter = "none";
+        }
+      });
+    });
+  </script>
+
+  <script></script>
+</body>
+
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&display=swap" rel="stylesheet">
+
+    <link href="style.css" rel="stylesheet">   
+</head>
+
+<body>
+    <!-- Start Exam Button -->
+    <!-- <div class="container text-center mt-5">
+        <button id="startExamBtn" class="btn btn-primary">Start Exam</button>
+    </div> -->
+    <!-- Add these HTML elements before the exam container -->
+    <div class="container-fluid">
+        <div class="row g-3">
+
+            <!-- Timer Panel -->
+            <div class="col-xl-3">
+                <div class="side-panel" id="timerPanel">
+                    <h5>Remaining Time</h5>
+                    <div id="countdown"><i class="bi bi-alarm-fill"></i><span>00:00:00</span></div>
+                </div>
+            </div>
+
+            <!-- Exam Container -->
+            <div class="col-xl-5 ">
+                <div id="examContainer">
+                    <h2 class="text-center mb-4">General Knowledge Exam</h2>
+                    <form id="examForm">
+
+                        <!-- Question 1 -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5>Question 1:</h5>
+                                <p>What is the capital of France?</p>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q1a1" name="q1" value="Paris">
+                                        <label for="q1a1">Paris</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q1a2" name="q1" value="London">
+                                        <label for="q1a2">London</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q1a3" name="q1" value="Berlin">
+                                        <label for="q1a3">Berlin</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Question 2 -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5>Question 2:</h5>
+                                <p>What is 5 + 3?</p>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q2a1" name="q2" value="6">
+                                        <label for="q2a1">6</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q2a2" name="q2" value="8">
+                                        <label for="q2a2">8</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q2a3" name="q2" value="10">
+                                        <label for="q2a3">10</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5>Question 3:</h5>
+                                <p>What is the square root of 16?</p>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q3a1" name="q3" value="4">
+                                        <label for="q3a1">4</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q3a2" name="q3" value="6">
+                                        <label for="q3a2">6</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q3a3" name="q3" value="8">
+                                        <label for="q3a3">8</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5>Question 4:</h5>
+                                <p>Which planet is known as the Red Planet?</p>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q4a1" name="q4" value="Venus">
+                                        <label for="q4a1">Venus</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q4a2" name="q4" value="Mars">
+                                        <label for="q4a2">Mars</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q4a3" name="q4" value="Jupiter">
+                                        <label for="q4a3">Jupiter</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5>Question 5:</h5>
+                                <p>Who painted the Mona Lisa?</p>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q5a1" name="q5" value="Van Gogh">
+                                        <label for="q5a1">Vincent van Gogh</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q5a2" name="q5" value="Da Vinci">
+                                        <label for="q5a2">Leonardo da Vinci</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q5a3" name="q5" value="Picasso">
+                                        <label for="q5a3">Pablo Picasso</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success">Submit Exam</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Info Panel -->
+                <div class="col-xl-4">
+                    <div class="side-panel" id="infoPanel">
+                        <h5 class="mb-3">Exam Information</h5>
+                        <div class="exam-detail">
+                            <span class="detail-label">Exam Name:</span>
+                            <span class="detail-value">General Knowledge Exam</span>
+                        </div>
+                        <div class="exam-detail">
+                            <span class="detail-label">Instructor:</span>
+                            <span class="detail-value">Dr. John Smith</span>
+                        </div>
+                        <div class="exam-detail">
+                            <span class="detail-label">Start Date:</span>
+                            <span class="detail-value">2023-08-01 09:00</span>
+                        </div>
+                        <div class="exam-detail">
+                            <span class="detail-label">End Date:</span>
+                            <span class="detail-value">2023-08-01 11:00</span>
+                        </div>
+                        <div class="exam-detail">
+                            <span class="detail-label">Total Marks:</span>
+                            <span class="detail-value">100</span>
+                        </div>
+                        <div class="exam-detail">
+                            <span class="detail-label">Questions:</span>
+                            <span class="detail-value">10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="script.js"></script>
+
+</body>
+
+</html>

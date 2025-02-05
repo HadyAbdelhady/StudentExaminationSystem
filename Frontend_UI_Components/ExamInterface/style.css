@@ -1,0 +1,220 @@
+body {
+    background-color: #F0ECE5; /* Light background */
+    font-family: 'Lora', serif;
+    color: #161A30; /* Dark text for contrast */
+}
+
+input[type="radio"] {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+label {
+    margin-right: 30px;
+}
+
+#examContainer {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    background-color: #F8F9FA; /* Light gray background */
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    border: 2px solid rgba(49, 48, 77, 0.7); /* Dark blue border on hover */
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+h2 {
+    color: #31304D; /* Dark blue for headings */
+    font-weight: 700;
+    margin-bottom: 2rem;
+    /* border-bottom: 3px solid #4c51bf; */
+    border-bottom: 3px solid #63408b; /* Accent color for underline */
+    padding-bottom: 1rem;
+    display: inline-block;
+}
+
+h5 {
+    color: #31304D; /* Dark blue for subheadings */
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+p {
+    color: #4A5568; /* Gray for paragraph text */
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+label {
+    color: #4A5568; /* Gray for labels */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+label:hover {
+    color: #31304D; /* Dark blue on hover */
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #31304D 0%, #161A30 100%); /* Dark blue gradient */
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(49, 48, 77, 0.3); /* Dark blue shadow */
+    transition: all 0.3s ease;
+    color: #F0ECE5; /* Light text for buttons */
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(49, 48, 77, 0.4); /* Darker shadow on hover */
+}
+
+/* Custom Radio Button Styling */
+.radio-group {
+    display: flex;
+    gap: 2rem;
+    align-items: self-start;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #B6BBC4; /* Stone gray border */
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="radio"]:checked {
+    border-color: #31304D; /* Dark blue border when checked */
+    background-color: #31304D; /* Dark blue background when checked */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
+}
+
+/* Answer Options Layout */
+.card-body > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* Timer Style */
+.timer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #31304D; /* Dark blue background */
+    color: #F0ECE5; /* Light text */
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Side Panels */
+.side-panel {
+    position: absolute;
+    top: 20px;
+    padding: 1rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: block;
+}
+
+#timerPanel {
+    position: fixed;
+    left: 20px;
+}
+
+#infoPanel {
+    right: 20px;
+}
+
+.exam-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-label {
+    color: #4A5568; /* Gray for labels */
+    font-weight: 500;
+}
+
+.detail-value {
+    color: #31304D; /* Dark blue for values */
+    font-weight: 600;
+    text-align: right;
+}
+
+#countdown {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #31304D; /* Dark blue for countdown */
+    text-align: center;
+    margin: 1rem 0;
+}
+
+@media (max-width: 1200px) {
+    .side-panel {
+        position: static !important;
+        width: 100% !important;
+        margin: 1rem 0 !important;
+    }
+
+    #examContainer {
+        margin: 0 auto !important;
+        max-width: 100% !important;
+        padding: 1rem !important;
+    }
+
+    #countdown {
+        font-size: 1.5rem !important;
+        margin: 0.5rem 0 !important;
+    }
+
+    .globalContainer {
+        flex-direction: column !important;
+    }
+}
+
+/* Add this for mobile timer */
+@media (max-width: 768px) {
+    #timerPanel {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
+        background: white !important;
+        margin-bottom: 1rem !important;
+    }
+}

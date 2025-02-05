@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam Manager</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="cardView.css" />
+
+</head>
+
+<body>
+  <div id="body-content">
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Question Bank</h2>
+
+      <!-- Add New Exam Button -->
+      <div class="mb-3 text-end">
+        <button class="btn btn-primary" id="addExamBtn">
+          Add New Question
+        </button>
+        <button class="btn btn-review" id="reviewExamBtn">Review Exam</button>
+      </div>
+
+      <!-- Exam Manager Table -->
+      <table id="examManagerTable" class="table table-striped table-bordered text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="text-center">Question</th>
+            <th class="text-center">instructor</th>
+            <th class="text-center">Course</th>
+            <th class="text-center">Date</th>
+            <th class="text-center">Type</th>
+            <th class="text-center">Actions</th>
+            <th class="text-center">Select</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>enta men mfakrni tefla wa ma bt2sha3 ghyrak</td>
+            <td>Dr. Ahmed</td>
+            <td>Math</td>
+            <td>2025-02-15</td>
+            <td>T/F</td>
+            <td>
+              <button id="toggle-view" class="btn btn-success btn-sm toggle-view">
+                View
+              </button>
+              <button class="btn btn-warning btn-sm">Edit</button>
+              <button class="btn btn-danger btn-sm">Delete</button>
+            </td>
+            <td><input type="checkbox" class="check-box" /></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Science Quiz</td>
+            <td>Dr. Ahmed</td>
+            <td>Dunno</td>
+            <td>2025-03-10</td>
+            <td>MCQ</td>
+            <td>
+              <button class="btn btn-success btn-sm toggle-view">View</button>
+              <button class="btn btn-warning btn-sm">Edit</button>
+              <button class="btn btn-danger btn-sm">Delete</button>
+            </td>
+            <td><input type="checkbox" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- footer.html -->
+    <footer class="footer mt-auto py-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 text-center text-md-start" style="color: rgb(20, 20, 20)">
+            <p class="mb-0">
+              &copy; 2023 Elmanshar. All rights reserved. Support Contact :
+              Zero Etnashr.
+            </p>
+          </div>
+          <div class="col-md-6 text-center text-md-end">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item">
+                <a href="#" class="text-decoration-none">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" class="text-decoration-none">Terms of Service</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" class="text-decoration-none">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="card-container">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Question <span>5</span>:</h5>
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <h4 class="mb-3">Who painted the Mona Lisa?</h4>
+            <div class="radio-group">
+              <div class="radio-option selected">
+                <input type="radio" id="q5a1" name="q5" value="Van Gogh" />
+                <label for="q5a1"><span>a) </span>Vincent van Gogh</label>
+              </div>
+              <div class="radio-option correct selected">
+                <input type="radio" id="q5a2" name="q5" value="Da Vinci" />
+                <label for="q5a2">b) Leonardo da Vinci</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="q5a3" name="q5" value="Picasso" />
+                <label for="q5a3">c) Pablo Picasso</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
